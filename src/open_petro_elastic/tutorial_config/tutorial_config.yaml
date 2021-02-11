@@ -1,0 +1,99 @@
+# The yaml config consists of three sections, minerals, fluids and dryrock.
+# Elastic values for dry rock, having the mineral as its pore-material and
+# saturated with the fluid is outputed. The tutorial consists of three
+# cases corresponding to the three rows in the data file.
+#
+# The tutorial can be executed as follows:
+# open_petro_elastic --data-file tutorial_data.csv tutorial_config.yaml
+
+# The minerals in this tutorial consists of sand and shale. The volume-fraction
+# of sand is found in the data file. Since shale fraction is left out , it is
+# assigned the remainder of volume.
+minerals:
+    constituents:
+        - material: # sand
+            bulk_modulus: 36.0E+9 #Pa
+            shear_modulus: 44.0E+9 #Pa
+            density: 2650.0 # kg/m3
+            # fraction is found in csv file, column "sand_fraction"
+          fraction:
+            column: "sand_fraction"
+        - material: # shale
+            bulk_modulus: 11.0E+9 #Pa
+            shear_modulus: 4.5E+9 #Pa
+            density: 1.0 # kg/m3
+            # fraction of shale is 1 - sum(other materials)
+
+# As with minerals, fluids is mainly just the list of constituents,
+# but temperature can be given which is used for the
+# modeling of oil, brine, gas and condensate. Oil, brine, gas
+# and condensate are given pressure from pressure->fluid.
+fluids:
+    temperature: 75.0 # celsius
+    constituents:
+        - material:
+            type: "oil"
+            gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
+            reference_density: 800.0 # kg/m3
+            gas_oil_ratio: 153.0 # ratio of gas to oil
+          #fraction set to 1 - sum(other_fluid_fractions)
+        - material:
+            type: "brine"
+            salinity: 45000 # ppm
+          fraction: # Ratio of brine to remaining fluid
+            column: "brine_saturation"
+
+# The pressure section describes the various pressures
+# the rock is affected by.
+pressure:
+    #Overburden pressure is the pressure on the rock from the weight
+    #of the rock and earth above the formation.
+    overburden: 50.0E+6 # Pa
+    # The reference pressure is the pore pressure at reference
+    # conditions, used for pressure dependency calculation.
+    reference: 30.0E+6 # Pa
+    # Fluid pressure is the pore pressure applied to the fluid.
+    fluid: 40.0E+6
+    # Rock pressure is the pore pressure applied to the rock.
+    # This is optional and defaults to fluid pressure.
+    rock: 42.0E+6
+    # max_effective is a truncation value for effective pressure.
+    max_effective: 100.0E+6 # Pa
+
+# The dry_rock section describes the porous dry rock of the dense mineral.
+# The different models have several additional keys for tweaking the model.
+# Additionally pressure dependency and depth trend adjustments can be added,
+# see github.com/equinor/open_petro_elastic for more information.
+dry_rock:
+    model:
+        # patchy cement is a hybrid model which is a combination of friable sand and
+        # contact cement. The properties of the hybrid model is on the line between
+        # two points, friable sand on one end and contact cement on the other end.
+        # The weights are calculated using a lower bound (friable sand with lower bound
+        # on pressure) and an upper bound (constant cement with upper bound porosity)
+        # Then the weight for e.g. bulk modulus is calculated as follows:
+        # w_bulk = (cc_bulk - lower_bulk) / (upper_bulk - lower_bulk)
+        # where cc_bulk is the bulk modulus of constant cement, upper_bulk is the bulk
+        # modulus of the upper bound, and lower_bulk is the bulk modulus of the lower bound.
+        type: "patchy_cement"
+        # The cement of the upper bound.
+        cement: # cement properties
+          bulk_modulus: 36.8E+9 # Pa
+          shear_modulus: 44.0E+9 # Pa
+          density: 2650.0 # kg/m3
+        # The cement fraction in the dry rock
+        cement_fraction: 0.04
+        # The pressure used for lower bound
+        lower_bound_pressure: 20.0E+6
+        # The cement fraction in the upper bound
+        upper_bound_cement_fraction: 0.1
+        coordination_number: 9
+        # The critical porosity of the dry rock
+        critical_porosity: 0.4
+        # Shear reduction factor used to account for tangential frictionless
+        # grain contacts in all submodels.
+        shear_reduction: 1.0
+    porosity: 0.3 # Porosity of uncemented sand stone
+
+
+

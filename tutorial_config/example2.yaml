@@ -1,0 +1,71 @@
+# The yaml config consists of three sections, minerals, fluids and dryrock.
+# Elastic values for dry rock, having the mineral as its pore-material and
+# saturated with the fluid is outputed. The tutorial consists of three
+# cases corresponding to the three rows in the data file.
+#
+# The tutorial can be executed as follows:
+# petro_elastic --data-file tutorial_data.csv tutorial_config.yaml
+
+# The minerals in this tutorial consists of sand and shale. The volume-fraction
+# of sand is found in the data file. Since shale fraction is left out , it is
+# assigned the remainder of volume.
+minerals:
+    constituents:
+        - material: # sand
+            bulk_modulus: 36.0E+9 #Pa
+            shear_modulus: 44.0E+9 #Pa
+            density: 2650.0 # kg/m3
+            # fraction is found in csv file, column "sand_fraction"
+          fraction:
+            column: "sand_fraction"
+        - material: # shale
+            bulk_modulus: 11.0E+9 #Pa
+            shear_modulus: 4.5E+9 #Pa
+            density: 1.0 # kg/m3
+            # fraction of shale is 1 - sum(other materials)
+
+# As with minerals, fluids is mainly just the list of constituents,
+# but temperature and pressure can be given which is used for the
+# modeling of oil, brine, gas and condensate.
+fluids:
+    temperature: 75.0 # celsius
+    pressure: 50.0E+6 # Pa
+    constituents:
+        - material:
+            type: "oil"
+            gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
+            reference_density: 800.0 # kg/m3
+            gas_oil_ratio: 153.0 # ratio of gas to oil
+          #fraction set to 1 - sum(other_fluid_fractions)
+        - material:
+            type: "brine"
+            salinity: 45000 # ppm
+          fraction: # Ratio of brine to remaining fluid
+            column: "brine_saturation"
+        - material:
+            type: "condensate"
+            gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
+            oil_reference_density: 800 # kg/m3
+            gas_oil_ratio: 150.0 # ratio of gas to oil
+          fraction: # Ratio of condensate to remianing fluids
+             column: "condensate_saturation"
+
+# The dry_rock section describes the porous dry rock of the dense mineral.
+# The different models have several additional keys for tweaking the model.
+# Additionally pressure dependency and depth trend adjustments can be added,
+# see github.com/equinor/petro_elastic for more information.
+dry_rock:
+    model: "patchy_cement" # or "polyfit", "friable_sand"
+    porosity:
+        # porosity of dry rock gotten from the column in the data file with
+        # name "porosity"
+        column: "porosity"
+    cement: # cement properties
+      bulk_modulus: 36.8E+9 # Pa
+      shear_modulus: 44.0E+9 # Pa
+      density: 2650.0 # kg/m3
+    overburden_pressure: 50.0E+6 # Pa
+    pressure: 40.0E+6 # Pa
+
+
+

@@ -1,0 +1,52 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
+        pip install -r test_requirements.txt
+    - name: Lint with flake8 and black
+      run: |
+        pip install flake8
+        pip install black==20.8b1
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # test remaining issues
+        flake8 . --count --max-complexity=30 --statistics
+        black --check src/open_petro_elastic tests/*.py
+    - name: Test
+      run: |
+        pytest .
+
+    - name: Run Examples
+      run: |
+        open_petro_elastic --data-file examples/example1.csv examples/example1.yaml
+        open_petro_elastic --data-file examples/example2.csv examples/example2.yaml
+        open_petro_elastic examples/patchy_cement_example.yaml
+        open_petro_elastic examples/friable_sand_example.yaml
+        open_petro_elastic --generate-tutorial tutorial/
+        open_petro_elastic --data-file tutorial/tutorial_data.csv tutorial/tutorial_config.yaml
+        python examples/batzle_wang_visualizations.py

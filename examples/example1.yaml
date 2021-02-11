@@ -1,0 +1,66 @@
+minerals:
+    constituents:
+        - material: #sand
+            bulk_modulus: 36.0E+9 #Pa
+            shear_modulus: 44.0E+9 #Pa
+            density: 2650.0 # kg/m3
+            # fraction is found in csv file, column "sand_fraction"
+          fraction:
+              column: "sand_fraction"
+        - material: # shale
+            bulk_modulus: 11.0E+9 #Pa
+            shear_modulus: 4.5E+9 #Pa
+            density: 1.0 # kg/m3
+          # fraction of shale is 1 - sum(other materials)
+
+pressure:
+    overburden: 50.0E+6 # Pa
+    fluid: # Pa
+      column: "fluid_pressure"
+    rock:
+        column: "rock_pressure"
+
+fluids:
+    mix_method: "wood" # either brie or wood
+    temperature: 75.0 # celsius
+    constituents:
+        - material:
+            type: "oil"
+            gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
+            reference_density: 800.0 # kg/m3
+            gas_oil_ratio: 153.0 # ratio of gas to oil
+          #fraction set to 1 - sum(other_fluid_fractions)
+        - material:
+            type: "brine"
+            salinity: 45000 # ppm
+          fraction: # Ratio of brine to remaining fluid
+              column: "brine_saturation"
+        - material:
+            type: "gas"
+            gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
+          fraction: # Ratio of gas to remaining fluid
+              column: "gas_saturation"
+
+dry_rock:
+    model:
+        # model type is one of:
+        #  * "polyfit"
+        #  * "friable_sand"
+        #  * "patchy_cement"
+        type: "patchy_cement"
+        lower_bound_pressure: 20.0E+6 # Pa
+        upper_bound_cement_fraction: 0.1
+        cement: # cement properties
+          bulk_modulus: 36.8E+9 # Pa
+          shear_modulus: 44.0E+9 # Pa
+          density: 2650.0 # kg/m3
+        shear_reduction: 0.5
+        cement_fraction: 0.04 # volume ratio of pore space to mineral
+        critical_porosity: 0.4 # volume ratio of pore space to mineral
+    porosity:
+        # porosity of dry rock gotten from column in csv file
+        # with name "porosity"
+        column: "porosity"
+
+
+

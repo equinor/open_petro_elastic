@@ -1,0 +1,77 @@
+minerals:
+    constituents:
+        - material: # sand
+            bulk_modulus: 36.0E+9 #Pa
+            shear_modulus: 44.0E+9 #Pa
+            density: 2650.0 # kg/m3
+            # fraction is found in csv file, column "sand_fraction"
+          fraction:
+            column: "sand_fraction"
+        - material: # shale
+            bulk_modulus: 11.0E+9 #Pa
+            shear_modulus: 4.5E+9 #Pa
+            density: 1.0 # kg/m3
+            # fraction of shale is 1 - sum(other materials)
+
+fluids:
+    mix_method: "brie" # either brie or wood
+    brie_constant: 3.0 # The exponentent in the brie function
+    temperature: 75.0 # celsius
+    constituents:
+        - material:
+            type: "oil"
+            gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
+            reference_density: 800.0 # kg/m3
+            gas_oil_ratio: 153.0 # ratio of gas to oil
+          #fraction set to 1 - sum(other_fluid_fractions)
+        - material:
+            type: "brine"
+            salinity: 45000 # ppm
+          fraction: # Ratio of brine to remaining fluid
+            column: "brine_saturation"
+
+
+pressure:
+    overburden: 50.0E+6 # Pa
+    reference: 30.0E+6 # Pa
+    fluid: # Pa
+      column: "fluid_pressure"
+    rock:
+        column: "rock_pressure"
+    max_effective: 100.0E+6 # Pa
+
+dry_rock:
+    model:
+        # model type is one of:
+        #  * "polyfit"
+        #  * "friable_sand"
+        #  * "patchy_cement"
+        type: "polyfit"
+    porosity:
+        # porosity of dry rock gotten from column in csv file
+        column: "porosity"
+    adjustments:
+       - type: "pressure_dependency"
+         model:
+              # model type is one of:
+              # * "polyfit"
+              # * "expfit"
+              # * "logfit"
+              # * "powerfit"
+              # * "patchy_cement"
+              # * "friable_sand"
+             type: "patchy_cement"
+       - type: "depth_trend"
+         depth:
+           column: "depth"
+         reference_depth: 0.0
+         max_depth: 4000.0
+         # coefficients in a 2d polynomial which
+         # adjusts dry rock properties to depth
+         coefficients:
+           # adjusted_bulk_modulus = c[i][j] * delta_depth^i * original_bulk_modulus^j
+           bulk_modulus: [[0.0, 1.5], [1.0, 0.0]]
+           # adjusted_shear_modulus = c[i][j] * delta_depth^i * original_shear_modulus^j
+           shear_modulus: [[0.0, 1.2], [1.0, 0.0]]
+           # adjusted_density = c[i][j] * delta_depth^i * original_density^j
+           density: [[0.0, 1.35], [1.0, 0.0]]

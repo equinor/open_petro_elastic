@@ -1,0 +1,4 @@
+pytest
+snapshottest
+hypothesis
+matplotlib

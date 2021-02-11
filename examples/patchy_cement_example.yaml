@@ -1,0 +1,45 @@
+minerals:
+    constituents:
+        - material:
+            bulk_modulus: 36.0E+9 # Pa
+            shear_modulus: 44.0E+9 # Pa
+            density: 2650.0 # kg/m3
+          fraction: 1.0
+
+fluids:
+    constituents:
+        - material:
+            bulk_modulus: 2.3E+9 # Pa
+            shear_modulus: 0.0E+9 # Pa
+            density: 994.5 # kg/m3
+
+# patchy cement is a hybrid model which is a combination of friable sand and
+# contact cement. The properties of the hybrid model is on the line between
+# two points, friable sand on one end and contact cement on the other end.
+# The weights are calculated using a lower bound (friable sand with lower bound
+# on pressure) and an upper bound (constant cement with upper bound porosity)
+# Then the weight for e.g. bulk modulus is calculated as follows:
+# w_bulk = (cc_bulk - lower_bulk) / (upper_bulk - lower_bulk)
+# where cc_bulk is the bulk modulus of constant cement, upper_bulk is the bulk
+# modulus of the upper bound, and lower_bulk is the bulk modulus of the lower bound.
+dry_rock:
+    model:
+        type: "patchy_cement"
+        # The cement of the upper bound.
+        cement: # cement properties
+          bulk_modulus: 36.8E+9 # Pa
+          shear_modulus: 44.0E+9 # Pa
+          density: 2650.0 # kg/m3
+        # The cement fraction in the dry rock
+        cement_fraction: 0.04
+        # The pressure used for lower bound
+        lower_bound_pressure: 20.0E+6
+        # The cement fraction in the upper bound
+        upper_bound_cement_fraction: 0.1
+        coordination_number: 9
+        # The critical porosity of the dry rock
+        critical_porosity: 0.4
+        # Shear reduction factor used to account for tangential frictionless
+        # grain contacts in all submodels.
+        shear_reduction: 1.0
+    porosity: 0.3 # Porosity of uncemented sand stone

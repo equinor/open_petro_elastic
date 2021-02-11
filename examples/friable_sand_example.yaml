@@ -1,0 +1,28 @@
+minerals:
+    constituents:
+        - material:
+            bulk_modulus: 36.0E+9 # Pa
+            shear_modulus: 44.0E+9 # Pa
+            density: 2650.0 # kg/m3
+          fraction: 1.0
+
+fluids:
+    constituents:
+        - material:
+            bulk_modulus: 2.3E+9 # Pa
+            shear_modulus: 0.0E+9 # Pa
+            density: 994.5 # kg/m3
+
+# friable sand models sandstone as a hashin-shtrikman-walpole lower bound of
+# hertz_mindlin granular material at critical porosity and solid mineral. The
+# fraction of solid mineral is 1 - porosity / critical_porosity.
+dry_rock:
+    model:
+        type: "friable_sand"
+        coordination_number: 9
+        # The critical porosity of the dry rock
+        critical_porosity: 0.4
+        # Shear reduction factor used to account for tangential frictionless
+        # grain contacts in all submodels.
+        shear_reduction: 1.0
+    porosity: 0.3 # Porosity of uncemented sand stone
