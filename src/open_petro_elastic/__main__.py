@@ -295,8 +295,8 @@ for documentation.
 """
 
 
-def parse_arguments(argv):
-    ap = argparse.ArgumentParser(prog=argv[0], description=TOOL_DESCRIPTION)
+def make_parser(prog="open_petro_elastic"):
+    ap = argparse.ArgumentParser(prog=prog, description=TOOL_DESCRIPTION)
     ap.add_argument(
         "config_file", type=argparse.FileType("r"), help="petro elastic yaml input file"
     )
@@ -335,6 +335,11 @@ def parse_arguments(argv):
         + " Unsuccessful rows will be given NaN. Note that "
         + "this option can deteriorate performance.",
     )
+    return ap
+
+
+def parse_arguments(argv):
+    ap = make_parser(argv[0])
     return ap.parse_args(argv[1:])
 
 
