@@ -7,6 +7,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinxarg.ext",
     "sphinx.ext.viewcode",
+    "sphinx.ext.doctest",
     "matplotlib.sphinxext.plot_directive",
     "recommonmark",
 ]
