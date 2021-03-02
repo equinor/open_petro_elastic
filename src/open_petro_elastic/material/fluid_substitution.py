@@ -1,3 +1,14 @@
+"""
+Model for substituting a fluid in porous material.
+
+For instance, a sandstone will generally have pore space,
+which can, for instance, be filled by oil. Fluid
+substitution means, given the elastic properties (Material
+class) of a dry material and the fluid, calculate the
+elastic properties of the dry material when filled with
+the liquid.
+
+"""
 from open_petro_elastic.float_vectorize import float_vectorize
 
 from .material import Material

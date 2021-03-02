@@ -18,10 +18,9 @@ where
 
 see also:
 
-* "A Tutorial on Gassmann Fluid Substitution: Formulation, Algorithm and Matlab
-Code", Dhananjay Kumar, 2006,
-https://www.spgindia.org/geohorizon/jan_2006/dhananjay_paper.pdf
-
+* "A Tutorial on Gassmann Fluid Substitution: Formulation,
+  Algorithm and Matlab Code", Dhananjay Kumar, 2006,
+  https://www.spgindia.org/geohorizon/jan_2006/dhananjay_paper.pdf
 * https://petrowiki.org/Compressional_and_shear_velocities
 
 """

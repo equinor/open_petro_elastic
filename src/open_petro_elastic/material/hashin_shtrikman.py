@@ -3,9 +3,10 @@ Computation of bounds on elastic properties using the method
 of Hashin-Shtrikman and their extensions.
 
 see, for instance,
+
 * Chinh, Pham Duc. "Bounds on the elastic moduli of statistically isotropic
-    multicomponent materials and random cell polycrystals." International Journal
-    of Solids and Structures 49.18 (2012): 2646-2659.
+  multicomponent materials and random cell polycrystals." International Journal
+  of Solids and Structures 49.18 (2012): 2646-2659.
 """
 import numpy as np
 
@@ -81,9 +82,11 @@ def hashin_shtrikman_average(material1, material2, ratio):
 def hashin_shtrikman_walpole(material1, material2, ratio, bound="lower"):
     """
     Refinement of hashin_shtrikman bounds
-    Chinh, Pham Duc. "Bounds on the elastic moduli of statistically isotropic
-        multicomponent materials and random cell polycrystals." International
-        Journal of Solids and Structures 49.18 (2012): 2646-2659.
+
+    * Chinh, Pham Duc. "Bounds on the elastic moduli of statistically isotropic
+      multicomponent materials and random cell polycrystals." International
+      Journal of Solids and Structures 49.18 (2012): 2646-2659.
+
     :param material1: The first constiuent in the composite material.
     :param material2: The second constiuent in the composite material.
     :param ratio: The ratio of material1 in the composite material.

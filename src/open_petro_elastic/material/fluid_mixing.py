@@ -1,3 +1,6 @@
+"""
+Contains models for fluid mixtures
+"""
 from .fluid import fluid
 
 

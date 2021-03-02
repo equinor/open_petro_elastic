@@ -1,4 +1,4 @@
-## Config file format
+## Config File Format
 
 Input to `open_petro_elastic` consists of a yaml
 config file plus an optional csv data file.
@@ -7,7 +7,7 @@ The yaml config consists of three sections, minerals, fluids and dryrock. Elasti
 values for dry rock, having the mineral as its pore-material and saturated with the fluid
 is outputed.
 
-### minerals
+### Minerals
 
 Consists only of a list of constituents which will be mixed using Hashin-Shtrikman,
 like so:
@@ -27,7 +27,7 @@ minerals:
           # fraction of shale is 1 - sum(other materials)
 ```
 
-### fluids
+### Fluids
 
 Same as minerals, but a choice of mixing methods is given, and temperature and
 pressure can be given for costituents from theoretical models:
@@ -109,7 +109,7 @@ the powerfit model is applied first, then depth trend which uses a polynomial fi
 See `examples/example2.yaml` for a detailed description of adjustments.
 
 
-### Inserting form datafile
+### Inserting from datafile
 Values from the csv file are inserted into the config file as columns of vectors,
 `open_petro_elastic` then maps its computation over the columns row-wise. The insertion
 into the yaml file of columns is done by giving the column name to the value you
@@ -127,7 +127,7 @@ minerals:
                 column: "shale_r"
 ```
 
-This specifies that the minerals first constitutent shold have a material whos
+This specifies that the minerals first constituent should have a material whos
 `bulk_modulus`, `shear_modulus`, and `density` can be found in the data files
 columns with headers `shale_k`, `shale_s`, and `shale_r` respectively. Lets say
 the contents of the data file is as follows:
@@ -157,4 +157,4 @@ minerals:
             density: 1000
 ```
 
-A density of 1000 kg/m^3 is applied in all three output rows.
+A density of 1000 kg/m³ is applied in all three output rows.

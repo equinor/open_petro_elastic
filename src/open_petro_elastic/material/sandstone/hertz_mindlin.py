@@ -1,10 +1,6 @@
 """
-Models the elastic properties of a hydrostatic confining pressure applied to a
-random indentical sphere packing, see Mavko et. al (2003) page 150
-
-* "The Rock Physics Handbook: Tools for Seismic Analysis of Porous Media"
-Gary Mavko, Tapan Mukerji, Jack Dvorkin
-Cambridge University Press, 16. okt. 2003
+Module for Hertz-Mindlin granular material under pressure model
+ see :py:meth:`hertz_mindlin`.
 """
 import numpy as np
 
@@ -22,6 +18,13 @@ def hertz_mindlin(
     Adjusts the moduli of a given granular material to a confining pressure
     according to Hertz-Mindlin model for pressure-induced moduli increase at
     critical porosity.
+
+    Models the elastic properties of a hydrostatic confining pressure applied to a
+    random indentical sphere packing, see Mavko et. al (2003) page 150
+
+    * "The Rock Physics Handbook: Tools for Seismic Analysis of Porous Media"
+      Gary Mavko, Tapan Mukerji, Jack Dvorkin
+      Cambridge University Press, 16. okt. 2003
 
     :param mineral: The material composing the grains of a granular material.
     :param porisity: The porosity of the granular material.

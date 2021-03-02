@@ -1,9 +1,9 @@
-Usage as a library
+Usage as a Library
 ##################
 
 Generally, the :code:`open_petro_elastic.material` module
 is used for interfacing with open_petro_elastic as
-a python library::
+a python library:
 
 .. doctest::
 

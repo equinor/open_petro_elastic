@@ -1,12 +1,7 @@
 """
-The constant cement model (Aveset et. al (2000)) which assumes that sands of
-varying porosity all have the same amount of contact cement.
-
-* Avseth, Per, et al. "Rock physics diagnostic of North Sea sands: Link between
-microstructure and seismic properties." Geophysical Research Letters 27.17
-(2000): 2761-2764.
+Module for calculation of the constant cement model
+of Avseth et. al, see :py:meth:`constant_cement`.
 """
-
 from ..hashin_shtrikman import hashin_shtrikman_walpole
 from .contact_cement import contact_cement
 
@@ -21,6 +16,14 @@ def constant_cement(
     shear_reduction=1.0,
 ):
     """
+
+    The constant cement model (Aveset et. al (2000)) which assumes that sands of
+    varying porosity all have the same amount of contact cement.
+
+    * Avseth, Per, et al. "Rock physics diagnostic of North Sea sands: Link between
+      microstructure and seismic properties." Geophysical Research Letters 27.17
+      (2000): 2761-2764.
+
     :param sand: material representing the sand framework material.
     :param cement: material representing a pore-filling cement.
     :param porosity: The porosity of constant cement.
