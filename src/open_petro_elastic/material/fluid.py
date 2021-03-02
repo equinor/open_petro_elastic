@@ -1,3 +1,6 @@
+"""
+Fluid is short hand for a material with shear modulus equal to zero.
+"""
 from .material import Material
 
 

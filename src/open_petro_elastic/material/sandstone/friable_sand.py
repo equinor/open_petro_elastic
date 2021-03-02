@@ -1,3 +1,7 @@
+"""
+Module for calculation of the friable sand model
+of Dvorkin & Nur, see :py:meth:`friable_sand`.
+"""
 from ..hashin_shtrikman import hashin_shtrikman_walpole
 from .hertz_mindlin import hertz_mindlin
 

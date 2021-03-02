@@ -1,11 +1,6 @@
 """
-Dvorkin Nur (1996) contact cement model of cemented granular
-material. Based on the assumption that porosity decreases from the
-initial porosity of a sand pack due to the uniform
-deposition of cement on the surface of the grains.
-
-* Dvorkin, Jack, and Amos Nur. "Elasticity of high-porosity sandstones: Theory
-for two North Sea data sets." Geophysics 61.5 (1996): 1363-1370.
+Module for calculation of the contact cement model
+of Dvorkin & Nur et. al, see :py:meth:`contact_cement`.
 """
 
 import numpy as np
@@ -17,7 +12,7 @@ def shear_stiffness(
     cement_shear_modulus, grain_shear_modulus, grain_poisson_ratio, radius_ratio
 ):
     """
-    Calculates the parameter St in (1) from dvorkin et. al (1991), also
+    Calculates the parameter St in (1) from Dvorkin et. al (1991), also
     known as the tangential stiffness.
 
     See appendix A for description of calculation.
@@ -26,7 +21,7 @@ def shear_stiffness(
     :param cement_shear_modulus: The shear modulus of the cement.
     :param grain_shear_modulus: The shear modulus of the grain.
     :param radius_ratio: The ratio of the radius of the cement layer to the
-        grain radius. Constant alpha in dvorkin et. al (1991) equations (1)-(3).
+        grain radius. Constant alpha in Dvorkin et. al (1991) equations (1)-(3).
     """
     poiss = grain_poisson_ratio
     alpha = radius_ratio
@@ -56,14 +51,14 @@ def normal_stiffness(
     radius_ratio,
 ):
     """
-    Calculates the parameter Sn in (1) from dvorkin et. al (1991).
+    Calculates the parameter Sn in (1) from Dvorkin et. al (1991).
     See appendix A for description of calculation.
     :param grain_poisson_ratio: The poisson's ratio of the grains.
     :param cement_poisson_ratio: The poisson's ratio of the cement.
     :param cement_shear_modulus: The shear modulus of the cement.
     :param grain_shear_modulus: The shear modulus of the grain.
     :param radius_ratio: The ratio of the radius of the cement layer to the
-        grain radius. Constant alpha in dvorkin et. al (1991) equations (1)-(3).
+        grain radius. Constant alpha in Dvorkin et. al (1991) equations (1)-(3).
     """
     poiss = grain_poisson_ratio
     poiss_c = cement_poisson_ratio
@@ -83,7 +78,7 @@ def normal_stiffness(
 def cement_radius_ratio(cemented_sand_porosity, grain_porosity):
     """
     :return: the ratio of the radius of the cement layer to the grain
-        radius, alpha in dvorkin et. al (1991) equation (2). Unlike the paper,
+        radius, alpha in Dvorkin et. al (1991) equation (2). Unlike the paper,
         the ratio is restricted to [0.0, 1.0] to avoid impossible values caused
         by numerical instability.
     :param cemented_sand_porosity: Porosity of cemented sand.
@@ -115,6 +110,14 @@ def contact_cement(
     coordination_number=9,
 ):
     """
+    Dvorkin Nur (1996) contact cement model of cemented granular
+    material. Based on the assumption that porosity decreases from the
+    initial porosity of a sand pack due to the uniform
+    deposition of cement on the surface of the grains.
+
+    * Dvorkin, Jack, and Amos Nur. "Elasticity of high-porosity sandstones: Theory
+      for two North Sea data sets." Geophysics 61.5 (1996): 1363-1370.
+
     Cement is assumed to be evenly distributed on the
     grains (scheme 2 in Dvorkin and Nur's original paper)
 
