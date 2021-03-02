@@ -28,3 +28,4 @@ jobs:
     - name: Generate documentation
       run: |
         sphinx-build docs docs_out/
+        sphinx-build -b doctest docs docs_out/
