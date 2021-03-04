@@ -2,11 +2,11 @@ import numpy as np
 from numpy import sqrt
 from numpy.polynomial.polynomial import polyval3d
 
-from open_petro_elastic.material.batzle_wang.water import (
+from open_petro_elastic.material.batzle_wang.water_properties import (
     water_density,
     water_primary_velocity,
 )
-from open_petro_elastic.material.fluid import fluid
+from open_petro_elastic.material.fluid import fluid_material as fluid
 
 
 def brine_density(temperature, pressure, salinity):
