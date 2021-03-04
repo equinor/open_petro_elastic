@@ -9,7 +9,7 @@ see also https://petrowiki.spe.org/Pore_fluid_properties
 
 """
 
-from .brine import brine
+from .brine_properties import brine
 from .hydro_carbon_gas import gas
 from .oil_properties import dead_oil, live_oil, oil
 from .water_properties import water
