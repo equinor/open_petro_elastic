@@ -4,7 +4,7 @@ Module for calculating properties of ideal gas.
 from numpy import sqrt
 from scipy.constants import gas_constant
 
-from open_petro_elastic.material.fluid import fluid
+from open_petro_elastic.material.fluid import fluid_material as fluid
 
 AIR_WEIGHT = 28.8  # g/mol
 

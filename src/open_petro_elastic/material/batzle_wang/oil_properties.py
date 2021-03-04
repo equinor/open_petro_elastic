@@ -1,7 +1,8 @@
 import warnings
 
 import numpy as np
-from open_petro_elastic.material.fluid import fluid
+
+from open_petro_elastic.material.fluid import fluid_material as fluid
 
 
 def oil_bubble_point(density, gas_oil_ratio, gas_gravity, temperature):

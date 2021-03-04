@@ -1,8 +1,9 @@
 import numpy as np
 import pytest
+
 from open_petro_elastic.config import DryRock
 from open_petro_elastic.material import Material
-from open_petro_elastic.material.fluid import fluid
+from open_petro_elastic.material.fluid import fluid_material as fluid
 
 
 @pytest.fixture

@@ -17,8 +17,7 @@ elastic properties of any given material
 
 
 """
-from .fluid_mixing import brie_fluid_mixing, wood_fluid_mixing
-from .fluid_substitution import fluid_substitution
+from .fluid import brie_fluid_mixing, fluid_substitution, wood_fluid_mixing
 from .hashin_shtrikman import hashin_shtrikman_average, hashin_shtrikman_walpole
 from .material import Material, polyval_material
 

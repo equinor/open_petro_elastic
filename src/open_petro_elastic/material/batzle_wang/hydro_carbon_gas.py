@@ -1,7 +1,7 @@
 from numpy import exp
 
 from open_petro_elastic.material.conversions import celsius_to_kelvin
-from open_petro_elastic.material.fluid import fluid
+from open_petro_elastic.material.fluid import fluid_material as fluid
 
 from .ideal_gas import ideal_gas
 

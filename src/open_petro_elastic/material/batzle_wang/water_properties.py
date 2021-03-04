@@ -3,7 +3,7 @@ import warnings
 import numpy as np
 from numpy.polynomial.polynomial import polyval2d
 
-from open_petro_elastic.material.fluid import fluid
+from open_petro_elastic.material.fluid import fluid_material as fluid
 
 
 def water_density(temperature, pressure):
