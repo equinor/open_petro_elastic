@@ -49,4 +49,3 @@ jobs:
         open_petro_elastic examples/friable_sand_example.yaml
         open_petro_elastic --generate-tutorial tutorial/
         open_petro_elastic --data-file tutorial/tutorial_data.csv tutorial/tutorial_config.yaml
-        python examples/batzle_wang_visualizations.py
