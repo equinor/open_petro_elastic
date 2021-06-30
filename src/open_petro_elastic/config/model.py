@@ -55,6 +55,21 @@ class AbstractPressureDependencyModel(abc.ABC):
     def eval(self, pressure, porosity, mineral):
         pass
 
+    def eval_material(self, *args, **kwargs):
+        density_factor, primary_factor, secondary_factor = self.eval(*args, **kwargs)
+        if self.use_moduli:
+            return Material(
+                density=density_factor,
+                bulk_modulus=primary_factor,
+                shear_modulus=secondary_factor,
+            )
+        else:
+            return Material(
+                density=density_factor,
+                primary_velocity=primary_factor,
+                secondary_velocity=secondary_factor,
+            )
+
 
 @dataclass(config=PetroElasticConfig)
 class PolyfitModel(AbstractPressureDependencyModel):
@@ -145,6 +160,11 @@ class PowerfitModel(AbstractPressureDependencyModel):
             density=material.density + density_factor,
         )
 
+    def eval_material(self, pressure, porosity, mineral):
+        raise NotImplementedError(
+            "Cannot construct a valid material for power fit model"
+        )
+
     def eval(self, pressure, porosity=None, mineral=None):
         coeff = np.asarray(self.coefficients.as_list)
         return np.vectorize(
@@ -212,7 +232,7 @@ class FriableSandModel(AbstractPressureDependencyModel):
 
     def eval(self, pressure, porosity, mineral):
         m = self.eval_material(pressure, porosity, mineral)
-        return np.transpose([m.bulk_modulus, m.shear_modulus, m.density])
+        return np.transpose([m.density, m.bulk_modulus, m.shear_modulus])
 
     def eval_material(self, pressure, porosity, mineral):
         return friable_sand(
@@ -291,7 +311,7 @@ class PatchyCementModel(AbstractPressureDependencyModel):
 
     def eval(self, pressure, porosity, mineral):
         m = self.eval_material(pressure, porosity, mineral)
-        return np.transpose([m.bulk_modulus, m.shear_modulus, m.density])
+        return np.transpose([m.density, m.bulk_modulus, m.shear_modulus])
 
     def eval_material(self, pressure, porosity, mineral):
         return patchy_cement(
