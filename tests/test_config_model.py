@@ -1,5 +1,6 @@
+import numpy as np
 import pytest
-from generators import materials
+from generators import materials, positives, ratios
 from hypothesis import given
 from numpy.testing import assert_allclose
 from predicates import assert_similar_material
@@ -177,6 +178,35 @@ def test_patchy_cement_model_nonporous(patchy_cement_model, material):
 
 def test_patchy_cement_model_use_moduli(patchy_cement_model):
     assert patchy_cement_model.use_moduli()
+
+
+coefficient_params = {
+    "coefficients": {"density": [1.0], "bulk_modulus": [1.0], "shear_modulus": [5.0]}
+}
+
+
+@pytest.mark.parametrize(
+    "model",
+    [
+        PatchyCementModel(),
+        FriableSandModel(),
+        PolyfitModel(**coefficient_params),
+        ExpfitModel(**coefficient_params),
+        LogfitModel(**coefficient_params),
+    ],
+)
+@given(materials(), ratios(min_value=0.1, max_value=0.3), positives())
+def test_eval_order(model, mineral, porosity, pressure):
+    model = PatchyCementModel()
+
+    material = model.eval_material(pressure, porosity, mineral)
+
+    assert np.all(
+        model.eval(pressure, porosity, mineral)
+        == np.transpose(
+            [material.density, material.bulk_modulus, material.shear_modulus]
+        )
+    )
 
 
 def test_patchy_cement_model_eval_material(patchy_cement_model, mineral_mix_material):
