@@ -8,7 +8,6 @@ from open_petro_elastic.material.span_wagner.carbon_dioxide import carbon_dioxid
 table_header = "temperature, pressure, density"
 table_data = [
     # 0.05 MPa
-    [186.436, 0.05, 1.4370],
     [190, 0.05, 1.4089],
     [200, 0.05, 1.3359],
     [210, 0.05, 1.2704],
@@ -39,7 +38,6 @@ table_data = [
     [1000, 0.05, 0.26463],
     [1100, 0.05, 0.24057],
     # 0.1 MPa
-    [194.525, 0.1, 2.7796],
     [200, 0.1, 2.6980],
     [210, 0.1, 2.5617],
     [220, 0.1, 2.4394],
@@ -69,12 +67,9 @@ table_data = [
     [1000, 0.1, 0.52921],
     [1100, 0.1, 0.48109],
     # 1.00 MPa
-    [216.695, 1, 1179.10],
     [220, 1, 1167.03],
     [225, 1, 1148.32],
     [230, 1, 1128.97],
-    [233.028, 1, 1116.90],
-    [233.028, 1, 26.006],
     [235, 1, 25.665],
     [240, 1, 24.857],
     [245, 1, 24.117],
@@ -127,7 +122,6 @@ table_data = [
     [1000, 1, 5.2826],
     [1100, 1, 4.8014],
     # 10 MPa
-    [218.600, 10, 1190.34],
     [220, 10, 1185.63],
     [225, 10, 1168.59],
     [230, 10, 1151.15],
@@ -182,7 +176,6 @@ table_data = [
     [1000, 10, 51.825],
     [1100, 10, 47.040],
     # 100 MPa
-    [236.031, 100, 1265.83],
     [240, 100, 1257.21],
     [245, 100, 1246.37],
     [250, 100, 1235.57],
@@ -226,7 +219,6 @@ table_data = [
     [600, 100, 649.77],
     [625, 100, 624.90],
     # 800 MPa
-    [327.673, 800, 1495.70],
     [330, 800, 1493.71],
     [335, 800, 1489.46],
     [340, 800, 1485.25],
@@ -268,10 +260,10 @@ def test_gas_density_and_pressure(temperature, pressure, density):
     Tests that values calculated match that of table 35 from Span & Wagner.
     """
     assert carbon_dioxide_pressure(temperature, density) == pytest.approx(
-        pressure, rel=0.01
+        pressure, rel=0.002
     )
     assert carbon_dioxide_density(temperature, pressure) == pytest.approx(
-        density, rel=0.01
+        density, rel=0.002
     )
 
 
@@ -281,6 +273,123 @@ def test_vectorized_gas_density_and_pressure():
     """
     data = array(table_data)
     calc_pressure = carbon_dioxide_pressure(data[:, 0], data[:, 2])
-    assert_allclose(calc_pressure, data[:, 1])
+    assert_allclose(calc_pressure, data[:, 1], rtol=0.002)
     calc_density = carbon_dioxide_density(data[:, 0], data[:, 1])
-    assert_allclose(calc_density, data[:, 2])
+    assert_allclose(calc_density, data[:, 2], rtol=0.002)
+
+
+@pytest.mark.parametrize(
+    "temperature, pressure, density, vapor",
+    [
+        # From Table 34 of [2]
+        [216.592, 0.51796, 1178.46, False],
+        [216.592, 0.51796, 13.761, True],
+        [218, 0.55042, 1173.40, False],
+        [218, 0.55042, 14.584, True],
+        [220, 0.59913, 1166.14, False],
+        [220, 0.59913, 15.817, True],
+        [222, 0.65102, 1158.81, False],
+        [222, 0.65102, 17.131, True],
+        [224, 0.70621, 1151.40, False],
+        [224, 0.70621, 18.530, True],
+        [226, 0.76484, 1143.92, False],
+        [226, 0.76484, 20.016, True],
+        [228, 0.82703, 1136.34, False],
+        [228, 0.82703, 21.595, True],
+        [230, 0.89291, 1128.68, False],
+        [230, 0.89291, 23.271, True],
+        [232, 0.96262, 1120.93, False],
+        [232, 0.96262, 25.050, True],
+        [234, 1.0363, 1113.08, False],
+        [234, 1.0363, 26.936, True],
+        [236, 1.1141, 1105.12, False],
+        [236, 1.1141, 28.935, True],
+        [238, 1.1961, 1097.05, False],
+        [238, 1.1961, 31.052, True],
+        [240, 1.2825, 1088.87, False],
+        [240, 1.2825, 33.295, True],
+        [242, 1.3734, 1080.56, False],
+        [242, 1.3734, 35.670, True],
+        [244, 1.4690, 1072.13, False],
+        [244, 1.4690, 38.184, True],
+        [246, 1.5693, 1063.56, False],
+        [246, 1.5693, 40.845, True],
+        [248, 1.6746, 1054.84, False],
+        [248, 1.6746, 43.662, True],
+        [250, 1.7850, 1045.97, False],
+        [250, 1.7850, 46.644, True],
+        [252, 1.9007, 1036.93, False],
+        [252, 1.9007, 49.801, True],
+        [254, 2.0217, 1027.72, False],
+        [254, 2.0217, 53.144, True],
+        [256, 2.1483, 1018.32, False],
+        [256, 2.1483, 56.685, True],
+        [258, 2.2806, 1008.71, False],
+        [258, 2.2806, 60.438, True],
+        [260, 2.4188, 998.89, False],
+        [260, 2.4188, 64.417, True],
+        [262, 2.5630, 988.83, False],
+        [262, 2.5630, 68.640, True],
+        [264, 2.7134, 978.51, False],
+        [264, 2.7134, 73.124, True],
+        [266, 2.8701, 967.92, False],
+        [266, 2.8701, 77.891, True],
+        [268, 3.0334, 957.04, False],
+        [268, 3.0334, 82.965, True],
+        [270, 3.2033, 945.83, False],
+        [270, 3.2033, 88.374, True],
+        [272, 3.3802, 934.26, False],
+        [272, 3.3802, 94.140, True],
+        [274, 3.5642, 922.30, False],
+        [274, 3.5642, 100.32, True],
+        [276, 3.7555, 909.90, False],
+        [276, 3.7555, 106.95, True],
+        [278, 3.9542, 897.02, False],
+        [278, 3.9542, 114.07, True],
+        [280, 4.1607, 883.58, False],
+        [280, 4.1607, 121.74, True],
+        [282, 4.3752, 869.52, False],
+        [282, 4.3752, 130.05, True],
+        [284, 4.5978, 854.74, False],
+        [284, 4.5978, 139.09, True],
+        [286, 4.8289, 839.12, False],
+        [286, 4.8289, 148.98, True],
+        [288, 5.0688, 822.50, False],
+        [288, 5.0688, 159.87, True],
+        [290, 5.3177, 804.67, False],
+        [290, 5.3177, 171.96, True],
+        [292, 5.5761, 785.33, False],
+        [292, 5.5761, 185.55, True],
+        [294, 5.8443, 764.09, False],
+        [294, 5.8443, 201.06, True],
+        [296, 6.1227, 740.28, False],
+        [296, 6.1227, 219.14, True],
+        [298, 6.4121, 712.77, False],
+        [298, 6.4121, 240.90, True],
+        [300, 6.7131, 679.24, False],
+        [300, 6.7131, 268.58, True],
+        [301, 6.8683, 658.69, False],
+        [301, 6.8683, 286.15, True],
+        [302, 7.0268, 633.69, False],
+        [302, 7.0268, 308.15, True],
+        [303, 7.1890, 599.86, False],
+        [303, 7.1890, 339.00, True],
+        [304, 7.3555, 530.30, False],
+        [304, 7.3555, 406.42, True],
+        [304.1282, 7.3773, 467.60, True],  # Fails due to nan
+        # From Table 35 of [2]
+        [186.436, 0.05, 1.4370, True],
+        [194.525, 0.1, 2.7796, True],
+        [216.695, 1, 1179.10, False],
+        [233.028, 1, 1116.90, False],
+        [233.028, 1, 26.006, True],
+        [218.600, 10, 1190.34, False],
+        [236.031, 100, 1265.83, False],
+        [327.673, 800, 1495.70, False],
+    ]
+)
+def test_density_close_to_phase_boundaries(temperature, pressure, density, vapor):
+    calc_pressure = carbon_dioxide_pressure(temperature, density)
+    assert calc_pressure == pytest.approx(pressure, rel=0.005)
+    calc_density = carbon_dioxide_density(temperature, pressure, vapor)
+    assert calc_density == pytest.approx(density, rel=0.005)
