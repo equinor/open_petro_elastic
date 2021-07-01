@@ -50,6 +50,7 @@ The expressions are directly equivalent to the expressions in the code below, wi
 function. This can, however, be directly replaced with a boolean expression.
 """
 from numpy import array, log, exp, sum, abs, sign
+from open_petro_elastic import float_vectorize
 
 from open_petro_elastic.material.fluid import fluid_material as fluid
 from open_petro_elastic.material.conversions import celsius_to_kelvin
@@ -370,6 +371,7 @@ def phi_r(delta, tau, dd, dt):
         raise NotImplementedError
 
 
+@float_vectorize
 def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temperature=0):
     """
     CO2 pressure (MPa) as given by Table 3 of Span & Wagner [2]
@@ -465,6 +467,7 @@ def melting_pressure(absolute_temperature):
     return p_triple * (1 + _a1 * _t + _a2 * _t ** 2)
 
 
+@float_vectorize
 def carbon_dioxide_density(absolute_temperature, pressure):
     """
     Density of carbon dioxide. Found solving the Pressure equation of Table 3 in Span & Wagner [2] numerically for
