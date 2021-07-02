@@ -1,12 +1,114 @@
 import pytest
 from numpy.testing import assert_allclose
-from numpy import array
-from open_petro_elastic.material.span_wagner.carbon_dioxide import carbon_dioxide_density, carbon_dioxide_pressure
+import numpy as np
+from open_petro_elastic.material.span_wagner.carbon_dioxide import carbon_dioxide_density, carbon_dioxide_pressure,\
+    carbon_dioxide
+
+
+# Excerpt from Table 34 of Span & Wagner [2]
+table_34_header = ["temperature", "pressure", "density", "vapor", "speed_of_sound"]
+table_34_data = np.array([
+    [216.592, 0.51796, 1178.46, False, 975.85],
+    [216.592, 0.51796, 13.761, True, 222.78],
+    [218, 0.55042, 1173.40, False, 965.66],
+    [218, 0.55042, 14.584, True, 222.94],
+    [220, 0.59913, 1166.14, False, 951.21],
+    [220, 0.59913, 15.817, True, 223.15],
+    [222, 0.65102, 1158.81, False, 936.79],
+    [222, 0.65102, 17.131, True, 223.31],
+    [224, 0.70621, 1151.40, False, 922.37],
+    [224, 0.70621, 18.530, True, 223.44],
+    [226, 0.76484, 1143.92, False, 907.95],
+    [226, 0.76484, 20.016, True, 223.52],
+    [228, 0.82703, 1136.34, False, 893.53],
+    [228, 0.82703, 21.595, True, 223.57],
+    [230, 0.89291, 1128.68, False, 879.09],
+    [230, 0.89291, 23.271, True, 223.57],
+    [232, 0.96262, 1120.93, False, 864.63],
+    [232, 0.96262, 25.050, True, 223.54],
+    [234, 1.0363, 1113.08, False, 850.14],
+    [234, 1.0363, 26.936, True, 223.46],
+    [236, 1.1141, 1105.12, False, 835.61],
+    [236, 1.1141, 28.935, True, 223.33],
+    [238, 1.1961, 1097.05, False, 821.02],
+    [238, 1.1961, 31.052, True, 223.17],
+    [240, 1.2825, 1088.87, False, 806.38],
+    [240, 1.2825, 33.295, True, 222.96],
+    [242, 1.3734, 1080.56, False, 791.67],
+    [242, 1.3734, 35.670, True, 222.70],
+    [244, 1.4690, 1072.13, False, 776.87],
+    [244, 1.4690, 38.184, True, 222.40],
+    [246, 1.5693, 1063.56, False, 761.97],
+    [246, 1.5693, 40.845, True, 222.06],
+    [248, 1.6746, 1054.84, False, 746.95],
+    [248, 1.6746, 43.662, True, 221.66],
+    [250, 1.7850, 1045.97, False, 731.78],
+    [250, 1.7850, 46.644, True, 221.22],
+    [252, 1.9007, 1036.93, False, 716.44],
+    [252, 1.9007, 49.801, True, 220.72],
+    [254, 2.0217, 1027.72, False, 700.88],
+    [254, 2.0217, 53.144, True, 220.17],
+    [256, 2.1483, 1018.32, False, 685.08],
+    [256, 2.1483, 56.685, True, 219.56],
+    [258, 2.2806, 1008.71, False, 668.99],
+    [258, 2.2806, 60.438, True, 218.90],
+    [260, 2.4188, 998.89, False, 652.58],
+    [260, 2.4188, 64.417, True, 218.19],
+    [262, 2.5630, 988.83, False, 635.84],
+    [262, 2.5630, 68.640, True, 217.41],
+    [264, 2.7134, 978.51, False, 618.75],
+    [264, 2.7134, 73.124, True, 216.59],
+    [266, 2.8701, 967.92, False, 601.31],
+    [266, 2.8701, 77.891, True, 215.70],
+    [268, 3.0334, 957.04, False, 583.54],
+    [268, 3.0334, 82.965, True, 214.76],
+    [270, 3.2033, 945.83, False, 565.46],
+    [270, 3.2033, 88.374, True, 213.75],
+    [272, 3.3802, 934.26, False, 547.11],
+    [272, 3.3802, 94.140, True, 212.68],
+    [274, 3.5642, 922.30, False, 528.51],
+    [274, 3.5642, 100.32, True, 211.55],
+    [276, 3.7555, 909.90, False, 509.71],
+    [276, 3.7555, 106.95, True, 210.35],
+    [278, 3.9542, 897.02, False, 490.72],
+    [278, 3.9542, 114.07, True, 209.07],
+    [280, 4.1607, 883.58, False, 471.54],
+    [280, 4.1607, 121.74, True, 207.72],
+    [282, 4.3752, 869.52, False, 452.19],
+    [282, 4.3752, 130.05, True, 206.28],
+    [284, 4.5978, 854.74, False, 432.63],
+    [284, 4.5978, 139.09, True, 204.74],
+    [286, 4.8289, 839.12, False, 412.81],
+    [286, 4.8289, 148.98, True, 203.10],
+    [288, 5.0688, 822.50, False, 392.63],
+    [288, 5.0688, 159.87, True, 201.34],
+    [290, 5.3177, 804.67, False, 371.95],
+    [290, 5.3177, 171.96, True, 199.45],
+    [292, 5.5761, 785.33, False, 350.49],
+    [292, 5.5761, 185.55, True, 197.38],
+    [294, 5.8443, 764.09, False, 327.85],
+    [294, 5.8443, 201.06, True, 195.09],
+    [296, 6.1227, 740.28, False, 303.44],
+    [296, 6.1227, 219.14, True, 192.49],
+    [298, 6.4121, 712.77, False, 276.42],
+    [298, 6.4121, 240.90, True, 189.38],
+    [300, 6.7131, 679.24, False, 245.67],
+    [300, 6.7131, 268.58, True, 185.33],
+    [301, 6.8683, 658.69, False, 228.18],
+    [301, 6.8683, 286.15, True, 182.61],
+    [302, 7.0268, 633.69, False, 208.08],
+    [302, 7.0268, 308.15, True, 178.91],
+    [303, 7.1890, 599.86, False, 182.14],
+    [303, 7.1890, 339.00, True, 172.71],
+    [304, 7.3555, 530.30, False, 134.14],
+    [304, 7.3555, 406.42, True, 147.62],
+    [304.1282, 7.3773, 467.60, True, np.nan],  # Speed of sound not provided
+], dtype='object')
 
 
 # Values are extracted from Table 35 of Span & Wagner [2]
-table_header = "temperature, pressure, density"
-table_data = [
+table_35_header = ["temperature", "pressure", "density"]
+table_35_data = np.array([
     # 0.05 MPa
     [190, 0.05, 1.4089],
     [200, 0.05, 1.3359],
@@ -251,10 +353,10 @@ table_data = [
     [900, 800, 1168.47],
     [1000, 800, 1129.16],
     [1100, 800, 1092.77],
-]
+])
 
 
-@pytest.mark.parametrize(table_header, table_data)
+@pytest.mark.parametrize(table_35_header, table_35_data)
 def test_gas_density_and_pressure(temperature, pressure, density):
     """
     Tests that values calculated match that of table 35 from Span & Wagner.
@@ -271,7 +373,7 @@ def test_vectorized_gas_density_and_pressure():
     """
     Same as above, except for the vectorized version of the function
     """
-    data = array(table_data)
+    data = table_35_data
     calc_pressure = carbon_dioxide_pressure(data[:, 0], data[:, 2])
     assert_allclose(calc_pressure, data[:, 1], rtol=0.002)
     calc_density = carbon_dioxide_density(data[:, 0], data[:, 1])
@@ -279,117 +381,40 @@ def test_vectorized_gas_density_and_pressure():
 
 
 @pytest.mark.parametrize(
-    "temperature, pressure, density, vapor",
-    [
-        # From Table 34 of [2]
-        [216.592, 0.51796, 1178.46, False],
-        [216.592, 0.51796, 13.761, True],
-        [218, 0.55042, 1173.40, False],
-        [218, 0.55042, 14.584, True],
-        [220, 0.59913, 1166.14, False],
-        [220, 0.59913, 15.817, True],
-        [222, 0.65102, 1158.81, False],
-        [222, 0.65102, 17.131, True],
-        [224, 0.70621, 1151.40, False],
-        [224, 0.70621, 18.530, True],
-        [226, 0.76484, 1143.92, False],
-        [226, 0.76484, 20.016, True],
-        [228, 0.82703, 1136.34, False],
-        [228, 0.82703, 21.595, True],
-        [230, 0.89291, 1128.68, False],
-        [230, 0.89291, 23.271, True],
-        [232, 0.96262, 1120.93, False],
-        [232, 0.96262, 25.050, True],
-        [234, 1.0363, 1113.08, False],
-        [234, 1.0363, 26.936, True],
-        [236, 1.1141, 1105.12, False],
-        [236, 1.1141, 28.935, True],
-        [238, 1.1961, 1097.05, False],
-        [238, 1.1961, 31.052, True],
-        [240, 1.2825, 1088.87, False],
-        [240, 1.2825, 33.295, True],
-        [242, 1.3734, 1080.56, False],
-        [242, 1.3734, 35.670, True],
-        [244, 1.4690, 1072.13, False],
-        [244, 1.4690, 38.184, True],
-        [246, 1.5693, 1063.56, False],
-        [246, 1.5693, 40.845, True],
-        [248, 1.6746, 1054.84, False],
-        [248, 1.6746, 43.662, True],
-        [250, 1.7850, 1045.97, False],
-        [250, 1.7850, 46.644, True],
-        [252, 1.9007, 1036.93, False],
-        [252, 1.9007, 49.801, True],
-        [254, 2.0217, 1027.72, False],
-        [254, 2.0217, 53.144, True],
-        [256, 2.1483, 1018.32, False],
-        [256, 2.1483, 56.685, True],
-        [258, 2.2806, 1008.71, False],
-        [258, 2.2806, 60.438, True],
-        [260, 2.4188, 998.89, False],
-        [260, 2.4188, 64.417, True],
-        [262, 2.5630, 988.83, False],
-        [262, 2.5630, 68.640, True],
-        [264, 2.7134, 978.51, False],
-        [264, 2.7134, 73.124, True],
-        [266, 2.8701, 967.92, False],
-        [266, 2.8701, 77.891, True],
-        [268, 3.0334, 957.04, False],
-        [268, 3.0334, 82.965, True],
-        [270, 3.2033, 945.83, False],
-        [270, 3.2033, 88.374, True],
-        [272, 3.3802, 934.26, False],
-        [272, 3.3802, 94.140, True],
-        [274, 3.5642, 922.30, False],
-        [274, 3.5642, 100.32, True],
-        [276, 3.7555, 909.90, False],
-        [276, 3.7555, 106.95, True],
-        [278, 3.9542, 897.02, False],
-        [278, 3.9542, 114.07, True],
-        [280, 4.1607, 883.58, False],
-        [280, 4.1607, 121.74, True],
-        [282, 4.3752, 869.52, False],
-        [282, 4.3752, 130.05, True],
-        [284, 4.5978, 854.74, False],
-        [284, 4.5978, 139.09, True],
-        [286, 4.8289, 839.12, False],
-        [286, 4.8289, 148.98, True],
-        [288, 5.0688, 822.50, False],
-        [288, 5.0688, 159.87, True],
-        [290, 5.3177, 804.67, False],
-        [290, 5.3177, 171.96, True],
-        [292, 5.5761, 785.33, False],
-        [292, 5.5761, 185.55, True],
-        [294, 5.8443, 764.09, False],
-        [294, 5.8443, 201.06, True],
-        [296, 6.1227, 740.28, False],
-        [296, 6.1227, 219.14, True],
-        [298, 6.4121, 712.77, False],
-        [298, 6.4121, 240.90, True],
-        [300, 6.7131, 679.24, False],
-        [300, 6.7131, 268.58, True],
-        [301, 6.8683, 658.69, False],
-        [301, 6.8683, 286.15, True],
-        [302, 7.0268, 633.69, False],
-        [302, 7.0268, 308.15, True],
-        [303, 7.1890, 599.86, False],
-        [303, 7.1890, 339.00, True],
-        [304, 7.3555, 530.30, False],
-        [304, 7.3555, 406.42, True],
-        [304.1282, 7.3773, 467.60, True],  # Fails due to nan
-        # From Table 35 of [2]
-        [186.436, 0.05, 1.4370, True],
-        [194.525, 0.1, 2.7796, True],
-        [216.695, 1, 1179.10, False],
-        [233.028, 1, 1116.90, False],
-        [233.028, 1, 26.006, True],
-        [218.600, 10, 1190.34, False],
-        [236.031, 100, 1265.83, False],
-        [327.673, 800, 1495.70, False],
-    ]
+    table_34_header[:4],
+    np.vstack((
+        table_34_data[:, :4],
+        np.array([
+            # From Table 35 of [2]
+            [186.436, 0.05, 1.4370, True],
+            [194.525, 0.1, 2.7796, True],
+            [216.695, 1, 1179.10, False],
+            [233.028, 1, 1116.90, False],
+            [233.028, 1, 26.006, True],
+            [218.600, 10, 1190.34, False],
+            [236.031, 100, 1265.83, False],
+            [327.673, 800, 1495.70, False],
+        ], dtype='object')
+    ))
 )
 def test_density_close_to_phase_boundaries(temperature, pressure, density, vapor):
     calc_pressure = carbon_dioxide_pressure(temperature, density)
     assert calc_pressure == pytest.approx(pressure, rel=0.005)
     calc_density = carbon_dioxide_density(temperature, pressure, vapor)
     assert calc_density == pytest.approx(density, rel=0.005)
+
+
+def test_carbon_dioxide_pressure_derivative():
+    t, p, r = table_35_data.T
+    eps = 0.01
+    cd_estimate = carbon_dioxide_pressure(t, r + eps) - carbon_dioxide_pressure(t, r - eps)
+    cd_estimate /= (2 * eps)
+    calculated = carbon_dioxide_pressure(t, r, d_density=1)
+    assert_allclose(calculated, cd_estimate, rtol=0.01)
+
+
+def test_carbon_dioxide_primary_velocity():
+    t, r, s = table_34_data[:-1, [0, 2, 4]].astype(np.float).T
+    co2 = carbon_dioxide(t, None, r, None)
+    calc_s = co2.primary_velocity
+    assert_allclose(s, calc_s, rtol=0.02)

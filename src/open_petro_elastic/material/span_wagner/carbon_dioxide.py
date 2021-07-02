@@ -384,7 +384,7 @@ def phi_r(delta, tau, dd, dt):
 
 
 @float_vectorize
-def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temperature=0):
+def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temperature=0, isentropic=False):
     """
     CO2 pressure (MPa) as given by Table 3 of Span & Wagner [2]
 
@@ -392,8 +392,8 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
     :param density: CO2 density (kg / m^3).
     :param d_density: Degree of derivation wrt. density.
     :param d_temperature: Degree of derivation wrt. temperature.
+    :param isentropic: Correction for isentropic conditions. Relevant primarily for isentropic bulk modulus
     """
-    # Table 3, SW
     tau = T_critical / absolute_temperature
     delta = density / rho_critical
     if d_temperature != 0:
@@ -402,8 +402,15 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
         return density * R * absolute_temperature * (1 + delta * phi_r(delta, tau, 1, 0)) / 1e6
     elif d_density == 1:
         first = 2 * delta * phi_r(delta, tau, 1, 0)
-        second = density * delta * phi_r(delta, tau, 2, 0)
-        return absolute_temperature * R * (1 + first + second) / 1e6
+        second = delta ** 2 * phi_r(delta, tau, 2, 0)
+        if isentropic is False:
+            third = 0
+        else:
+            # See Table 3 of Span & Wagner (speed of sound)
+            nom = (1 + delta * phi_r(delta, tau, 1, 0) - delta * tau * phi_r(delta, tau, 1, 1)) ** 2
+            den = tau ** 2 * (phi(delta, tau, 0, 2))
+            third = -nom / den
+        return absolute_temperature * R * (1 + first + second + third) / 1e6
 
 
 def saturated_liquid_density(absolute_temperature):
@@ -518,17 +525,27 @@ def carbon_dioxide_density(absolute_temperature, pressure, force_vapor='auto'):
     return opt.root
 
 
-def carbon_dioxide_bulk_modulus(absolute_temperature, pressure):
-    raise NotImplementedError
-
-
-def carbon_dioxide(temperature, pressure):
+def carbon_dioxide_bulk_modulus(absolute_temperature, density):
     """
-    :param temperature: Temperature in Celsius. Valid range: 216 K - 1100 K
+    Isentropic bulk modulus, derived from the expression for speed of sound in Table 3 of Span & Wagner
+
+
+    """
+    d_pressure = carbon_dioxide_pressure(absolute_temperature, density, d_density=1, isentropic=True)
+    return density * d_pressure * 1e6
+
+
+def carbon_dioxide(absolute_temperature, pressure, density, force_vapor):
+    """
+    :param absolute_temperature: Temperature in Celsius. Valid range: 216 K - 1100 K
     :param pressure: Pressure in MPa. Valid range: 0 - 800
+    :param density: Density in kg / m^3. May be provided instead of pressure. If both are provided, density has
+        precedence
+    :param force_vapor: Indicator used to force vapor phase or not (see carbon_dioxide_density)
     """
-    t = celsius_to_kelvin(temperature)
+    if density is None:
+        density = carbon_dioxide_density(absolute_temperature, pressure, force_vapor)
     return fluid(
-        density=carbon_dioxide_density(t, pressure),
-        bulk_modulus=carbon_dioxide_bulk_modulus(t, pressure)
+        density=density,
+        bulk_modulus=carbon_dioxide_bulk_modulus(absolute_temperature, density),
     )
