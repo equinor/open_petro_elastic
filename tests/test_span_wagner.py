@@ -2,7 +2,7 @@ import pytest
 from numpy.testing import assert_allclose
 import numpy as np
 from open_petro_elastic.material.span_wagner.carbon_dioxide import carbon_dioxide_density, carbon_dioxide_pressure,\
-    carbon_dioxide
+    carbon_dioxide, array_carbon_dioxide_density, carbon_dioxide_bulk_modulus
 
 
 # Excerpt from Table 34 of Span & Wagner [2]
@@ -380,6 +380,15 @@ def test_vectorized_gas_density_and_pressure():
     assert_allclose(calc_density, data[:, 2], rtol=0.002)
 
 
+def test_newton_carbon_dioxide_density():
+    """
+    Tests the alternative vectorized variant for density
+    """
+    data = table_35_data
+    calc_density = array_carbon_dioxide_density(data[:, 0], data[:, 1], 'auto')
+    assert_allclose(calc_density, data[:, 2], rtol=0.002)
+
+
 @pytest.mark.parametrize(
     table_34_header[:4],
     np.vstack((
@@ -418,3 +427,16 @@ def test_carbon_dioxide_primary_velocity():
     co2 = carbon_dioxide(t, None, r, None)
     calc_s = co2.primary_velocity
     assert_allclose(s, calc_s, rtol=0.02)
+
+
+def test_bulk_modulus_array_shapes():
+    b0 = carbon_dioxide_bulk_modulus(280, 122)
+    assert b0.ndim == 0
+    b1 = carbon_dioxide_bulk_modulus(np.array([280]), np.array([122]))
+    assert b1.ndim == 1
+    assert b0 == b1[0]
+    b2 = carbon_dioxide_bulk_modulus(np.array([280, 280]), np.array([122, 122]))
+    assert b2.ndim == 1
+    assert b2.size == 2
+    assert b0 == b2[0]
+    assert b0 == b2[1]
