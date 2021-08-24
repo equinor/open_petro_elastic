@@ -125,12 +125,12 @@ TODO:
 
 
 # Constants
-R = 0.1889241 * 1e3  # J / kg K
-T_critical = 304.1282  # K
-rho_critical = 467.6  # kg / m^3
-p_critical = 7.3773  # MPa
-T_triple = 216.592  # K
-p_triple = 0.51795  # MPa
+CO2_GAS_CONSTANT = 0.1889241 * 1e3  # J / kg K
+CO2_CRITICAL_TEMPERATURE = 304.1282  # K
+CO2_CRITICAL_DENSITY = 467.6  # kg / m^3
+CO2_CRITICAL_PRESSURE = 7.3773  # MPa
+CO2_TRIPLE_TEMPERATURE = 216.592  # K
+CO2_TRIPLE_PRESSURE = 0.51795  # MPa
 
 
 """
@@ -240,7 +240,7 @@ C4 = array([[10.0, 10.0, 12.5]])
 D4 = array([[275, 275, 275]])
 
 
-def phi(delta, tau, dd, dt):
+def co2_helmholtz_energy(delta, tau, dd, dt):
     """
     Helmholtz energy as defined by equation 6.1 in Span & Wagner [2]
 
@@ -249,10 +249,10 @@ def phi(delta, tau, dd, dt):
     :param dd: Degree of derivation wrt. delta. Integer between 0 and 2.
     :param dt: Degree of derivation wrt. tau. Integer between 0 and 2, as long as (dt + dd < 3)
     """
-    return phi_0(delta, tau, dd, dt) + phi_r(delta, tau, dd, dt)
+    return ideal_gas_helmholtz_energy(delta, tau, dd, dt) + co2_residual_helmholtz_energy(delta, tau, dd, dt)
 
 
-def phi_0(delta, tau, dd, dt):
+def ideal_gas_helmholtz_energy(delta, tau, dd, dt):
     """
     Helmholtz energy from ideal gas behavior as defined by equation 2.3 in Span & Wagner [2]. See function phi for
     argument documentation.
@@ -286,7 +286,7 @@ def phi_0(delta, tau, dd, dt):
         return result
 
 
-def phi_r(delta, tau, dd, dt):
+def co2_residual_helmholtz_energy(delta, tau, dd, dt):
     """
     Residual part of Helmholtz energy as defined by the equation in Table 32 of Span & Wagner [2]. See function phi for
     argument documentation.
@@ -413,23 +413,23 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
     :param d_temperature: Degree of derivation wrt. temperature.
     :param isentropic: Correction for isentropic conditions. Relevant primarily for isentropic bulk modulus
     """
-    tau = T_critical / absolute_temperature
-    delta = density / rho_critical
+    tau = CO2_CRITICAL_TEMPERATURE / absolute_temperature
+    delta = density / CO2_CRITICAL_DENSITY
     if d_temperature != 0:
         raise NotImplementedError
     if d_density == 0:
-        return density * R * absolute_temperature * (1 + delta * phi_r(delta, tau, 1, 0)) / 1e6
+        return density * CO2_GAS_CONSTANT * absolute_temperature * (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)) / 1e6
     elif d_density == 1:
-        first = 2 * delta * phi_r(delta, tau, 1, 0)
-        second = delta ** 2 * phi_r(delta, tau, 2, 0)
+        first = 2 * delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
+        second = delta ** 2 * co2_residual_helmholtz_energy(delta, tau, 2, 0)
         if isentropic is False:
             third = 0
         else:
             # See Table 3 of Span & Wagner (speed of sound)
-            nom = (1 + delta * phi_r(delta, tau, 1, 0) - delta * tau * phi_r(delta, tau, 1, 1)) ** 2
-            den = tau ** 2 * (phi(delta, tau, 0, 2))
+            nom = (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0) - delta * tau * co2_residual_helmholtz_energy(delta, tau, 1, 1)) ** 2
+            den = tau ** 2 * (co2_helmholtz_energy(delta, tau, 0, 2))
             third = -nom / den
-        return absolute_temperature * R * (1 + first + second + third) / 1e6
+        return absolute_temperature * CO2_GAS_CONSTANT * (1 + first + second + third) / 1e6
 
 
 def saturated_liquid_density(absolute_temperature):
@@ -442,9 +442,9 @@ def saturated_liquid_density(absolute_temperature):
     _a2 = -0.62385555
     _a3 = -0.32731127
     _a4 = 0.39245142
-    _t = 1 - absolute_temperature / T_critical
+    _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
     inner = _a1 * _t ** 0.34 + _a2 * _t ** 0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
-    return rho_critical * exp(inner)
+    return CO2_CRITICAL_DENSITY * exp(inner)
 
 
 def saturated_vapor_density(absolute_temperature):
@@ -459,9 +459,9 @@ def saturated_vapor_density(absolute_temperature):
     _a3 = -4.6008549
     _a4 = -10.111178
     _a5 = -29.742252
-    _t = 1 - absolute_temperature / T_critical
+    _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
     inner = _a1 * _t ** 0.34 + _a2 * _t ** 0.5 + _a3 * _t + _a4 * _t ** (7 / 3) + _a5 * _t ** (14 / 3)
-    return rho_critical * exp(inner)
+    return CO2_CRITICAL_DENSITY * exp(inner)
 
 
 def sublimation_pressure(absolute_temperature):
@@ -473,9 +473,9 @@ def sublimation_pressure(absolute_temperature):
     _a1 = -14.740846
     _a2 = 2.4327015
     _a3 = -5.3061778
-    _t = 1 - absolute_temperature / T_triple
+    _t = 1 - absolute_temperature / CO2_TRIPLE_TEMPERATURE
     inner = _a1 * _t + _a2 * _t ** 1.9 + _a3 * _t ** 2.9
-    return p_triple * exp(inner / (1 - _t))
+    return CO2_TRIPLE_PRESSURE * exp(inner / (1 - _t))
 
 
 def vapor_pressure(absolute_temperature):
@@ -488,9 +488,9 @@ def vapor_pressure(absolute_temperature):
     _a2 = 1.9391218
     _a3 = -1.6463597
     _a4 = -3.2995634
-    _t = 1 - absolute_temperature / T_critical
+    _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
     inner = _a1 * _t ** 1.0 + _a2 * _t ** 1.5 + _a3 * _t ** 2.0 + _a4 * _t ** 4.0
-    return p_critical * exp(inner / (1 - _t))
+    return CO2_CRITICAL_PRESSURE * exp(inner / (1 - _t))
 
 
 def melting_pressure(absolute_temperature):
@@ -501,8 +501,8 @@ def melting_pressure(absolute_temperature):
     """
     _a1 = 1955.5390
     _a2 = 2055.4593
-    _t = absolute_temperature / T_triple - 1
-    return p_triple * (1 + _a1 * _t + _a2 * _t ** 2)
+    _t = absolute_temperature / CO2_TRIPLE_TEMPERATURE - 1
+    return CO2_TRIPLE_PRESSURE * (1 + _a1 * _t + _a2 * _t ** 2)
 
 
 def determine_density_bounds(absolute_temperature, pressure, force_vapor):
@@ -510,8 +510,8 @@ def determine_density_bounds(absolute_temperature, pressure, force_vapor):
     bounds[:, 0] = 0.1
     bounds[:, 1] = 1500.0
 
-    below_triple = absolute_temperature < T_triple
-    below_critical = ~below_triple & (absolute_temperature < T_critical)
+    below_triple = absolute_temperature < CO2_TRIPLE_TEMPERATURE
+    below_critical = ~below_triple & (absolute_temperature < CO2_CRITICAL_TEMPERATURE)
 
     bounds[below_triple, 1] = saturated_vapor_density(absolute_temperature[below_triple])
     if force_vapor is True:
