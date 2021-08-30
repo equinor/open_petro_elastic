@@ -1,5 +1,5 @@
 import pytest
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_array_equal
 import numpy as np
 from open_petro_elastic.material.span_wagner.carbon_dioxide import carbon_dioxide_density, carbon_dioxide_pressure,\
     carbon_dioxide, array_carbon_dioxide_density, carbon_dioxide_bulk_modulus
@@ -409,7 +409,7 @@ def test_newton_carbon_dioxide_density():
 def test_density_close_to_phase_boundaries(temperature, pressure, density, vapor):
     calc_pressure = carbon_dioxide_pressure(temperature, density)
     assert calc_pressure == pytest.approx(pressure, rel=0.005)
-    calc_density = carbon_dioxide_density(temperature, pressure, vapor)
+    calc_density = carbon_dioxide_density(temperature, pressure, force_vapor=vapor)
     assert calc_density == pytest.approx(density, rel=0.005)
 
 
@@ -440,3 +440,11 @@ def test_bulk_modulus_array_shapes():
     assert b2.size == 2
     assert b0 == b2[0]
     assert b0 == b2[1]
+
+
+def test_interpolate_density():
+    t, p, d = table_35_data.T
+    outside_bounds = (t < 274) | (t > 473) | (p < 0.5) | (p > 99.5)
+    di = carbon_dioxide_density(t, p, interpolate=True)
+    assert_array_equal(outside_bounds, np.isnan(di))
+    assert_allclose(di[~outside_bounds], d[~outside_bounds], rtol=0.0001)

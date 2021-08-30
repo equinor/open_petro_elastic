@@ -45,12 +45,9 @@ s4 = n4 * bigdelta_expr ** b4 * delta * bigphi_expr
 
 
 def _lambdify(expr, diff_delta, diff_tau):
-    while diff_tau > 0:
-        diff_tau -= 1
-        expr = expr.diff(tau)
-    while diff_delta > 0:
-        diff_delta -= 1
-        expr = expr.diff(delta)
+    diff = [delta] * diff_delta + [tau] * diff_tau
+    if len(diff) > 0:
+        expr = expr.diff(*diff)
     expr = expr.powsimp()
     coeff_vars = [getattr(coefficients, s.name) for s in coeff_symbols]
     _sympy_lambda = sp.utilities.lambdify(

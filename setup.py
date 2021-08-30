@@ -46,5 +46,8 @@ setup(
     ],
     python_requires=">=3.6",
     include_package_data=True,
-    package_data={"open_petro_elastic": ["tutorial_config/*"]},
+    package_data={
+        "open_petro_elastic": ["tutorial_config/*"],
+        "open_petro_elastic.material.span_wagner.tables": ["material/span_wagner/tables/carbon_dioxide_density.npz"]
+    },
 )
