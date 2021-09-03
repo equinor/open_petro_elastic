@@ -74,6 +74,12 @@ run_example_parameters = (
             "patchy_cement_calibration.csv",
             1,
         ],
+        [
+            example_yaml("carbon_dioxide_example"),
+            example_csv("carbon_dioxide_example"),
+            example_csv("carbon_dioxide_calibration"),
+            None,
+        ]
     ],
 )
 

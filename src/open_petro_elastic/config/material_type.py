@@ -98,6 +98,20 @@ class CondensateMaterial:
         )
 
 
+@dataclass(config=PetroElasticConfig)
+class CarbonDioxideMaterial:
+    type: Literal["carbon_dioxide"] = "carbon_dioxide"
+    interpolate_density: bool = False
+
+    def as_material(
+            self,
+            temperature,
+            pressure,
+            fluid_model_provider=fluid_model_providers["span_wagner"]
+    ):
+        return fluid_model_provider.carbon_dioxide(temperature, pressure, self.interpolate_density)
+
+
 MaterialType = Union[
-    ArbitraryMaterial, GasMaterial, OilMaterial, BrineMaterial, CondensateMaterial
+    ArbitraryMaterial, GasMaterial, OilMaterial, BrineMaterial, CondensateMaterial, CarbonDioxideMaterial
 ]

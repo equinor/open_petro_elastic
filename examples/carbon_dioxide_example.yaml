@@ -1,0 +1,31 @@
+pressure:
+    overburden: 50.0E+6 # Pa
+    fluid: # Pa
+      column: "fluid_pressure"
+    rock:
+        column: "rock_pressure"
+
+fluids:
+    temperature: 75.0 # celsius
+    fluid_model: "span_wagner"
+    constituents:
+        - material:
+            type: "carbon_dioxide"
+            interpolate_density: false
+
+dry_rock:
+    model:
+        type: "patchy_cement"
+        lower_bound_pressure: 20.0E+6 # Pa
+        upper_bound_cement_fraction: 0.1
+        cement: # cement properties
+          bulk_modulus: 36.8E+9 # Pa
+          shear_modulus: 44.0E+9 # Pa
+          density: 2650.0 # kg/m3
+        shear_reduction: 0.5
+        cement_fraction: 0.04 # volume ratio of pore space to mineral
+        critical_porosity: 0.4 # volume ratio of pore space to mineral
+    porosity:
+        # porosity of dry rock gotten from column in csv file
+        # with name "porosity"
+        column: "porosity"

@@ -13,8 +13,8 @@ from pydantic import parse_obj_as
 
 import open_petro_elastic
 
-from .config.input import ColumnInsertionError, Input
-from .material import fluid_substitution
+from open_petro_elastic.config.input import ColumnInsertionError, Input
+from open_petro_elastic.material import fluid_substitution
 
 
 def warn_without_traceback(message, category, filename, lineno, file=None, line=None):

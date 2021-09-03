@@ -22,6 +22,7 @@ setup(
         "console_scripts": ["open_petro_elastic = open_petro_elastic.__main__:main"],
         "open_petro_elastic.fluid_model_providers": [
             "batzle_wang = open_petro_elastic.config.fluid_model_providers:BatzleWangFluidModelProvider",
+            "span_wagner = open_petro_elastic.config.fluid_model_providers:SpanWagnerFluidModelProvider",
         ],
     },
     package_dir={"": "src"},
