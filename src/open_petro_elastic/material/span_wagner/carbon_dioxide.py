@@ -73,7 +73,7 @@ def co2_residual_helmholtz_energy(delta, tau, dd, dt):
     """
     tau = np.asarray(tau)
     delta = np.asarray(delta)
-    return_scalar = (tau.ndim == 0)
+    return_scalar = (tau.ndim == 0) & (delta.ndim == 0)
     tau = tau.reshape(-1, 1)
     delta = delta.reshape(-1, 1)
     # tau == 1.0 or delta == 1.0 leads to numerically invalid results. The values are nudged to avoid nan output.
@@ -349,16 +349,15 @@ def carbon_dioxide_bulk_modulus(absolute_temperature, density):
     return density * d_pressure * 1e6
 
 
-def carbon_dioxide(absolute_temperature, pressure, density, force_vapor):
+def carbon_dioxide(absolute_temperature, pressure, density, **kwargs):
     """
     :param absolute_temperature: Temperature in Celsius. Valid range: 216 K - 1100 K
     :param pressure: Pressure in MPa. Valid range: 0 - 800
     :param density: Density in kg / m^3. May be provided instead of pressure. If both are provided, density has
         precedence
-    :param force_vapor: Indicator used to force vapor phase or not (see carbon_dioxide_density)
     """
     if density is None:
-        density = carbon_dioxide_density(absolute_temperature, pressure, force_vapor)
+        density = carbon_dioxide_density(absolute_temperature, pressure, **kwargs)
     return fluid(
         density=density,
         bulk_modulus=carbon_dioxide_bulk_modulus(absolute_temperature, density),

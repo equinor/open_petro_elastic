@@ -21,8 +21,10 @@ def load_lookup_table_interpolator(filename):
         outside |= (_x > box[1])
         outside |= (_y < box[2])
         outside |= (_y > box[3])
-        res = np.full_like(_x, fill_value=np.nan)
-        res[~outside] = rbs.ev(_x[~outside], _y[~outside])
+        res = np.full_like(outside, dtype=np.float, fill_value=np.nan)
+        _x = _x if np.asarray(_x).size == 1 else _x[~outside]
+        _y = _y if np.asarray(_y).size == 1 else _y[~outside]
+        res[~outside] = rbs.ev(_x, _y)
         return res
 
     return _interp

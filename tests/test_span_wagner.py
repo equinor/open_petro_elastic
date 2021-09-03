@@ -424,7 +424,7 @@ def test_carbon_dioxide_pressure_derivative():
 
 def test_carbon_dioxide_primary_velocity():
     t, r, s = table_34_data[:-1, [0, 2, 4]].astype(np.float).T
-    co2 = carbon_dioxide(t, None, r, None)
+    co2 = carbon_dioxide(t, None, r)
     calc_s = co2.primary_velocity
     assert_allclose(s, calc_s, rtol=0.02)
 
@@ -448,3 +448,14 @@ def test_interpolate_density():
     di = carbon_dioxide_density(t, p, interpolate=True)
     assert_array_equal(outside_bounds, np.isnan(di))
     assert_allclose(di[~outside_bounds], d[~outside_bounds], rtol=0.0001)
+
+
+def test_partially_vectorized_bulk_modulus():
+    t = np.array([348, 350])
+    p = np.array([29.24, 29.27])
+    vbm1 = carbon_dioxide(t[0], p, None).bulk_modulus
+    nbm1 = [carbon_dioxide(t[0], _p, None).bulk_modulus for _p in p]
+    assert_allclose(vbm1, nbm1)
+    vbm2 = carbon_dioxide(t, p[0], None).bulk_modulus
+    nbm2 = [carbon_dioxide(_t, p[0], None).bulk_modulus for _t in t]
+    assert_allclose(vbm2, nbm2)
