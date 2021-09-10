@@ -103,8 +103,11 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
     if d_temperature != 0:
         raise NotImplementedError
     if d_density == 0:
-        return density * CO2_GAS_CONSTANT * absolute_temperature * \
-               (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)) / 1e6
+        return (density
+                * CO2_GAS_CONSTANT
+                * absolute_temperature
+                * (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0))
+                / 1e6)
     elif d_density == 1:
         first = 2 * delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
         second = delta ** 2 * co2_residual_helmholtz_energy(delta, tau, 2, 0)
@@ -112,8 +115,8 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
             third = 0
         else:
             # See Table 3 of Span & Wagner (speed of sound)
-            nom = (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0) -
-                   delta * tau * co2_residual_helmholtz_energy(delta, tau, 1, 1)) ** 2
+            nom = (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
+                   - delta * tau * co2_residual_helmholtz_energy(delta, tau, 1, 1)) ** 2
             den = tau ** 2 * (co2_helmholtz_energy(delta, tau, 0, 2))
             third = -nom / den
         return absolute_temperature * CO2_GAS_CONSTANT * (1 + first + second + third) / 1e6
