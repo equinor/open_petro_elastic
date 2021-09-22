@@ -33,6 +33,7 @@ setup(
         "pyyaml",
         "pandas",
         "pydantic",
+        'sympy',
         "dataclasses>=0.6;python_version<'3.7'",
         "typing_extensions",
     ],
