@@ -79,7 +79,7 @@ run_example_parameters = (
             example_csv("carbon_dioxide_example"),
             example_csv("carbon_dioxide_calibration"),
             None,
-        ]
+        ],
     ],
 )
 

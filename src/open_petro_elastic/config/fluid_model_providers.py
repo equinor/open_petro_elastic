@@ -30,10 +30,15 @@ class BatzleWangFluidModelProvider:
 class SpanWagnerFluidModelProvider:
     def carbon_dioxide(self, temperature, pressure, interpolate_density):
         from open_petro_elastic.material.conversions import celsius_to_kelvin
+
         temperature = celsius_to_kelvin(temperature)
         pressure = pressure / 1e6
         return span_wagner.carbon_dioxide(
-            temperature, pressure, None, force_vapor='auto', interpolate=interpolate_density
+            temperature,
+            pressure,
+            None,
+            force_vapor="auto",
+            interpolate=interpolate_density,
         )
 
 

@@ -8,7 +8,9 @@ from open_petro_elastic import float_vectorize
 from open_petro_elastic.material.fluid import fluid_material as fluid
 from open_petro_elastic.material.span_wagner import equations
 from open_petro_elastic.material.span_wagner.coefficients import a0, theta0
-from open_petro_elastic.material.span_wagner.tables.lookup_table import load_lookup_table_interpolator
+from open_petro_elastic.material.span_wagner.tables.lookup_table import (
+    load_lookup_table_interpolator,
+)
 
 
 # Constants
@@ -29,7 +31,9 @@ def co2_helmholtz_energy(delta, tau, dd, dt):
     :param dd: Degree of derivation wrt. delta. Integer between 0 and 2.
     :param dt: Degree of derivation wrt. tau. Integer between 0 and 2, as long as (dt + dd < 3)
     """
-    return ideal_gas_helmholtz_energy(delta, tau, dd, dt) + co2_residual_helmholtz_energy(delta, tau, dd, dt)
+    return ideal_gas_helmholtz_energy(
+        delta, tau, dd, dt
+    ) + co2_residual_helmholtz_energy(delta, tau, dd, dt)
 
 
 def ideal_gas_helmholtz_energy(delta, tau, dd, dt):
@@ -40,22 +44,32 @@ def ideal_gas_helmholtz_energy(delta, tau, dd, dt):
     # Adjust array shapes
     tau = np.asarray(tau)
     delta = np.asarray(delta)
-    return_scalar = (tau.ndim == 0)
+    return_scalar = tau.ndim == 0
     tau2 = tau.reshape(-1, 1)  # Needed for array-based sums
 
     if dt == dd == 0:
         _sum = np.sum(a0[0, 3:] * np.log(1 - np.exp(-theta0 * tau2)), axis=-1)
-        result = np.log(delta) + a0[0, 0] + a0[0, 1] * tau + a0[0, 2] * np.log(tau) + _sum
+        result = (
+            np.log(delta) + a0[0, 0] + a0[0, 1] * tau + a0[0, 2] * np.log(tau) + _sum
+        )
     elif dt == 1 and dd == 0:
-        _sum = np.sum(a0[0, 3:] * theta0 * ((1 - np.exp(-theta0 * tau2)) ** -1 - 1), axis=-1)
+        _sum = np.sum(
+            a0[0, 3:] * theta0 * ((1 - np.exp(-theta0 * tau2)) ** -1 - 1), axis=-1
+        )
         result = a0[0, 1] + a0[0, 2] / tau + _sum
     elif dt == 0 and dd == 1:
         return 1 / delta
     elif dt == 2 and dd == 0:
-        _sum = np.sum(a0[0, 3:] * theta0 ** 2 * np.exp(-theta0 * tau2) * (1 - np.exp(-theta0 * tau2)) ** -2, axis=-1)
+        _sum = np.sum(
+            a0[0, 3:]
+            * theta0 ** 2
+            * np.exp(-theta0 * tau2)
+            * (1 - np.exp(-theta0 * tau2)) ** -2,
+            axis=-1,
+        )
         result = -a0[0, 2] / tau ** 2 - _sum
     elif dt == 0 and dd == 2:
-        return - 1 / delta ** 2
+        return -1 / delta ** 2
     elif dt == 1 and dd == 1:
         return 0
     else:
@@ -88,7 +102,9 @@ def co2_residual_helmholtz_energy(delta, tau, dd, dt):
         return res
 
 
-def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temperature=0, isentropic=False):
+def carbon_dioxide_pressure(
+    absolute_temperature, density, d_density=0, d_temperature=0, isentropic=False
+):
     """
     CO2 pressure (MPa) as given by Table 3 of Span & Wagner [2]
 
@@ -103,11 +119,13 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
     if d_temperature != 0:
         raise NotImplementedError
     if d_density == 0:
-        return (density
-                * CO2_GAS_CONSTANT
-                * absolute_temperature
-                * (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0))
-                / 1e6)
+        return (
+            density
+            * CO2_GAS_CONSTANT
+            * absolute_temperature
+            * (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0))
+            / 1e6
+        )
     elif d_density == 1:
         first = 2 * delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
         second = delta ** 2 * co2_residual_helmholtz_energy(delta, tau, 2, 0)
@@ -115,11 +133,16 @@ def carbon_dioxide_pressure(absolute_temperature, density, d_density=0, d_temper
             third = 0
         else:
             # See Table 3 of Span & Wagner (speed of sound)
-            nom = (1 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
-                   - delta * tau * co2_residual_helmholtz_energy(delta, tau, 1, 1)) ** 2
+            nom = (
+                1
+                + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
+                - delta * tau * co2_residual_helmholtz_energy(delta, tau, 1, 1)
+            ) ** 2
             den = tau ** 2 * (co2_helmholtz_energy(delta, tau, 0, 2))
             third = -nom / den
-        return absolute_temperature * CO2_GAS_CONSTANT * (1 + first + second + third) / 1e6
+        return (
+            absolute_temperature * CO2_GAS_CONSTANT * (1 + first + second + third) / 1e6
+        )
 
 
 def saturated_liquid_density(absolute_temperature):
@@ -134,7 +157,9 @@ def saturated_liquid_density(absolute_temperature):
     _a3 = -0.32731127
     _a4 = 0.39245142
     _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
-    inner = _a1 * _t ** 0.34 + _a2 * _t ** 0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
+    inner = (
+        _a1 * _t ** 0.34 + _a2 * _t ** 0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
+    )
     return CO2_CRITICAL_DENSITY * np.exp(inner)
 
 
@@ -152,7 +177,13 @@ def saturated_vapor_density(absolute_temperature):
     _a4 = -10.111178
     _a5 = -29.742252
     _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
-    inner = _a1 * _t ** 0.34 + _a2 * _t ** 0.5 + _a3 * _t + _a4 * _t ** (7 / 3) + _a5 * _t ** (14 / 3)
+    inner = (
+        _a1 * _t ** 0.34
+        + _a2 * _t ** 0.5
+        + _a3 * _t
+        + _a4 * _t ** (7 / 3)
+        + _a5 * _t ** (14 / 3)
+    )
     return CO2_CRITICAL_DENSITY * np.exp(inner)
 
 
@@ -209,11 +240,17 @@ def _determine_density_bounds(absolute_temperature, pressure, force_vapor):
     below_triple = absolute_temperature < CO2_TRIPLE_TEMPERATURE
     below_critical = ~below_triple & (absolute_temperature < CO2_CRITICAL_TEMPERATURE)
 
-    bounds[below_triple, 1] = saturated_vapor_density(absolute_temperature[below_triple])
+    bounds[below_triple, 1] = saturated_vapor_density(
+        absolute_temperature[below_triple]
+    )
     if force_vapor is True:
-        bounds[below_critical, 1] = saturated_vapor_density(absolute_temperature[below_critical])
+        bounds[below_critical, 1] = saturated_vapor_density(
+            absolute_temperature[below_critical]
+        )
     elif force_vapor is False:
-        bounds[below_critical, 0] = saturated_liquid_density(absolute_temperature[below_critical])
+        bounds[below_critical, 0] = saturated_liquid_density(
+            absolute_temperature[below_critical]
+        )
     else:  # force_vapor == 'auto'
         below_vapor_pressure = pressure < vapor_pressure(absolute_temperature)
         is_vapor = below_critical & below_vapor_pressure
@@ -229,13 +266,18 @@ def _find_initial_density_values(bounds, absolute_temperature, pressure):
     used by array_carbon_dioxide_density.
     """
     from scipy.interpolate import RegularGridInterpolator
-    temps = np.geomspace(np.min(absolute_temperature) * 0.99, np.max(absolute_temperature) * 1.01, 41)
-    press = np.geomspace(np.min(pressure) * 0.99, np.max(absolute_temperature) * 1.01, 41)
-    tt, pp = np.meshgrid(temps, press, indexing='ij')
+
+    temps = np.geomspace(
+        np.min(absolute_temperature) * 0.99, np.max(absolute_temperature) * 1.01, 41
+    )
+    press = np.geomspace(
+        np.min(pressure) * 0.99, np.max(absolute_temperature) * 1.01, 41
+    )
+    tt, pp = np.meshgrid(temps, press, indexing="ij")
     densi = carbon_dioxide_density(
-        tt.flatten(), pp.flatten(), force_vapor='auto', raise_error=False
+        tt.flatten(), pp.flatten(), force_vapor="auto", raise_error=False
     ).reshape(temps.size, press.size)
-    rgi = RegularGridInterpolator(np.array((temps, press)), densi, method='linear')
+    rgi = RegularGridInterpolator(np.array((temps, press)), densi, method="linear")
     iv = rgi(np.array((absolute_temperature, pressure)).T)
     oob = (iv < bounds[:, 0]) | (iv > bounds[:, 1]) | np.isnan(iv)
     iv[oob] = np.mean(bounds[oob], axis=1)
@@ -265,21 +307,30 @@ def array_carbon_dioxide_density(absolute_temperature, pressure, force_vapor):
     #  invalid. The opt.converged variable does not seem to suffice, so we perform separate checks. First, check that
     #  the solution is a valid root
     invalid = ~np.isclose(
-        carbon_dioxide_pressure(absolute_temperature, opt.root), pressure, atol=1e-5, rtol=0.0
+        carbon_dioxide_pressure(absolute_temperature, opt.root),
+        pressure,
+        atol=1e-5,
+        rtol=0.0,
     )
 
     # Next, check if the solution is anywhere out of bounds (since newton does not support brackets), and check for nan
     # values.
-    invalid |= (opt.root < bounds[:, 0]) | (opt.root > bounds[:, 1]) | np.isnan(opt.root)
+    invalid |= (
+        (opt.root < bounds[:, 0]) | (opt.root > bounds[:, 1]) | np.isnan(opt.root)
+    )
 
     # Finally, use the robust density method to determine the invalid results
     sol = opt.root
-    sol[invalid] = carbon_dioxide_density(absolute_temperature[invalid], pressure[invalid], force_vapor=force_vapor)
+    sol[invalid] = carbon_dioxide_density(
+        absolute_temperature[invalid], pressure[invalid], force_vapor=force_vapor
+    )
     return sol
 
 
 @float_vectorize
-def _calculate_carbon_dioxide_density(absolute_temperature, pressure, force_vapor='auto', raise_error=True):
+def _calculate_carbon_dioxide_density(
+    absolute_temperature, pressure, force_vapor="auto", raise_error=True
+):
     """
     Density of carbon dioxide. Found solving the Pressure equation of Table 3 in Span & Wagner [2] numerically for
     density. To ensure a single solution, the phase of the liquid must first be determined.
@@ -297,9 +348,7 @@ def _calculate_carbon_dioxide_density(absolute_temperature, pressure, force_vapo
     :return: Density (kg / m^3)
     """
     bounds = _determine_density_bounds(
-        np.array([absolute_temperature]),
-        np.array([pressure]),
-        force_vapor
+        np.array([absolute_temperature]), np.array([pressure]), force_vapor
     )[0, :]
 
     # Extend bounds slightly to ensure toms748 can converge
@@ -308,7 +357,7 @@ def _calculate_carbon_dioxide_density(absolute_temperature, pressure, force_vapo
     try:
         opt = scipy.optimize.root_scalar(
             lambda x: carbon_dioxide_pressure(absolute_temperature, x) - pressure,
-            method='toms748',
+            method="toms748",
             bracket=bounds,
             x0=np.sum(bounds) / 2,
         )
@@ -333,11 +382,14 @@ def carbon_dioxide_density(absolute_temperature, pressure, interpolate=False, **
     :return: Density (kg / m^3)
     """
     if interpolate is False:
-        return _calculate_carbon_dioxide_density(absolute_temperature, pressure, **kwargs)
+        return _calculate_carbon_dioxide_density(
+            absolute_temperature, pressure, **kwargs
+        )
     else:
         assert interpolate is True
         fp = importlib.resources.path(
-            'open_petro_elastic.material.span_wagner.tables', 'carbon_dioxide_density.npz'
+            "open_petro_elastic.material.span_wagner.tables",
+            "carbon_dioxide_density.npz",
         )
         with fp as f:
             interpolator = load_lookup_table_interpolator(f)
@@ -348,7 +400,9 @@ def carbon_dioxide_bulk_modulus(absolute_temperature, density):
     """
     Isentropic bulk modulus, derived from the expression for speed of sound in Table 3 of Span & Wagner
     """
-    d_pressure = carbon_dioxide_pressure(absolute_temperature, density, d_density=1, isentropic=True)
+    d_pressure = carbon_dioxide_pressure(
+        absolute_temperature, density, d_density=1, isentropic=True
+    )
     return density * d_pressure * 1e6
 
 

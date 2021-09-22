@@ -104,14 +104,21 @@ class CarbonDioxideMaterial:
     interpolate_density: bool = False
 
     def as_material(
-            self,
-            temperature,
-            pressure,
-            fluid_model_provider=fluid_model_providers["span_wagner"]
+        self,
+        temperature,
+        pressure,
+        fluid_model_provider=fluid_model_providers["span_wagner"],
     ):
-        return fluid_model_provider.carbon_dioxide(temperature, pressure, self.interpolate_density)
+        return fluid_model_provider.carbon_dioxide(
+            temperature, pressure, self.interpolate_density
+        )
 
 
 MaterialType = Union[
-    ArbitraryMaterial, GasMaterial, OilMaterial, BrineMaterial, CondensateMaterial, CarbonDioxideMaterial
+    ArbitraryMaterial,
+    GasMaterial,
+    OilMaterial,
+    BrineMaterial,
+    CondensateMaterial,
+    CarbonDioxideMaterial,
 ]
