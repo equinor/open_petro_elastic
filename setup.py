@@ -22,6 +22,7 @@ setup(
         "console_scripts": ["open_petro_elastic = open_petro_elastic.__main__:main"],
         "open_petro_elastic.fluid_model_providers": [
             "batzle_wang = open_petro_elastic.config.fluid_model_providers:BatzleWangFluidModelProvider",
+            "span_wagner = open_petro_elastic.config.fluid_model_providers:SpanWagnerFluidModelProvider",
         ],
     },
     package_dir={"": "src"},
@@ -32,6 +33,7 @@ setup(
         "pyyaml",
         "pandas",
         "pydantic",
+        'sympy',
         "dataclasses>=0.6;python_version<'3.7'",
         "typing_extensions",
     ],
@@ -46,5 +48,8 @@ setup(
     ],
     python_requires=">=3.6",
     include_package_data=True,
-    package_data={"open_petro_elastic": ["tutorial_config/*"]},
+    package_data={
+        "open_petro_elastic": ["tutorial_config/*"],
+        "open_petro_elastic.material.span_wagner.tables": ["material/span_wagner/tables/carbon_dioxide_density.npz"]
+    },
 )

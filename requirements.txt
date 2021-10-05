@@ -2,3 +2,5 @@ numpy
 pyyaml
 quantities
 pandas
+scipy
+sympy
