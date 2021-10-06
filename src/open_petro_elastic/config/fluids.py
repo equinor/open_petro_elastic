@@ -72,7 +72,7 @@ class Fluids:
         """
         fluid_model_provider = fluid_model_providers[self.fluid_model]
         materials = [
-            c.material.as_material(
+            c.as_material(
                 self.temperature,
                 pressure.fluid,
                 fluid_model_provider=fluid_model_provider,

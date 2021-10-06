@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 import numpy as np
 from pydantic import validator
@@ -23,6 +23,7 @@ class Constituent:
 
     material: MaterialType
     fraction: Optional[Array[float]] = None
+    fluid_model: Optional[Literal[tuple(fluid_model_providers.keys())]] = None
 
     def as_material(
         self,
@@ -30,6 +31,11 @@ class Constituent:
         pressure,
         fluid_model_provider=fluid_model_providers["default"],
     ):
+        fluid_model_provider = (
+            fluid_model_provider
+            if self.fluid_model is None
+            else fluid_model_providers[self.fluid_model]
+        )
         return self.material.as_material(
             temperature, pressure, fluid_model_provider=fluid_model_provider
         )
