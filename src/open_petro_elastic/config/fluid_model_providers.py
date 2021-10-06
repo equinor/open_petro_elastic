@@ -26,8 +26,29 @@ class BatzleWangFluidModelProvider:
             "Default Fluid model provider has no condensate model."
         )
 
+    def carbon_dioxide(self, *args, **kwargs):
+        raise NotImplementedError(
+            "Default fluid model provider has no carbon dioxide model"
+        )
+
 
 class SpanWagnerFluidModelProvider:
+    def oil(self, *args, **kwargs):
+        raise NotImplementedError("Span & Wagner fluid model provider has no oil model")
+
+    def gas(self, *args, **kwargs):
+        raise NotImplementedError("Span & Wagner fluid model provider has no gas model")
+
+    def brine(self, *args, **kwargs):
+        raise NotImplementedError(
+            "Span & Wagner fluid model provider has no brine model"
+        )
+
+    def condensate(self, *args, **kwargs):
+        raise NotImplementedError(
+            "Span & Wagner fluid model provider has no condensate model"
+        )
+
     def carbon_dioxide(self, temperature, pressure, interpolate_density):
         from open_petro_elastic.material.conversions import celsius_to_kelvin
 

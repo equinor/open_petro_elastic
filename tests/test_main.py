@@ -63,6 +63,12 @@ run_example_parameters = (
             None,
         ],
         [
+            example_yaml("example4"),
+            example_csv("example4"),
+            example_csv("example4_calibration"),
+            None,
+        ],
+        [
             example_yaml("friable_sand_example"),
             None,
             example_csv("friable_sand_calibration"),
