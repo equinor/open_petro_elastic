@@ -60,7 +60,66 @@ def test_fluids_gas_idx():
     }
     fluids = Fluids(constituents=[oil_config, gas_config], mix_method="brie")
 
-    assert fluids.index_of_gas == 1
+    assert len(fluids.index_of_brie_gases()) == 1
+    assert fluids.index_of_brie_gases()[0] == 1
+
+
+def test_fluids_mixed_with_brie_without_gases():
+    oil_config = {
+        "material": {
+            "density": 1,
+            "bulk_modulus": 1,
+            "shear_modulus": 30,
+        },
+        "fraction": 0.5,
+    }
+    brine_config = {
+        "material": {
+            "type": "brine",
+            "salinity": 0.0
+        },
+        "fraction": 0.5,
+    }
+    brie_fluid = Fluids(constituents=[oil_config, brine_config], mix_method='brie').as_mixture(Pressure())
+    wood_fluid = Fluids(constituents=[oil_config, brine_config], mix_method='wood').as_mixture(Pressure())
+    assert_similar_material(brie_fluid, wood_fluid)
+
+
+def test_fluids_mixed_with_brie_using_multiple_materials():
+    brine_config1 = {
+        "material": {
+            "type": "brine",
+            "salinity": 0.0
+        },
+        "fraction": 0.4,
+    }
+    brine_config2 = {
+        "material": {
+            "type": "brine",
+            "salinity": 1e-5
+        },
+        "fraction": 0.4,
+    }
+    gas_config1 = {
+        "material": {
+            "type": "gas",
+            "gas_gravity": 0.5,
+        },
+        "fraction": 0.1,
+    }
+    gas_config2 = {
+        "material": {
+            "type": "carbon_dioxide",
+        },
+        "fraction": 0.1,
+    }
+    mixed = Fluids(
+        constituents=[brine_config1, brine_config2, gas_config1, gas_config2],
+        mix_method="brie",
+    )
+    assert len(mixed.index_of_brie_gases()) == 2
+    assert 2 in mixed.index_of_brie_gases()
+    assert 3 in mixed.index_of_brie_gases()
 
 
 def test_fluids_vectorized(snapshot):

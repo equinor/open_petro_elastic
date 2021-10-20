@@ -1,6 +1,7 @@
 """
 Fluid is short hand for a material with shear modulus equal to zero.
 """
+import numpy as np
 from open_petro_elastic.float_vectorize import float_vectorize
 
 from .material import Material
@@ -13,10 +14,25 @@ def fluid_material(*args, **kwargs):
     return Material(shear_modulus=0, *args, **kwargs)
 
 
+def sum_saturations_to_one(saturations):
+    saturations = np.array(saturations).T
+    total_saturations = np.sum(saturations, axis=-1)
+    saturations[total_saturations < 1e-15] = 1e-15
+    adjusted_saturation = np.sum(saturations, axis=-1)
+    return [s / adjusted_saturation for s in saturations.T]
+
+
 def mix_densities(fluids, saturations):
     return sum(
         fluid.density * saturation for (fluid, saturation) in zip(fluids, saturations)
     )
+
+
+def mix_bulk_moduli(fluids, saturations):
+    saturations = np.array(saturations).T
+    bulk_moduli = np.array([fluid.bulk_modulus for fluid in fluids]).T
+    return (np.sum(saturations, axis=-1)
+            / np.sum(saturations / bulk_moduli, axis=-1))
 
 
 def wood_fluid_mixing(fluids, saturations):
@@ -29,21 +45,20 @@ def wood_fluid_mixing(fluids, saturations):
     * A. B. Wood, A Textbook of Sound, 1st ed. MacMillan, New York, 1930, p. 361.
     * https://wiki.seg.org/wiki/Rock_physics#Voigt-Reuss-Hill_average
     """
-    bulk_mix = sum(saturations) / sum(
-        saturation / fluid.bulk_modulus
-        for (fluid, saturation) in zip(fluids, saturations)
-    )
     return fluid_material(
-        bulk_modulus=bulk_mix, density=mix_densities(fluids, saturations)
+        bulk_modulus=mix_bulk_moduli(fluids, saturations),
+        density=mix_densities(fluids, saturations)
     )
 
 
-def brie_fluid_mixing(fluids, fluid_saturations, gas, exponent=3.0):
+def brie_fluid_mixing(fluids, fluid_saturations, gases, gas_saturations, exponent=3.0):
     """
     Fluid mixing law proposed by Brie et al. (1995), see also Borges et al. (2018).
     :param fluids: A list of liquids to mix with gas.
-    :param saturations: List of saturation for each liquid ( sums to 1.0 minus saturation of gas).
-    :param gas: The gas to mix into a liquid.
+    :param fluid_saturations: List of saturation for each liquid.
+    :param gases: The gases to mix into a liquid.
+    :param gas_saturations: List of saturations for each gas. Total saturation
+        (fluids + gases) should sum to 1.0.
     :param exponent: An empirical constant, defaults to 3.0.
     :return: Material representing the fluid mixed with gas.
 
@@ -55,16 +70,29 @@ def brie_fluid_mixing(fluids, fluid_saturations, gas, exponent=3.0):
         Workshop. Vol. 2018. No. 1. European Association of Geoscientists &
         Engineers, 2018.
     """
-    liquid = wood_fluid_mixing(fluids, fluid_saturations)
-    total_fluid = sum(fluid_saturations)
-    bulk_mix = (liquid.bulk_modulus - gas.bulk_modulus) * (
-        total_fluid
-    ) ** exponent + gas.bulk_modulus
-    density_mix = (
-        mix_densities(fluids, fluid_saturations) + (1 - total_fluid) * gas.density
-    )
+    if len(fluids) != len(fluid_saturations):
+        raise ValueError("Mismatched lengths of fluid and fluid saturation input")
+    if len(gases) != len(gas_saturations):
+        raise ValueError("Mismatched lengths of gas and gas saturation input")
 
-    return fluid_material(density=density_mix, bulk_modulus=bulk_mix)
+    if len(fluids) != 0:
+        liquid = wood_fluid_mixing(fluids, sum_saturations_to_one(fluid_saturations))
+    if len(gases) != 0:
+        gas = wood_fluid_mixing(gases, sum_saturations_to_one(gas_saturations))
+
+    if len(gases) == 0 and len(fluids) == 0:
+        raise ValueError("Mixing is undefined for zero constituents")
+    elif len(gases) == 0:
+        return liquid
+    elif len(fluids) == 0:
+        return gas
+    else:
+        total_fluid = sum(fluid_saturations)
+        bulk_mix = (liquid.bulk_modulus - gas.bulk_modulus) * (
+            total_fluid
+        ) ** exponent + gas.bulk_modulus
+        density_mix = mix_densities([liquid, gas], [total_fluid, 1 - total_fluid])
+        return fluid_material(density=density_mix, bulk_modulus=bulk_mix)
 
 
 def fluid_substitution(dry_rock, mineral, fluid, porosity):

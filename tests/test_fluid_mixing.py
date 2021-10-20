@@ -1,4 +1,4 @@
-from generators import fluids, ratios
+from generators import fluids, ratios, positives
 from hypothesis import assume, given
 from numpy.testing import assert_allclose
 from predicates import assert_similar_material
@@ -11,7 +11,7 @@ def test_bries_equation_density(water, oil, gas, water_saturation, oil_saturatio
     assume(0.0 < water_saturation + oil_saturation <= 1.0)
     gas_saturation = 1.0 - (water_saturation + oil_saturation)
 
-    mix = brie_fluid_mixing([water, oil], [water_saturation, oil_saturation], gas, 3.0)
+    mix = brie_fluid_mixing([water, oil], [water_saturation, oil_saturation], [gas], [gas_saturation], exponent=3.0)
 
     mix_density = (
         water.density * water_saturation
@@ -49,5 +49,31 @@ def test_woods_unit_saturation_preserves_liquid(liquid, gas):
 @given(fluids(), fluids())
 def test_bries_unit_saturation_preserves_liquid(liquid, gas):
 
-    mix = brie_fluid_mixing([liquid], [1.0], gas)
+    mix = brie_fluid_mixing([liquid], [1.0], [gas], [0.0])
     assert_similar_material(mix, liquid, atol=1e-6)
+
+
+@given(fluids(bulk_modulus=positives(min_value=1.1e7)),
+       fluids(bulk_modulus=positives(min_value=1.1e7)),
+       fluids(bulk_modulus=positives(max_value=1.0e7)),
+       fluids(bulk_modulus=positives(max_value=1.0e7)),
+       ratios(),
+       ratios(),
+       ratios(),
+       ratios())
+def test_bries_two_liquids_two_gases(fluid1, fluid2, fluid3, fluid4, liquid_sat1, liquid_sat2, gas_sat1, gas_sat2):
+    assume(0 < liquid_sat1 + liquid_sat2)
+    total = liquid_sat1 + liquid_sat2 + gas_sat1 + gas_sat2
+    assume(0 < total)
+    liquid_sat1 /= total
+    liquid_sat2 /= total
+    gas_sat1 /= total
+    gas_sat2 /= total
+    liquids = [fluid1, fluid2]
+    gases = [fluid3, fluid4]
+    mix = brie_fluid_mixing(liquids,
+                            [liquid_sat1, liquid_sat2],
+                            gases,
+                            [gas_sat1, gas_sat2])
+    assert min(g.bulk_modulus for g in gases) <= mix.bulk_modulus
+    assert mix.bulk_modulus <= max(liq.bulk_modulus for liq in liquids)

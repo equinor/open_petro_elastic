@@ -4,6 +4,7 @@ import numpy as np
 from pydantic import conlist, validator
 from pydantic.dataclasses import dataclass
 from typing_extensions import Literal
+from typing import List, Optional
 
 from open_petro_elastic.material import brie_fluid_mixing, wood_fluid_mixing
 
@@ -49,14 +50,17 @@ class Fluids:
     )
     mix_method: Literal["wood", "brie"] = "wood"
     brie_constant: float = 3.0
-    index_of_gas: int = 0
+    brie_gases: Optional[List[int]] = None
     fluid_model: Literal[tuple(fluid_model_providers.keys())] = "default"
 
     def __post_init_post_parse__(self):
         fix_one_fraction(self.constituents)
-        gas_constituents = [c for c in self.constituents if c.material.type == "gas"]
-        if len(gas_constituents) > 0:
-            self.index_of_gas = self.constituents.index(gas_constituents[0])
+        if self.brie_gases is None:
+            self.brie_gases = [
+                i
+                for i, c in enumerate(self.constituents)
+                if c.material.type in ("carbon_dioxide", "gas")
+            ]
 
     @validator("constituents")
     def fractions_should_not_exceed_one(cls, v):
@@ -65,6 +69,9 @@ class Fluids:
         if np.any(sum(fractions) > 1.0 + epsilon):
             raise ValueError("Sum of constituent fractions should not exceed 1.0")
         return v
+
+    def index_of_brie_gases(self):
+        return self.brie_gases
 
     def as_mixture(self, pressure):
         """
@@ -84,13 +91,19 @@ class Fluids:
         if self.mix_method == "wood":  # Method 1 - Wood's equation
             return wood_fluid_mixing(materials, fractions)
         if self.mix_method == "brie":  # Method 2 - Brie's equation with exponent 'e'
-            gas_material = materials.pop(self.index_of_gas)
-            fractions.pop(self.index_of_gas)
+            index_of_gas = self.index_of_brie_gases()
+            gas_materials = [
+                materials.pop(i) for i in sorted(index_of_gas, reverse=True)
+            ]
+            gas_saturations = [
+                fractions.pop(i) for i in sorted(index_of_gas, reverse=True)
+            ]
             return brie_fluid_mixing(
                 materials,
                 fractions,
-                gas_material,
-                self.brie_constant,
+                gas_materials,
+                gas_saturations,
+                exponent=self.brie_constant,
             )
         else:
             raise ValueError(f"Unknown mix_method: {self.mix_method}")
