@@ -1,5 +1,6 @@
 import numpy as np
-from scipy.interpolate import RectBivariateSpline
+import functools
+from scipy.interpolate import RegularGridInterpolator
 
 
 def generate_lookup_table(func, x, y, filename):
@@ -11,20 +12,22 @@ def generate_lookup_table(func, x, y, filename):
     return grids2d, z_grid
 
 
+@functools.lru_cache(maxsize=10)
 def load_lookup_table_interpolator(filename):
     data = np.load(filename)
-    rbs = RectBivariateSpline(data["x"], data["y"], data["z_grid"])
-    box = np.min(data["x"]), np.max(data["x"]), np.min(data["y"]), np.max(data["y"])
+    reg = RegularGridInterpolator(
+        (data["x"], data["y"]), data["z_grid"], method="nearest", bounds_error=False
+    )
 
     def _interp(_x, _y):
-        outside = _x < box[0]
-        outside |= _x > box[1]
-        outside |= _y < box[2]
-        outside |= _y > box[3]
-        res = np.full_like(outside, dtype=np.float, fill_value=np.nan)
-        _x = _x if np.asarray(_x).size == 1 else _x[~outside]
-        _y = _y if np.asarray(_y).size == 1 else _y[~outside]
-        res[~outside] = rbs.ev(_x, _y)
-        return res
+        _x, _y = np.asarray(_x), np.asarray(_y)
+        pts = np.full((max(_x.size, _y.size), 2), fill_value=np.nan)
+        pts[:, 0] = _x
+        pts[:, 1] = _y
+        res = reg(pts)
+        if _x.ndim == 0 and _y.ndim == 0:
+            return res[0]
+        else:
+            return res
 
     return _interp

@@ -464,7 +464,7 @@ def test_interpolate_density():
     outside_bounds = (t < 274) | (t > 473) | (p < 0.5) | (p > 99.5)
     di = carbon_dioxide_density(t, p, interpolate=True)
     assert_array_equal(outside_bounds, np.isnan(di))
-    assert_allclose(di[~outside_bounds], d[~outside_bounds], rtol=0.0001)
+    assert_allclose(di[~outside_bounds], d[~outside_bounds], rtol=0.01)
 
 
 def test_partially_vectorized_bulk_modulus():
@@ -476,3 +476,11 @@ def test_partially_vectorized_bulk_modulus():
     vbm2 = carbon_dioxide(t, p[0], None).bulk_modulus
     nbm2 = [carbon_dioxide(_t, p[0], None).bulk_modulus for _t in t]
     assert_allclose(vbm2, nbm2)
+
+
+def test_interpolation_near_phase_boundary():
+    abs_temp = 288.3132044400248
+    pressure = 5.110887342162991
+    eos_density = carbon_dioxide_density(abs_temp, pressure)
+    int_density = carbon_dioxide_density(abs_temp, pressure, interpolate=True)
+    assert int_density == pytest.approx(eos_density, rel=0.005)

@@ -31,8 +31,7 @@ def mix_densities(fluids, saturations):
 def mix_bulk_moduli(fluids, saturations):
     saturations = np.array(saturations).T
     bulk_moduli = np.array([fluid.bulk_modulus for fluid in fluids]).T
-    return (np.sum(saturations, axis=-1)
-            / np.sum(saturations / bulk_moduli, axis=-1))
+    return np.sum(saturations, axis=-1) / np.sum(saturations / bulk_moduli, axis=-1)
 
 
 def wood_fluid_mixing(fluids, saturations):
@@ -47,7 +46,7 @@ def wood_fluid_mixing(fluids, saturations):
     """
     return fluid_material(
         bulk_modulus=mix_bulk_moduli(fluids, saturations),
-        density=mix_densities(fluids, saturations)
+        density=mix_densities(fluids, saturations),
     )
 
 

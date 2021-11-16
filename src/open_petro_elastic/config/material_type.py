@@ -101,7 +101,7 @@ class CondensateMaterial:
 @dataclass(config=PetroElasticConfig)
 class CarbonDioxideMaterial:
     type: Literal["carbon_dioxide"] = "carbon_dioxide"
-    interpolate_density: bool = False
+    interpolate_density: bool = True
 
     def as_material(
         self,

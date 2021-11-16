@@ -74,30 +74,25 @@ def test_fluids_mixed_with_brie_without_gases():
         "fraction": 0.5,
     }
     brine_config = {
-        "material": {
-            "type": "brine",
-            "salinity": 0.0
-        },
+        "material": {"type": "brine", "salinity": 0.0},
         "fraction": 0.5,
     }
-    brie_fluid = Fluids(constituents=[oil_config, brine_config], mix_method='brie').as_mixture(Pressure())
-    wood_fluid = Fluids(constituents=[oil_config, brine_config], mix_method='wood').as_mixture(Pressure())
+    brie_fluid = Fluids(
+        constituents=[oil_config, brine_config], mix_method="brie"
+    ).as_mixture(Pressure())
+    wood_fluid = Fluids(
+        constituents=[oil_config, brine_config], mix_method="wood"
+    ).as_mixture(Pressure())
     assert_similar_material(brie_fluid, wood_fluid)
 
 
 def test_fluids_mixed_with_brie_using_multiple_materials():
     brine_config1 = {
-        "material": {
-            "type": "brine",
-            "salinity": 0.0
-        },
+        "material": {"type": "brine", "salinity": 0.0},
         "fraction": 0.4,
     }
     brine_config2 = {
-        "material": {
-            "type": "brine",
-            "salinity": 1e-5
-        },
+        "material": {"type": "brine", "salinity": 1e-5},
         "fraction": 0.4,
     }
     gas_config1 = {
