@@ -15,11 +15,12 @@ def fluid_material(*args, **kwargs):
 
 
 def sum_saturations_to_one(saturations):
-    saturations = np.array(saturations).T
-    total_saturations = np.sum(saturations, axis=-1)
-    saturations[total_saturations < 1e-15] = 1e-15
-    adjusted_saturation = np.sum(saturations, axis=-1)
-    return [s / adjusted_saturation for s in saturations.T]
+    total_saturation = sum(saturations)
+    adjusted_saturation = np.maximum(total_saturation, 1e-15)
+    return [
+        np.where(total_saturation > 0.0, s, 1e-15) / adjusted_saturation
+        for s in saturations
+    ]
 
 
 def mix_densities(fluids, saturations):
@@ -29,9 +30,7 @@ def mix_densities(fluids, saturations):
 
 
 def mix_bulk_moduli(fluids, saturations):
-    saturations = np.array(saturations).T
-    bulk_moduli = np.array([fluid.bulk_modulus for fluid in fluids]).T
-    return np.sum(saturations, axis=-1) / np.sum(saturations / bulk_moduli, axis=-1)
+    return 1.0 / sum([s / f.bulk_modulus for s, f in zip(saturations, fluids)])
 
 
 def wood_fluid_mixing(fluids, saturations):
@@ -44,6 +43,7 @@ def wood_fluid_mixing(fluids, saturations):
     * A. B. Wood, A Textbook of Sound, 1st ed. MacMillan, New York, 1930, p. 361.
     * https://wiki.seg.org/wiki/Rock_physics#Voigt-Reuss-Hill_average
     """
+    saturations = sum_saturations_to_one(saturations)
     return fluid_material(
         bulk_modulus=mix_bulk_moduli(fluids, saturations),
         density=mix_densities(fluids, saturations),
@@ -75,9 +75,9 @@ def brie_fluid_mixing(fluids, fluid_saturations, gases, gas_saturations, exponen
         raise ValueError("Mismatched lengths of gas and gas saturation input")
 
     if len(fluids) != 0:
-        liquid = wood_fluid_mixing(fluids, sum_saturations_to_one(fluid_saturations))
+        liquid = wood_fluid_mixing(fluids, fluid_saturations)
     if len(gases) != 0:
-        gas = wood_fluid_mixing(gases, sum_saturations_to_one(gas_saturations))
+        gas = wood_fluid_mixing(gases, gas_saturations)
 
     if len(gases) == 0 and len(fluids) == 0:
         raise ValueError("Mixing is undefined for zero constituents")
