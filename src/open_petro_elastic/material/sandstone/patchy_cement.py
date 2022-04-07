@@ -22,6 +22,7 @@ def patchy_cement(
     critical_porosity=0.4,
     shear_reduction=1.0,
     coordination_number=9,
+    check_ratio=True,
 ):
     """
     A hybrid sandstone model based on the patchy cement model of Avseth et. al (2016).
@@ -39,6 +40,8 @@ def patchy_cement(
     :param critical_porosity: The critical porosity of the sandstone.
     :param shear_reduction: Shear reduction factor.
     :param coordination number: The coordination number of the sand.
+    :param check_ratio: Boolean controlling the requirement to check the ratio in
+        Hashin-Shtrikman equations, defaults to True.
 
     Avseth, Per & Skjei, Norunn & Mavko, Gary. (2016). Rock-physics modeling of
     stress sensitivity and 4D time shifts in patchy cemented sandstones —
@@ -46,7 +49,7 @@ def patchy_cement(
     10.1190/tle35100868.1.
     """
     dense_packing = hashin_shtrikman_walpole(
-        cement, sand, critical_porosity - upper_bound_porosity
+        cement, sand, critical_porosity - upper_bound_porosity, check_ratio=check_ratio
     )
 
     friable = friable_sand(
@@ -56,6 +59,7 @@ def patchy_cement(
         pressure,
         coordination_number,
         shear_reduction,
+        check_ratio,
     )
     lower_bound = friable_sand(
         dense_packing,
@@ -64,6 +68,7 @@ def patchy_cement(
         lower_bound_pressure,
         coordination_number,
         shear_reduction,
+        check_ratio,
     )
     upper_bound = constant_cement(
         sand,
@@ -73,6 +78,7 @@ def patchy_cement(
         critical_porosity,
         coordination_number,
         shear_reduction,
+        check_ratio,
     )
     contact = contact_cement(
         cement,
@@ -83,7 +89,7 @@ def patchy_cement(
         coordination_number,
     )
     constant = hashin_shtrikman_walpole(
-        dense_packing, contact, 1 - porosity / contact_cement_porosity
+        dense_packing, contact, 1 - porosity / contact_cement_porosity, check_ratio=check_ratio
     )
 
     kcc = np.asarray(constant.bulk_modulus)

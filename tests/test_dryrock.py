@@ -29,6 +29,7 @@ def test_dryrock_phi_fitted_vp_vs(
         overburden=overburden_pressure,
         reference=reference_pressure,
         max_effective=truncate_pressure,
+        fluid=reference_pressure,
     )
     m = velocityfit_dryrock.material(mineral_mix_material, pressure)
     dp = velocityfit_dryrock.nonporous(mineral_mix_material)
@@ -47,6 +48,7 @@ def test_dryrock_phi_k_my(
         overburden=overburden_pressure,
         reference=reference_pressure,
         max_effective=truncate_pressure,
+        fluid=reference_pressure,
     )
 
     m = modulifit_dryrock.material(mineral_mix_material, pressure)

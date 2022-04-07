@@ -25,7 +25,7 @@ def check_is_ratio(ratio, epsilon=1e-5):
         )
     if np.any(0 - epsilon > ratio):
         raise ValueError(
-            f"ratio in hashin-shrtikman bound should be greater than 0: {ratio}"
+            f"ratio in hashin-shtrikman bound should be greater than 0: {ratio}"
         )
 
 
@@ -79,7 +79,9 @@ def hashin_shtrikman_average(material1, material2, ratio):
     )
 
 
-def hashin_shtrikman_walpole(material1, material2, ratio, bound="lower"):
+def hashin_shtrikman_walpole(
+    material1, material2, ratio, bound="lower", check_ratio=True
+):
     """
     Refinement of hashin_shtrikman bounds
 
@@ -92,10 +94,13 @@ def hashin_shtrikman_walpole(material1, material2, ratio, bound="lower"):
     :param ratio: The ratio of material1 in the composite material.
     :param bound: Either "lower" or "upper", whether to return the
         lower or upper bound.
+    :param check_ratio: Boolean controlling the requirement to check the ratio in
+        Hashin-Shtrikman equations, defaults to True.
     :return: Lower (or upper) hashin-shtrikman-walpole bound for mixing
         of multicomponent materials.
     """
-    check_is_ratio(ratio)
+    if check_ratio:
+        check_is_ratio(ratio)
 
     @float_vectorize
     def calc_density(r1, r2, f1, f2):

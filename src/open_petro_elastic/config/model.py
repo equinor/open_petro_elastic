@@ -207,11 +207,14 @@ class FriableSandModel(AbstractPressureDependencyModel):
     :param critical_porosity: The critical porosity of the mineral.
     :param shear_reduction: The shear_reduction parameter to use for the
         friable_sand model.
+    :param check_ratio: Boolean controlling the requirement to check the ratio in
+        Hashin-Shtrikman equations, defaults to True.
     """
 
     critical_porosity: Array[float] = 0.4
     shear_reduction: Array[float] = 1.0
     coordination_number: Optional[Array[float]] = None
+    check_ratio: Optional[bool] = True
     type: Literal["friable_sand"] = "friable_sand"
 
     def __post_init_post_parse__(self):
@@ -242,6 +245,7 @@ class FriableSandModel(AbstractPressureDependencyModel):
             pressure,
             self.coordination_number,
             self.shear_reduction,
+            self.check_ratio,
         )
 
 
@@ -265,6 +269,8 @@ class PatchyCementModel(AbstractPressureDependencyModel):
     :param critical_porosity: The critical porosity of the mineral.
     :param shear_reduction: The shear_reduction parameter to use for the
         patchy_cement and friable_sand model.
+    :param check_ratio: Boolean controlling the requirement to check the ratio in
+        Hashin-Shtrikman equations, defaults to True.
     """
 
     type: Literal["patchy_cement"] = "patchy_cement"
@@ -276,6 +282,7 @@ class PatchyCementModel(AbstractPressureDependencyModel):
     coordination_number: Optional[Array[float]] = None
     critical_porosity: Array[float] = 0.4
     shear_reduction: Array[float] = 1.0
+    check_ratio: Optional[bool] = True
 
     def __post_init_post_parse__(self):
         if self.coordination_number is None:
@@ -325,6 +332,7 @@ class PatchyCementModel(AbstractPressureDependencyModel):
             self.critical_porosity,
             self.shear_reduction,
             self.coordination_number,
+            self.check_ratio,
         )
 
 

@@ -1,3 +1,6 @@
+
+
+
 """
 Module for calculation of the constant cement model
 of Avseth et. al, see :py:meth:`constant_cement`.
@@ -14,6 +17,7 @@ def constant_cement(
     sand_porosity=0.4,
     coordination_number=9,
     shear_reduction=1.0,
+    check_ratio=True,
 ):
     """
 
@@ -34,12 +38,14 @@ def constant_cement(
         defaults to 9.
     :param shear_reduction: Shear reduction parameter used to account for
         tangential frictionaless grain contacts, defaults to no reduction, ie. 1.0.
+    :param check_ratio: Boolean controlling the requirement to check the ratio in
+        Hashin-Shtrikman equations, defaults to True.
     """
 
     # At the zero-porosity point, all original porosity is filled with grains.
     # The cement fraction surrounds the original grains.
     dense_packing = hashin_shtrikman_walpole(
-        cement, sand, sand_porosity - contact_cement_porosity
+        cement, sand, sand_porosity - contact_cement_porosity, check_ratio=check_ratio
     )
 
     # Dry rock properties of high-porosity end member calculated with
@@ -55,4 +61,4 @@ def constant_cement(
 
     # Fraction of zero-porosity end member
     fraction = 1 - porosity / contact_cement_porosity
-    return hashin_shtrikman_walpole(dense_packing, cc, fraction)
+    return hashin_shtrikman_walpole(dense_packing, cc, fraction, check_ratio=check_ratio)

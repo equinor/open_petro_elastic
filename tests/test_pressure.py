@@ -21,6 +21,7 @@ def test_pressure_dependency_no_pressure_poly_fit(
         max_effective=truncate_pressure,
         reference=reference_pressure,
         rock=presrock,
+        fluid=presrock,
     )
     snapshot.assert_match(
         PressureDependency(
@@ -38,6 +39,7 @@ def test_pressure_dependency_vector_pressure(dryrock_reference_material):
         max_effective=[20, 20],
         reference=[5, 6],
         rock=[7, 8],
+        fluid=[7, 8],
     )
     dryrock = PressureDependency(
         model={
@@ -62,6 +64,7 @@ def test_pressure_dependency_empty_vector(dryrock_reference_material):
         max_effective=[],
         reference=[],
         rock=[],
+        fluid=[],
     )
     dryrock = PressureDependency(
         model={
@@ -92,6 +95,7 @@ def test_pressure_dependency_no_pressure_power_fit(
         max_effective=truncate_pressure,
         reference=reference_pressure,
         rock=presrock,
+        fluid=presrock,
     )
     d = PressureDependency(
         model={
@@ -119,6 +123,7 @@ def test_pressure_dependency_no_pressure_exp_fit(
         max_effective=truncate_pressure,
         reference=reference_pressure,
         rock=presrock,
+        fluid=presrock,
     )
     d = PressureDependency(
         model={
@@ -189,3 +194,32 @@ def test_pressure_invalid_powerfit_material():
             Material(primary_velocity=10.0, secondary_velocity=1.0, density=1.0),
             pressure,
         ),
+
+
+def test_pressure_raises_negative_reference_effective_pressure():
+    with pytest.raises(ValueError, match="reference pressure"):
+        Pressure(
+            overburden=20.0E+6,
+            reference=30.0E+6,
+            fluid=15.0E+6,
+        )
+
+
+def test_pressure_raises_negative_fluid_effective_pressure():
+    with pytest.raises(ValueError, match="fluid pressure"):
+        Pressure(
+            overburden=50.0E+6,
+            reference=30.0E+6,
+            fluid=70.0E+6,
+        )
+
+
+def test_pressure_raises_negative_rock_effective_pressure():
+    with pytest.raises(ValueError, match="rock pressure"):
+        Pressure(
+            overburden=50.0E+6,
+            reference=30.0E+6,
+            fluid=30.0E+6,
+            rock=65.0E+6,
+        )
+

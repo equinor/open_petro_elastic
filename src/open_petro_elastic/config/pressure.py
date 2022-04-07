@@ -28,6 +28,28 @@ class Pressure:
             raise ValueError("Need to give at least one of rock or fluid pressure.")
         return values
 
+    @root_validator
+    def positive_effective_pressure(cls, values):
+        ovb = values.get("overburden")
+        ref = values.get("reference")
+        fld = values.get("fluid")
+        rck = values.get("rock")
+        if "fluid" in values:
+            if np.any(ovb - fld < 0):
+                raise ValueError(
+                    "Overburden pressure needs to be greater than fluid pressure."
+                )
+        if rck is not None:
+            if np.any(ovb - rck < 0):
+                raise ValueError(
+                    "Overburden pressure needs to be greater than rock pressure."
+                )
+        if np.any(ovb - ref < 0):
+            raise ValueError(
+                "Overburden pressure needs to be greater than reference pressure."
+            )
+        return values
+
     @property
     def effective_fluid(self):
         return self.overburden - self.fluid
