@@ -58,4 +58,6 @@ def constant_cement(
 
     # Fraction of zero-porosity end member
     fraction = 1 - porosity / contact_cement_porosity
-    return hashin_shtrikman_walpole(dense_packing, cc, fraction, check_ratio=check_ratio)
+    return hashin_shtrikman_walpole(
+        dense_packing, cc, fraction, check_ratio=check_ratio
+    )

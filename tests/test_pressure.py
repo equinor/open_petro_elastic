@@ -199,26 +199,26 @@ def test_pressure_invalid_powerfit_material():
 def test_pressure_raises_negative_reference_effective_pressure():
     with pytest.raises(ValueError, match="reference pressure"):
         Pressure(
-            overburden=20.0E+6,
-            reference=30.0E+6,
-            fluid=15.0E+6,
+            overburden=20.0e6,
+            reference=30.0e6,
+            fluid=15.0e6,
         )
 
 
 def test_pressure_raises_negative_fluid_effective_pressure():
     with pytest.raises(ValueError, match="fluid pressure"):
         Pressure(
-            overburden=50.0E+6,
-            reference=30.0E+6,
-            fluid=70.0E+6,
+            overburden=50.0e6,
+            reference=30.0e6,
+            fluid=70.0e6,
         )
 
 
 def test_pressure_raises_negative_rock_effective_pressure():
     with pytest.raises(ValueError, match="rock pressure"):
         Pressure(
-            overburden=50.0E+6,
-            reference=30.0E+6,
-            fluid=30.0E+6,
-            rock=65.0E+6,
+            overburden=50.0e6,
+            reference=30.0e6,
+            fluid=30.0e6,
+            rock=65.0e6,
         )

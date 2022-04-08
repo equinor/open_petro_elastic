@@ -89,7 +89,10 @@ def patchy_cement(
         coordination_number,
     )
     constant = hashin_shtrikman_walpole(
-        dense_packing, contact, 1 - porosity / contact_cement_porosity, check_ratio=check_ratio
+        dense_packing,
+        contact,
+        1 - porosity / contact_cement_porosity,
+        check_ratio=check_ratio,
     )
 
     kcc = np.asarray(constant.bulk_modulus)
