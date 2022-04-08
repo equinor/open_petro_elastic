@@ -1,6 +1,3 @@
-
-
-
 """
 Module for calculation of the constant cement model
 of Avseth et. al, see :py:meth:`constant_cement`.

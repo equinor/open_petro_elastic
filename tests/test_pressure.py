@@ -222,4 +222,3 @@ def test_pressure_raises_negative_rock_effective_pressure():
             fluid=30.0E+6,
             rock=65.0E+6,
         )
-

@@ -1,6 +1,6 @@
 import warnings
 from dataclasses import field
-from typing import Optional, List, Union
+from typing import List, Union
 
 import numpy as np
 from pydantic import root_validator
