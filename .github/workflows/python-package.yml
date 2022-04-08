@@ -31,7 +31,7 @@ jobs:
     - name: Lint with flake8 and black
       run: |
         pip install flake8
-        pip install black==20.8b1
+        pip install black
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # test remaining issues
