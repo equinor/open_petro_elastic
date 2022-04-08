@@ -62,14 +62,14 @@ def ideal_gas_helmholtz_energy(delta, tau, dd, dt):
     elif dt == 2 and dd == 0:
         _sum = np.sum(
             a0[0, 3:]
-            * theta0 ** 2
+            * theta0**2
             * np.exp(-theta0 * tau2)
             * (1 - np.exp(-theta0 * tau2)) ** -2,
             axis=-1,
         )
-        result = -a0[0, 2] / tau ** 2 - _sum
+        result = -a0[0, 2] / tau**2 - _sum
     elif dt == 0 and dd == 2:
-        return -1 / delta ** 2
+        return -1 / delta**2
     elif dt == 1 and dd == 1:
         return 0
     else:
@@ -128,7 +128,7 @@ def carbon_dioxide_pressure(
         )
     elif d_density == 1:
         first = 2 * delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
-        second = delta ** 2 * co2_residual_helmholtz_energy(delta, tau, 2, 0)
+        second = delta**2 * co2_residual_helmholtz_energy(delta, tau, 2, 0)
         if isentropic is False:
             third = 0
         else:
@@ -138,7 +138,7 @@ def carbon_dioxide_pressure(
                 + delta * co2_residual_helmholtz_energy(delta, tau, 1, 0)
                 - delta * tau * co2_residual_helmholtz_energy(delta, tau, 1, 1)
             ) ** 2
-            den = tau ** 2 * (co2_helmholtz_energy(delta, tau, 0, 2))
+            den = tau**2 * (co2_helmholtz_energy(delta, tau, 0, 2))
             third = -nom / den
         return (
             absolute_temperature * CO2_GAS_CONSTANT * (1 + first + second + third) / 1e6
@@ -158,7 +158,7 @@ def saturated_liquid_density(absolute_temperature):
     _a4 = 0.39245142
     _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
     inner = (
-        _a1 * _t ** 0.34 + _a2 * _t ** 0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
+        _a1 * _t**0.34 + _a2 * _t**0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
     )
     return CO2_CRITICAL_DENSITY * np.exp(inner)
 
@@ -178,8 +178,8 @@ def saturated_vapor_density(absolute_temperature):
     _a5 = -29.742252
     _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
     inner = (
-        _a1 * _t ** 0.34
-        + _a2 * _t ** 0.5
+        _a1 * _t**0.34
+        + _a2 * _t**0.5
         + _a3 * _t
         + _a4 * _t ** (7 / 3)
         + _a5 * _t ** (14 / 3)
@@ -197,7 +197,7 @@ def sublimation_pressure(absolute_temperature):
     _a2 = 2.4327015
     _a3 = -5.3061778
     _t = 1 - absolute_temperature / CO2_TRIPLE_TEMPERATURE
-    inner = _a1 * _t + _a2 * _t ** 1.9 + _a3 * _t ** 2.9
+    inner = _a1 * _t + _a2 * _t**1.9 + _a3 * _t**2.9
     return CO2_TRIPLE_PRESSURE * np.exp(inner / (1 - _t))
 
 
@@ -213,7 +213,7 @@ def vapor_pressure(absolute_temperature):
     _a3 = -1.6463597
     _a4 = -3.2995634
     _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
-    inner = _a1 * _t ** 1.0 + _a2 * _t ** 1.5 + _a3 * _t ** 2.0 + _a4 * _t ** 4.0
+    inner = _a1 * _t**1.0 + _a2 * _t**1.5 + _a3 * _t**2.0 + _a4 * _t**4.0
     return CO2_CRITICAL_PRESSURE * np.exp(inner / (1 - _t))
 
 
@@ -226,7 +226,7 @@ def melting_pressure(absolute_temperature):
     _a1 = 1955.5390
     _a2 = 2055.4593
     _t = absolute_temperature / CO2_TRIPLE_TEMPERATURE - 1
-    return CO2_TRIPLE_PRESSURE * (1 + _a1 * _t + _a2 * _t ** 2)
+    return CO2_TRIPLE_PRESSURE * (1 + _a1 * _t + _a2 * _t**2)
 
 
 def _determine_density_bounds(absolute_temperature, pressure, force_vapor):

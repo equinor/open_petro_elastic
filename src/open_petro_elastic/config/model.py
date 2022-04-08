@@ -151,7 +151,7 @@ class PowerfitModel(AbstractPressureDependencyModel):
             material.primary_velocity / material.secondary_velocity + secondary_factor
         )
         bmod = material.bulk_modulus + primary_factor
-        smod_reduction = vp_over_vs ** 2 - 4.0 / 3.0
+        smod_reduction = vp_over_vs**2 - 4.0 / 3.0
         if np.any(smod_reduction <= 1e-20):
             raise ValueError("pressure correction did not result in valid dry rock")
         return Material(

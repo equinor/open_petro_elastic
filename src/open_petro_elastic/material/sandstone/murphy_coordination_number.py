@@ -8,4 +8,4 @@ def murphy_coordination_number(porosity):
     """
     # sciencedirect uses the following fit: 24.0 * exp(-2.547 * critical_porosity) - 0.3731
     # The polynomial below is fitted from values given in the rock physics handbook.
-    return 25.98805 * porosity ** 2 - 43.7622 * porosity + 21.6719
+    return 25.98805 * porosity**2 - 43.7622 * porosity + 21.6719

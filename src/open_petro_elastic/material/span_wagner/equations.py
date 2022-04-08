@@ -65,19 +65,19 @@ coeff_symbols = (
 )
 tau, delta = sp.symbols("tau delta", real=True)
 i = sp.symbols("i", integer=True)
-s1 = n1 * delta ** d1 * tau ** t1
-s2 = n2 * delta ** d2 * tau ** t2 * sp.exp(-(delta ** c2))
+s1 = n1 * delta**d1 * tau**t1
+s2 = n2 * delta**d2 * tau**t2 * sp.exp(-(delta**c2))
 s3 = (
     n3
-    * delta ** d3
-    * tau ** t3
+    * delta**d3
+    * tau**t3
     * sp.exp(-alpha3 * (delta - epsilon3) ** 2 - beta3 * (tau - gamma3) ** 2)
 )
 
 theta_expr = (1 - tau) + A4 * ((delta - 1) ** 2) ** (1 / (2 * beta4))
-bigdelta_expr = theta_expr ** 2 + B4 * ((delta - 1) ** 2) ** a4
+bigdelta_expr = theta_expr**2 + B4 * ((delta - 1) ** 2) ** a4
 bigphi_expr = sp.exp(-C4 * (delta - 1) ** 2 - D4 * (tau - 1) ** 2)
-s4 = n4 * bigdelta_expr ** b4 * delta * bigphi_expr
+s4 = n4 * bigdelta_expr**b4 * delta * bigphi_expr
 
 
 def _lambdify(expr, diff_delta, diff_tau):
