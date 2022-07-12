@@ -36,7 +36,7 @@ def calculate_shear_modulus(secondary_velocity, density):
     :param density: The density of the isotropic material in kg/m^3.
     :return: The shear modulus of the material
     """
-    return secondary_velocity ** 2 * density
+    return secondary_velocity**2 * density
 
 
 def calculate_bulk_modulus(primary_velocity, shear_modulus, density):
@@ -49,7 +49,7 @@ def calculate_bulk_modulus(primary_velocity, shear_modulus, density):
     :param shear_modulus: The shear modulus of the material.
     :return: The bulk modulus of the material.
     """
-    return primary_velocity ** 2 * density - 4 / 3 * shear_modulus
+    return primary_velocity**2 * density - 4 / 3 * shear_modulus
 
 
 def calculate_primary_velocity(bulk_modulus, shear_modulus, density):

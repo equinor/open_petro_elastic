@@ -4,7 +4,6 @@ of Dvorkin & Nur et. al, see :py:meth:`contact_cement`.
 """
 
 import numpy as np
-
 from open_petro_elastic.material import Material
 
 
@@ -28,19 +27,19 @@ def shear_stiffness(
     aat = cement_shear_modulus / (np.pi * grain_shear_modulus)
     at = (
         -1e-2
-        * (2.26 * poiss ** 2 + 2.07 * poiss + 2.3)
-        * aat ** (0.079 * poiss ** 2 + 0.1754 * poiss - 1.342)
+        * (2.26 * poiss**2 + 2.07 * poiss + 2.3)
+        * aat ** (0.079 * poiss**2 + 0.1754 * poiss - 1.342)
     )
-    bt = (0.0573 * poiss ** 2 + 0.0937 * poiss + 0.202) * aat ** (
-        0.0274 * poiss ** 2 + 0.0529 * poiss - 0.8765
+    bt = (0.0573 * poiss**2 + 0.0937 * poiss + 0.202) * aat ** (
+        0.0274 * poiss**2 + 0.0529 * poiss - 0.8765
     )
     ct = (
         1e-4
-        * (9.654 * poiss ** 2 + 4.945 * poiss + 3.1)
-        * aat ** (0.01867 * poiss ** 2 + 0.4011 * poiss - 1.8186)
+        * (9.654 * poiss**2 + 4.945 * poiss + 3.1)
+        * aat ** (0.01867 * poiss**2 + 0.4011 * poiss - 1.8186)
     )
 
-    return at * alpha ** 2 + bt * alpha + ct
+    return at * alpha**2 + bt * alpha + ct
 
 
 def normal_stiffness(
@@ -72,7 +71,7 @@ def normal_stiffness(
     bn = 0.20405 * aan ** (-0.89008)
     an = -0.024153 * aan ** (-1.3646)
 
-    return an * alpha ** 2 + bn * alpha + cn
+    return an * alpha**2 + bn * alpha + cn
 
 
 def cement_radius_ratio(cemented_sand_porosity, grain_porosity):

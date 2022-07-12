@@ -12,9 +12,7 @@ from open_petro_elastic.material.span_wagner.carbon_dioxide import (
 t_density = 273.15 + np.hstack(
     (np.arange(0, 50, step=0.05), np.arange(50, 200.1, step=0.5))
 )
-p_density = np.hstack(
-    (np.arange(0.5, 10, step=0.01), np.arange(10, 100.1, step=0.1))
-)
+p_density = np.hstack((np.arange(0.5, 10, step=0.01), np.arange(10, 100.1, step=0.1)))
 
 
 def run(args):
