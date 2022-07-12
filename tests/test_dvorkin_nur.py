@@ -34,11 +34,9 @@ def test_radius_ratio_bounds(sand_porosity, cemented_sand_porosity):
     assert 0.0 <= alpha <= 1.0
 
 
-@given(ratios())
+@given(ratios(max_value=0.9))
 def test_radius_ratio_same_porosity_means_no_cement(sand_porosity):
-    alpha = cement_radius_ratio(sand_porosity, sand_porosity)
-
-    assert alpha == 0.0
+    assert cement_radius_ratio(sand_porosity, sand_porosity) == 0.0
 
 
 @given(materials(), materials())
