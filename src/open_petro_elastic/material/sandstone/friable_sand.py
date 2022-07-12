@@ -13,6 +13,7 @@ def friable_sand(
     effective_pressure,
     coordination_number=9,
     shear_reduction=1.0,
+    check_ratio=True,
 ):
     """
     Models sandstone as a hashin-shtrikman-walpole lower bound
@@ -30,6 +31,8 @@ def friable_sand(
         tangential frictionaless grain contacts, defaults to no reduction, ie. 1.0.
     :param coordination_number: Average number of contacts per grain,
         defaults to 9.
+    :param check_ratio: Boolean controlling the requirement to check the ratio in
+        Hashin-Shtrikman equations, defaults to True.
     """
 
     # Dry rock properties of high-porosity end member calculated with
@@ -47,4 +50,6 @@ def friable_sand(
 
     # Hashin-Shtrikman lower bound describes the dry rock property mixing from
     # mineral properties to high-end porosity.
-    return hashin_shtrikman_walpole(mineral, critical_mineral, fraction)
+    return hashin_shtrikman_walpole(
+        mineral, critical_mineral, fraction, check_ratio=check_ratio
+    )

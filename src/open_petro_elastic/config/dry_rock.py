@@ -81,10 +81,13 @@ class DryRock:
             if "porosity" in values and np.any(
                 values["porosity"] - epsilon > cem_up_bound
             ):
-                raise ValueError(
-                    "Porosity exceeds critical porosity minus upper"
-                    + f"bound of cement fraction: {values['porosity']} vs {cem_up_bound}"
-                )
+                msg = "Porosity exceeds critical porosity minus upper bound of "
+                msg += f"cement fraction: {values['porosity']} vs {cem_up_bound}"
+
+                if values["model"].check_ratio:
+                    raise ValueError(msg)
+                else:
+                    warnings.warn(msg)
         return values
 
     @root_validator
