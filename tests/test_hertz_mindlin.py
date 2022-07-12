@@ -1,18 +1,18 @@
-from generators import materials, positives, ratios
 from hypothesis import assume, given
 from numpy.testing import assert_allclose
-
 from open_petro_elastic.material.sandstone import hertz_mindlin
 
+from generators import materials, positives, ratios
 
-@given(ratios(), materials(), positives())
+
+@given(ratios(min_value=0.1, max_value=0.5), materials(), positives())
 def test_hertz_mindlin_preserves_non_auxetic(sand_porosity, mineral, pressure):
     assume(mineral.poisson_ratio > 0)
     pressurized_sand = hertz_mindlin(mineral, sand_porosity, pressure)
     assert pressurized_sand.poisson_ratio > 0
 
 
-@given(ratios(), materials(), positives())
+@given(ratios(min_value=0.1, max_value=0.5), materials(), positives())
 def test_hertz_mindlin_density(sand_porosity, mineral, pressure):
     pressurized_sand = hertz_mindlin(mineral, sand_porosity, pressure)
     assert_allclose(pressurized_sand.density, mineral.density * (1 - sand_porosity))

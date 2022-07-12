@@ -125,10 +125,10 @@ def hashin_shtrikman_walpole(material1, material2, ratio, bound="lower"):
     ratio2 = 1 - ratio
     if bound == "lower":
         km = np.minimum(material1.bulk_modulus, material2.bulk_modulus)
-        mum = np.minimum(material2.shear_modulus, material2.shear_modulus)
+        mum = np.minimum(material1.shear_modulus, material2.shear_modulus)
     else:
         km = np.maximum(material1.bulk_modulus, material2.bulk_modulus)
-        mum = np.maximum(material2.shear_modulus, material2.shear_modulus)
+        mum = np.maximum(material1.shear_modulus, material2.shear_modulus)
 
     return Material(
         density=calc_density(material1.density, material2.density, ratio, ratio2),

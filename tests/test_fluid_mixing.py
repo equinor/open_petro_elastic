@@ -66,10 +66,10 @@ def test_bries_unit_saturation_preserves_liquid(liquid, gas):
     fluids(bulk_modulus=positives(min_value=1.1e7)),
     fluids(bulk_modulus=positives(max_value=1.0e7)),
     fluids(bulk_modulus=positives(max_value=1.0e7)),
-    ratios(),
-    ratios(),
-    ratios(),
-    ratios(),
+    ratios(min_value=0.1, max_value=0.5),
+    ratios(min_value=0.1, max_value=0.5),
+    ratios(min_value=0.1, max_value=0.5),
+    ratios(min_value=0.1, max_value=0.5),
 )
 def test_bries_two_liquids_two_gases(
     fluid1, fluid2, fluid3, fluid4, liquid_sat1, liquid_sat2, gas_sat1, gas_sat2

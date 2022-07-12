@@ -1,13 +1,13 @@
 import pytest
-from generators import materials, ratios
-from hypothesis import given
-from predicates import assert_similar_material, between
-
+from hypothesis import assume, given
 from open_petro_elastic.material.hashin_shtrikman import (
     hashin_shtrikman_average,
     hashin_shtrikman_bound,
     hashin_shtrikman_walpole,
 )
+
+from generators import materials, ratios
+from predicates import assert_similar_material, between
 
 
 @given(materials(), materials(), ratios())
@@ -45,7 +45,7 @@ def test_hashin_shtrikman_average(material1, material2, ratio):
 @given(materials(), materials())
 def test_hashin_shtrikman_average_close1(material1, material2):
     bound = hashin_shtrikman_average(material1, material2, 1.0)
-    assert_similar_material(bound, material1)
+    assert_similar_material(bound, material1, atol=1e-5)
 
 
 @given(materials(), materials())
@@ -92,3 +92,23 @@ def test_hashin_shtrikman_walpole_non_ratio_errors(material1, material2):
 
     with pytest.raises(ValueError, match="ratio"):
         hashin_shtrikman_walpole(material1, material2, -0.1)
+
+
+@given(materials(), materials())
+def test_hashin_shtrikman_lower_is_less_than_upper(material1, material2):
+    assume(material1.shear_modulus != pytest.approx(material2.shear_modulus))
+    assume(material1.bulk_modulus != pytest.approx(material2.bulk_modulus))
+    assert (
+        hashin_shtrikman_walpole(
+            material1,
+            material2,
+            0.4,
+            bound="lower",
+        ).bulk_modulus
+        < hashin_shtrikman_walpole(
+            material1,
+            material2,
+            0.4,
+            bound="upper",
+        ).bulk_modulus
+    )
