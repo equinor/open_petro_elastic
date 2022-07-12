@@ -153,11 +153,11 @@ def compressability_factor(absolute_temperature, pressure, gas_gravity):
     return (
         (0.03 + 0.00527 * (3.5 - tpr) ** 3) * ppr
         + 0.642 * tpr
-        - 0.007 * tpr ** 4
+        - 0.007 * tpr**4
         - 0.52
         + 0.109
         * (3.85 - tpr) ** 2
-        / exp((0.45 + 8 * (0.56 - 1 / tpr) ** 2) * ppr ** 1.2 / tpr)
+        / exp((0.45 + 8 * (0.56 - 1 / tpr) ** 2) * ppr**1.2 / tpr)
     )
 
 
@@ -196,9 +196,9 @@ def compressability_rate_per_pseudoreduced_pressure(
             0.1308
             * (0.45 + 8 * (0.56 - tpr ** (-1)) ** 2)
             * (3.85 - tpr) ** 2
-            * ppr ** 0.2
+            * ppr**0.2
         )
-        / (exp(((0.45 + 8 * (0.56 - tpr ** (-1)) ** 2) * ppr ** 1.2) / tpr) * tpr)
+        / (exp(((0.45 + 8 * (0.56 - tpr ** (-1)) ** 2) * ppr**1.2) / tpr) * tpr)
     )
 
 

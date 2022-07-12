@@ -33,7 +33,7 @@ setup(
         "pyyaml",
         "pandas",
         "pydantic",
-        'sympy',
+        "sympy",
         "dataclasses>=0.6;python_version<'3.7'",
         "typing_extensions",
     ],
@@ -50,6 +50,8 @@ setup(
     include_package_data=True,
     package_data={
         "open_petro_elastic": ["tutorial_config/*"],
-        "open_petro_elastic.material.span_wagner.tables": ["material/span_wagner/tables/carbon_dioxide_density.npz"]
+        "open_petro_elastic.material.span_wagner.tables": [
+            "material/span_wagner/tables/carbon_dioxide_density.npz"
+        ],
     },
 )

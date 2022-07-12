@@ -263,7 +263,7 @@ def oil_bubble_point(density, gas_oil_ratio, gas_gravity, temperature):
     ratio = gas_oil_ratio / gas_gravity
     denominator = np.exp(4072 / density - 0.00377 * temperature)
 
-    return 24469793.9134 * ratio ** 0.83 / denominator
+    return 24469793.9134 * ratio**0.83 / denominator
 
 
 def pressure_adjusted_dead_oil_density(pressure, reference_density):
@@ -279,9 +279,9 @@ def pressure_adjusted_dead_oil_density(pressure, reference_density):
     """
     return (
         reference_density
-        + (0.00277 * pressure - 1.71 * 10 ** -7 * pressure ** 3)
+        + (0.00277 * pressure - 1.71 * 10**-7 * pressure**3)
         * (reference_density - 1.15) ** 2
-        + 3.49 * 10 ** -4 * pressure
+        + 3.49 * 10**-4 * pressure
     )
 
 
@@ -295,7 +295,7 @@ def temperature_adjusted_dead_oil_density(temperature, density_at_21c):
     :param temperature: Temperature (celsius) of oil.
     :return: Density of oil at given temperature.
     """
-    return density_at_21c / (0.972 + 3.81 * (10 ** -4) * (temperature + 17.78) ** 1.175)
+    return density_at_21c / (0.972 + 3.81 * (10**-4) * (temperature + 17.78) ** 1.175)
 
 
 def dead_oil_density(temperature, pressure, reference_density):
@@ -331,7 +331,7 @@ def dead_oil_primary_velocity(temperature, pressure, reference_density):
         - 3.7 * temperature
         + 4.64 * pressure
         + 0.0115
-        * (4.12 * np.sqrt(1.08 * reference_density ** -1 - 1) - 1)
+        * (4.12 * np.sqrt(1.08 * reference_density**-1 - 1) - 1)
         * temperature
         * pressure
     )
