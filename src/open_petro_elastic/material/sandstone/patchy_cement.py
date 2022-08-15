@@ -22,6 +22,7 @@ def patchy_cement(
     critical_porosity=0.4,
     shear_reduction=1.0,
     coordination_number=9,
+    cement_coordination_number = 9,
 ):
     """
     A hybrid sandstone model based on the patchy cement model of Avseth et. al (2016).
@@ -71,7 +72,7 @@ def patchy_cement(
         porosity,
         upper_bound_porosity,
         critical_porosity,
-        coordination_number,
+        cement_coordination_number,
         shear_reduction,
     )
     contact = contact_cement(
@@ -80,7 +81,7 @@ def patchy_cement(
         contact_cement_porosity,
         critical_porosity,
         shear_reduction,
-        coordination_number,
+        cement_coordination_number,
     )
     constant = hashin_shtrikman_walpole(
         dense_packing, contact, 1 - porosity / contact_cement_porosity
