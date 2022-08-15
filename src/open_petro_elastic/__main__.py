@@ -59,6 +59,12 @@ def calculate_results(inp):
             "mysat": saturated_rock.shear_modulus,
             "rsat": saturated_rock.density,
             "kmin_fls": dense_packing.bulk_modulus,
+            "mumin_fls": dense_packing.shear_modulus,
+            "kfl": mixed_fluid.bulk_modulus,
+            "rhofl": mixed_fluid.density,
+            "vp": saturated_rock.primary_velocity,
+            "vs": saturated_rock.secondary_velocity,
+            "depth": inp.data['Depth'],
         },
         index=index,
     )
@@ -200,7 +206,7 @@ def run_with_threshold(args):
         )
         return -5
     try:
-        results.to_csv(args.output_file)
+        results.to_csv(args.output_file, index=False, line_terminator='\n')
     except Exception as e:
         print(f"Encountered unexpected error while writing output: {e}")
         print_tb(e.__traceback__)
