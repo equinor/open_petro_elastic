@@ -4,3 +4,4 @@ quantities
 pandas
 scipy
 sympy
+pydantic
