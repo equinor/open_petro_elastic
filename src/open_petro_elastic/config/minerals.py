@@ -5,7 +5,7 @@ from pydantic import conlist
 from pydantic.dataclasses import dataclass
 
 from open_petro_elastic.float_vectorize import float_vectorize
-from open_petro_elastic.material import Material, hashin_shtrikman_average
+from open_petro_elastic.material import Material, hashin_shtrikman_walpole
 
 from .constituent import Constituent, fix_one_fraction
 from .pydantic_config import PetroElasticConfig
@@ -62,7 +62,7 @@ class Minerals:
         for next_mineral in self[1:]:
             sub_total = mixed_mineral.fraction + next_mineral.fraction
             fraction = part_of_total(mixed_mineral.fraction, sub_total)
-            new_mix = hashin_shtrikman_average(
+            new_mix = hashin_shtrikman_walpole(
                 mixed_mineral.material, next_mineral.material, fraction
             )
             mixed_mineral = Constituent(

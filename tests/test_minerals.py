@@ -6,7 +6,7 @@ from numpy.testing import assert_allclose
 from predicates import assert_similar_material
 
 from open_petro_elastic.config import Minerals
-from open_petro_elastic.material import hashin_shtrikman_average
+from open_petro_elastic.material import hashin_shtrikman_walpole
 
 
 def test_no_constituents_raises_error():
@@ -15,10 +15,10 @@ def test_no_constituents_raises_error():
 
 
 @given(constituents(), constituents(fraction=st.just(None)))
-def test_mixed_is_hashin_average(sand, shale):
+def test_mixed_is_hashin_shtrikman_walpole(sand, shale):
     assert_similar_material(
         Minerals([sand, shale]).as_mixture,
-        hashin_shtrikman_average(sand.material, shale.material, sand.fraction),
+        hashin_shtrikman_walpole(sand.material, shale.material, sand.fraction),
     )
 
 
