@@ -5,7 +5,7 @@ from pydantic import conlist
 from pydantic.dataclasses import dataclass
 
 from open_petro_elastic.float_vectorize import float_vectorize
-from open_petro_elastic.material import Material, hashin_shtrikman_average, hashin_shtrikman_walpole
+from open_petro_elastic.material import Material, hashin_shtrikman_walpole
 
 from .constituent import Constituent, fix_one_fraction
 from .pydantic_config import PetroElasticConfig
