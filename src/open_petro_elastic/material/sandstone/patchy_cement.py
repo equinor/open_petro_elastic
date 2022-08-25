@@ -21,25 +21,26 @@ def patchy_cement(
     lower_bound_pressure,
     critical_porosity=0.4,
     shear_reduction=1.0,
-    coordination_number=9,
-    cement_coordination_number = 9,
+    friable_coordination_number=9,
+    cement_coordination_number=9,
 ):
     """
     A hybrid sandstone model based on the patchy cement model of Avseth et. al (2016).
 
     :param sand: Material representing the sand of the sandstone.
     :param cement: Material representing the cement of the sandstone.
-    :param porosity: Porosity of the uncemented sandstone.
+    :param porosity: Porosity of the friable sandstone.
     :param contact_cement_porosity: Porosity of the contact cement in the
         hybrid model.
-    :param constant_cement_porosity: The porosity of constant cement
+    :param upper_bound_porosity: The porosity of constant cement
         in the hybrid model.
     :param pressure: Pressure used for friable sand.
     :param lower_bound_pressure: The pressure used for the lower bound
         friable sand.
     :param critical_porosity: The critical porosity of the sandstone.
     :param shear_reduction: Shear reduction factor.
-    :param coordination number: The coordination number of the sand.
+    :param friable_coordination_number: The number of grain-grain contacts in the friable model
+    :param cement_coordination_number: The number of grain-grain contacts in the cemented model - to be kept constant
 
     Avseth, Per & Skjei, Norunn & Mavko, Gary. (2016). Rock-physics modeling of
     stress sensitivity and 4D time shifts in patchy cemented sandstones —
@@ -55,7 +56,7 @@ def patchy_cement(
         porosity,
         critical_porosity,
         pressure,
-        coordination_number,
+        friable_coordination_number,
         shear_reduction,
     )
     lower_bound = friable_sand(
@@ -63,7 +64,7 @@ def patchy_cement(
         porosity,
         critical_porosity,
         lower_bound_pressure,
-        coordination_number,
+        friable_coordination_number,
         shear_reduction,
     )
     upper_bound = constant_cement(
