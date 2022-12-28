@@ -2,7 +2,7 @@ import abc
 from typing import Optional, Union
 
 import numpy as np
-from pydantic import parse_obj_as
+from pydantic import parse_obj_as, Field
 from pydantic.dataclasses import dataclass
 from typing_extensions import Literal
 
@@ -268,7 +268,7 @@ class PatchyCementModel(AbstractPressureDependencyModel):
     """
 
     type: Literal["patchy_cement"] = "patchy_cement"
-    cement: ArbitraryMaterial = DEFAULT_CEMENT
+    cement: ArbitraryMaterial = Field(default_factory=lambda: DEFAULT_CEMENT)
     critical_porosity: Array[float] = 0.4
     cement_fraction: Array[float] = 0.04
     lower_bound_pressure: Array[float] = 20.0e6

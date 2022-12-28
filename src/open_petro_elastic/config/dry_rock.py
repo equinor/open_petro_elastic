@@ -3,7 +3,7 @@ from dataclasses import field
 from typing import List, Union
 
 import numpy as np
-from pydantic import root_validator
+from pydantic import root_validator, Field
 from pydantic.dataclasses import dataclass
 
 from .depth_trend import DepthTrend
@@ -40,7 +40,7 @@ class DryRock:
         VELOCITY_DEFAULT_COEFFICIENTS for defaults.
     """
 
-    model: SandstoneModel = Polyfit2dModel(DEFAULT_COEFFICIENTS)
+    model: SandstoneModel = Field(default_factory=lambda: Polyfit2dModel(DEFAULT_COEFFICIENTS))
     porosity: Array[float] = 0.3
 
     adjustments: List[Union[DepthTrend, PressureDependency]] = field(
