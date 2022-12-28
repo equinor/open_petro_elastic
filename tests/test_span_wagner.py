@@ -440,7 +440,7 @@ def test_carbon_dioxide_pressure_derivative():
 
 
 def test_carbon_dioxide_primary_velocity():
-    t, r, s = table_34_data[:-1, [0, 2, 4]].astype(np.float).T
+    t, r, s = table_34_data[:-1, [0, 2, 4]].astype(float).T
     co2 = carbon_dioxide(t, None, r)
     calc_s = co2.primary_velocity
     assert_allclose(s, calc_s, rtol=0.02)
