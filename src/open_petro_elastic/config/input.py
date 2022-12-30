@@ -1,3 +1,5 @@
+from dataclasses import field
+
 import pandas as pd
 from pydantic import root_validator
 from pydantic.dataclasses import dataclass
@@ -42,10 +44,10 @@ def insert_from_dataframe(dataframe, config):
 @dataclass(config=PetroElasticConfig)
 class Input:
     data: pd.DataFrame = None
-    minerals: Minerals = Minerals()
-    fluids: Fluids = Fluids()
-    dry_rock: DryRock = DryRock()
-    pressure: Pressure = Pressure()
+    minerals: Minerals = field(default_factory=lambda: Minerals())
+    fluids: Fluids = field(default_factory=lambda: Fluids())
+    dry_rock: DryRock = field(default_factory=lambda: DryRock())
+    pressure: Pressure = field(default_factory=lambda: Pressure())
 
     @root_validator(pre=True)
     def insert_dataframe(cls, values):

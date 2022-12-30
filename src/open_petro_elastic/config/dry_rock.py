@@ -40,7 +40,9 @@ class DryRock:
         VELOCITY_DEFAULT_COEFFICIENTS for defaults.
     """
 
-    model: SandstoneModel = Polyfit2dModel(DEFAULT_COEFFICIENTS)
+    model: SandstoneModel = field(
+        default_factory=lambda: Polyfit2dModel(DEFAULT_COEFFICIENTS)
+    )
     porosity: Array[float] = 0.3
 
     adjustments: List[Union[DepthTrend, PressureDependency]] = field(
