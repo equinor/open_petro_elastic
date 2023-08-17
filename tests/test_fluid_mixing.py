@@ -56,7 +56,6 @@ def test_woods_unit_saturation_preserves_liquid(liquid, gas):
 
 @given(fluids(), fluids())
 def test_bries_unit_saturation_preserves_liquid(liquid, gas):
-
     mix = brie_fluid_mixing([liquid], [1.0], [gas], [0.0])
     assert_similar_material(mix, liquid, atol=1e-6)
 

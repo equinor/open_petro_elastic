@@ -137,7 +137,6 @@ def dryrock_reference_material():
 
 @pytest.fixture
 def velocityfit_dryrock():
-
     c = {
         "primary_velocity": [[2900, -1300]],
         "secondary_velocity": [[1700, -800]],
@@ -151,7 +150,6 @@ def velocityfit_dryrock():
 
 @pytest.fixture
 def modulifit_dryrock():
-
     c = {
         "bulk_modulus": [[20.0, -40.0]],
         "shear_modulus": [[12.0, -20.0]],
