@@ -179,13 +179,13 @@ def run_with_threshold(args):
         return -5
     inputs = make_per_row_input(args.config_file, args.data_file)
     num_failures = 0
-    results = pd.DataFrame()
+    results = []
     for idx, inp in enumerate(inputs):
         if inp is None:
             num_failures += 1
             continue
         try:
-            results = results.append(calculate_results(inp))
+            results.append(calculate_results(inp))
         except Exception as e:
             print(f"Encountered error while calculating rows {id}: {e}")
             num_failures += 1
@@ -199,6 +199,7 @@ def run_with_threshold(args):
         )
         return -5
     try:
+        results = pd.concat(results)
         results.to_csv(args.output_file)
     except Exception as e:
         print(f"Encountered unexpected error while writing output: {e}")
