@@ -10,7 +10,6 @@ def test_dryrock_depthtrend_vp_vs(
     modulifit_dryrock,
     depth_coefficients,
 ):
-
     modulifit_dryrock.adjustments = [
         DepthTrend(
             max_depth=max_depth,
@@ -32,7 +31,6 @@ def test_dryrock_depthtrend_k_my(
     modulifit_dryrock,
     depth_coefficients,
 ):
-
     modulifit_dryrock.adjustments = [
         DepthTrend(
             depth=depth,
