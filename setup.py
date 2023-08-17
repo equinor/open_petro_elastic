@@ -32,7 +32,7 @@ setup(
         "scipy",
         "pyyaml",
         "pandas",
-        "pydantic",
+        "pydantic<2",
         "sympy",
         "typing_extensions",
     ],
