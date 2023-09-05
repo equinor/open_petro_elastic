@@ -138,7 +138,7 @@ def fluid_substitution(dry_rock, mineral, fluid, porosity):
             raise ValueError(
                 "moduli of materials are unsuitable for fluid substitution:\n"
                 + f"fluid: {fluid_bulk_modulus}, mineral: {mineral_bulk_modulus},"
-                + "dry rock: {dry_bulk_modulus}"
+                + f"dry rock: {dry_bulk_modulus}"
             )
 
         return difference_factor / (1 + difference_factor) * mineral_bulk_modulus
