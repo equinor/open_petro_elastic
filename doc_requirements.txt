@@ -4,3 +4,4 @@ sphinx-argparse
 matplotlib
 recommonmark
 pygments-csv-lexer
+pillow>=10.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
