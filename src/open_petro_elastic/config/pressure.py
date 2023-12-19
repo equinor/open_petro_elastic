@@ -1,8 +1,13 @@
 from typing import Optional
 
 import numpy as np
-from pydantic import root_validator
-from pydantic.dataclasses import dataclass
+
+try:
+    from pydantic.v1 import root_validator
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import root_validator
+    from pydantic.dataclasses import dataclass
 
 from .pydantic_config import PetroElasticConfig
 from .vector_type import Array

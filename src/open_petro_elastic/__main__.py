@@ -9,10 +9,13 @@ from traceback import print_tb
 import numpy as np
 import pandas as pd
 import yaml
-from pydantic import parse_obj_as
+
+try:
+    from pydantic.v1 import parse_obj_as
+except ImportError:
+    from pydantic import parse_obj_as
 
 import open_petro_elastic
-
 from open_petro_elastic.config.input import ColumnInsertionError, Input
 from open_petro_elastic.material import fluid_substitution
 

@@ -1,7 +1,12 @@
 from typing import Optional
 
 import numpy as np
-from pydantic.dataclasses import dataclass
+
+try:
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic.dataclasses import dataclass
+
 from typing_extensions import Literal
 
 from .coefficients import PolyfitCoefficients

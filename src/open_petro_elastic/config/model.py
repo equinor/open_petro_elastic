@@ -1,10 +1,16 @@
 import abc
-from typing import Optional, Union
 from dataclasses import field
+from typing import Optional, Union
 
 import numpy as np
-from pydantic import parse_obj_as
-from pydantic.dataclasses import dataclass
+
+try:
+    from pydantic.v1 import parse_obj_as
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import parse_obj_as
+    from pydantic.dataclasses import dataclass
+
 from typing_extensions import Literal
 
 from open_petro_elastic.material import Material, hashin_shtrikman_walpole

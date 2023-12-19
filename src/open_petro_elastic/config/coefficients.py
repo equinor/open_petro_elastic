@@ -1,6 +1,9 @@
 from typing import Optional, Union
 
-from pydantic.dataclasses import dataclass
+try:
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic.dataclasses import dataclass
 
 from open_petro_elastic.material import polyval_material
 
