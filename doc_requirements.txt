@@ -1,6 +1,0 @@
-sphinx
-sphinx-rtd-theme
-sphinx-argparse
-matplotlib
-recommonmark
-pygments-csv-lexer

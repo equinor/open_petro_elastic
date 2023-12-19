@@ -37,7 +37,7 @@ We expect commit messages to follow the style described [here](https://chris.bea
 You can build the documentation after installation by running:
 
 ```bash
-pip install -r dev-requirements.txt
+python -m pip install .[docs]
 sphinx-build -n -v -E -W ./docs ./tmp/ope_docs
 ```
 
