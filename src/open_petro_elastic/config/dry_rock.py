@@ -3,8 +3,13 @@ from dataclasses import field
 from typing import List, Union
 
 import numpy as np
-from pydantic import root_validator
-from pydantic.dataclasses import dataclass
+
+try:
+    from pydantic.v1 import root_validator
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import root_validator
+    from pydantic.dataclasses import dataclass
 
 from .depth_trend import DepthTrend
 from .model import Polyfit2dModel, SandstoneModel

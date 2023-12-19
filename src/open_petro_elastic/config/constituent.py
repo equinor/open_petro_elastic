@@ -1,9 +1,14 @@
 from typing import Optional
-from typing_extensions import Literal
 
 import numpy as np
-from pydantic import validator
-from pydantic.dataclasses import dataclass
+from typing_extensions import Literal
+
+try:
+    from pydantic.v1 import validator
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import validator
+    from pydantic.dataclasses import dataclass
 
 from open_petro_elastic.config.fluid_model_providers import fluid_model_providers
 from open_petro_elastic.material import Material

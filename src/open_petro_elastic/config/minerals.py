@@ -1,8 +1,13 @@
 from dataclasses import field
 
 import numpy as np
-from pydantic import conlist
-from pydantic.dataclasses import dataclass
+
+try:
+    from pydantic.v1 import conlist
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import conlist
+    from pydantic.dataclasses import dataclass
 
 from open_petro_elastic.float_vectorize import float_vectorize
 from open_petro_elastic.material import Material, hashin_shtrikman_walpole

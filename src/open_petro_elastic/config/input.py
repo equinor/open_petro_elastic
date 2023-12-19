@@ -1,8 +1,13 @@
 from dataclasses import field
 
 import pandas as pd
-from pydantic import root_validator
-from pydantic.dataclasses import dataclass
+
+try:
+    from pydantic.v1 import root_validator
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import root_validator
+    from pydantic.dataclasses import dataclass
 
 from .dry_rock import DryRock
 from .fluids import Fluids

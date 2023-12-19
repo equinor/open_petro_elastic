@@ -1,10 +1,17 @@
 from dataclasses import field
 
 import numpy as np
-from pydantic import conlist, validator
-from pydantic.dataclasses import dataclass
-from typing_extensions import Literal
+
+try:
+    from pydantic.v1 import conlist, validator
+    from pydantic.v1.dataclasses import dataclass
+except ImportError:
+    from pydantic import conlist, validator
+    from pydantic.dataclasses import dataclass
+
 from typing import List, Optional
+
+from typing_extensions import Literal
 
 from open_petro_elastic.material import brie_fluid_mixing, wood_fluid_mixing
 
