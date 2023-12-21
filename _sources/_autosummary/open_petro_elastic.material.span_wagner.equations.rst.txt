@@ -1,0 +1,29 @@
+open\_petro\_elastic.material.span\_wagner.equations
+====================================================
+
+.. automodule:: open_petro_elastic.material.span_wagner.equations
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      residual_helmholtz_energy
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

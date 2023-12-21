@@ -1,0 +1,35 @@
+open\_petro\_elastic.material.batzle\_wang.hydro\_carbon\_gas
+=============================================================
+
+.. automodule:: open_petro_elastic.material.batzle_wang.hydro_carbon_gas
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compressability_factor
+      compressability_rate_per_pseudoreduced_pressure
+      gas
+      gas_bulk_modulus
+      gas_density
+      pseudoreduced_pressure
+      pseudoreduced_temperature
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

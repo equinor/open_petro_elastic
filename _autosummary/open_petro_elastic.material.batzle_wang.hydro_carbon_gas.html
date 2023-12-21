@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>open_petro_elastic.material.batzle_wang.hydro_carbon_gas &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="open_petro_elastic.material.batzle_wang.ideal_gas" href="open_petro_elastic.material.batzle_wang.ideal_gas.html" />
+    <link rel="prev" title="open_petro_elastic.material.batzle_wang.brine_properties" href="open_petro_elastic.material.batzle_wang.brine_properties.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_file_format.html">Config File Format</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../usage_as_a_library.html">Usage as a Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="open_petro_elastic.material.html">open_petro_elastic.material</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.html">open_petro_elastic.material.batzle_wang</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.brine_properties.html">open_petro_elastic.material.batzle_wang.brine_properties</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">open_petro_elastic.material.batzle_wang.hydro_carbon_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.ideal_gas.html">open_petro_elastic.material.batzle_wang.ideal_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.oil_properties.html">open_petro_elastic.material.batzle_wang.oil_properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.water_properties.html">open_petro_elastic.material.batzle_wang.water_properties</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.conversions.html">open_petro_elastic.material.conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.fluid.html">open_petro_elastic.material.fluid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.hashin_shtrikman.html">open_petro_elastic.material.hashin_shtrikman</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.material.html">open_petro_elastic.material.material</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.sandstone.html">open_petro_elastic.material.sandstone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.seismic_velocity.html">open_petro_elastic.material.seismic_velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.span_wagner.html">open_petro_elastic.material.span_wagner</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../usage_as_a_library.html">Usage as a Library</a></li>
+          <li class="breadcrumb-item"><a href="open_petro_elastic.material.html">open_petro_elastic.material</a></li>
+          <li class="breadcrumb-item"><a href="open_petro_elastic.material.batzle_wang.html">open_petro_elastic.material.batzle_wang</a></li>
+      <li class="breadcrumb-item active">open_petro_elastic.material.batzle_wang.hydro_carbon_gas</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/open_petro_elastic.material.batzle_wang.hydro_carbon_gas.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-open_petro_elastic.material.batzle_wang.hydro_carbon_gas">
+<span id="open-petro-elastic-material-batzle-wang-hydro-carbon-gas"></span><h1>open_petro_elastic.material.batzle_wang.hydro_carbon_gas<a class="headerlink" href="#module-open_petro_elastic.material.batzle_wang.hydro_carbon_gas" title="Link to this heading"></a></h1>
+<p>The hydro-carbon gas properties are shown in figure 2 and figure 3 of
+Batzle &amp; Wang.</p>
+<p>We can reproduce these figures:</p>
+<section id="figure-2">
+<h2>Figure 2<a class="headerlink" href="#figure-2" title="Link to this heading"></a></h2>
+<p>(<a class="reference download internal" download="" href="../_downloads/50e8765fe6924280536db10045336e8c/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/22ac1b61ca9eee88b0cba6a21f27e49f/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/17778c5afe20491849cf1c0b3853f42f/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/a79735d816417d7c0f333f13f9fdc3c0/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-1.png" class="plot-directive" src="../_images/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-1.png" />
+</figure>
+</section>
+<section id="figure-3">
+<h2>Figure 3<a class="headerlink" href="#figure-3" title="Link to this heading"></a></h2>
+<p>(<a class="reference download internal" download="" href="../_downloads/ad2c48e87aada36eb91285b5c8487417/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-2.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/80a76c66837d1ac471025bae16f39291/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/38c55b750605b7a92abfc24f512f3a1a/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-2.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5f844cf37bad12e39380913411e2480a/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-2.png" class="plot-directive" src="../_images/open_petro_elastic-material-batzle_wang-hydro_carbon_gas-2.png" />
+</figure>
+</section>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compressability_factor</span></code>(absolute_temperature, ...)</p></td>
+<td><p>calculates compressability hydro-carbon gas, equation 10b and 10c from Batzle &amp; Wang [1].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compressability_rate_per_pseudoreduced_pressure</span></code>(...)</p></td>
+<td><p>Derivate of compressability_factor with respect to pressure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">gas</span></code>(temperature, pressure, gas_gravity)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param gas_gravity<span class="colon">:</span></dt>
+<dd class="field-odd"><p>molar mass of gas relative to air molar mas.</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">gas_bulk_modulus</span></code>(absolute_temperature, ...)</p></td>
+<td><p>The bulk modulus of hydro-carbon gas, using equation 11 from Batzle &amp; Wang [1].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">gas_density</span></code>(absolute_temperature, pressure, ...)</p></td>
+<td><p>The density of hydro-carbon gas, using equation 10 from Batzle &amp; Wang [1].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pseudoreduced_pressure</span></code>(pressure, gas_gravity)</p></td>
+<td><p>calculates pseudoreduced pressure, equation 9a from Batzle &amp; Wang [1].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pseudoreduced_temperature</span></code>(...)</p></td>
+<td><p>calculates pseudoreduced temperature, equation 9a from Batzle &amp; Wang [1].</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="open_petro_elastic.material.batzle_wang.brine_properties.html" class="btn btn-neutral float-left" title="open_petro_elastic.material.batzle_wang.brine_properties" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="open_petro_elastic.material.batzle_wang.ideal_gas.html" class="btn btn-neutral float-right" title="open_petro_elastic.material.batzle_wang.ideal_gas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

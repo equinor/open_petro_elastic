@@ -1,0 +1,6 @@
+open\_petro\_elastic.material.sandstone.contact\_cement
+=======================================================
+
+.. currentmodule:: open_petro_elastic.material.sandstone
+
+.. autofunction:: contact_cement

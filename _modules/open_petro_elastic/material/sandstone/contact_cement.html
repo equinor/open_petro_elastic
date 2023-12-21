@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>open_petro_elastic.material.sandstone.contact_cement &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../config_file_format.html">Config File Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage_as_a_library.html">Usage as a Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">open_petro_elastic.material.sandstone.contact_cement</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for open_petro_elastic.material.sandstone.contact_cement</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for calculation of the contact cement model</span>
+<span class="sd">of Dvorkin &amp; Nur et. al, see :py:meth:`contact_cement`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">open_petro_elastic.material</span> <span class="kn">import</span> <span class="n">Material</span>
+
+
+<span class="k">def</span> <span class="nf">shear_stiffness</span><span class="p">(</span>
+    <span class="n">cement_shear_modulus</span><span class="p">,</span> <span class="n">grain_shear_modulus</span><span class="p">,</span> <span class="n">grain_poisson_ratio</span><span class="p">,</span> <span class="n">radius_ratio</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the parameter St in (1) from Dvorkin et. al (1991), also</span>
+<span class="sd">    known as the tangential stiffness.</span>
+
+<span class="sd">    See appendix A for description of calculation.</span>
+
+<span class="sd">    :param grain_poisson_ratio: The poisson&#39;s ratio of the grains.</span>
+<span class="sd">    :param cement_shear_modulus: The shear modulus of the cement.</span>
+<span class="sd">    :param grain_shear_modulus: The shear modulus of the grain.</span>
+<span class="sd">    :param radius_ratio: The ratio of the radius of the cement layer to the</span>
+<span class="sd">        grain radius. Constant alpha in Dvorkin et. al (1991) equations (1)-(3).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">poiss</span> <span class="o">=</span> <span class="n">grain_poisson_ratio</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">radius_ratio</span>
+    <span class="n">aat</span> <span class="o">=</span> <span class="n">cement_shear_modulus</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">grain_shear_modulus</span><span class="p">)</span>
+    <span class="n">at</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">-</span><span class="mf">1e-2</span>
+        <span class="o">*</span> <span class="p">(</span><span class="mf">2.26</span> <span class="o">*</span> <span class="n">poiss</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">2.07</span> <span class="o">*</span> <span class="n">poiss</span> <span class="o">+</span> <span class="mf">2.3</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">aat</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.079</span> <span class="o">*</span> <span class="n">poiss</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.1754</span> <span class="o">*</span> <span class="n">poiss</span> <span class="o">-</span> <span class="mf">1.342</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">bt</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0573</span> <span class="o">*</span> <span class="n">poiss</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.0937</span> <span class="o">*</span> <span class="n">poiss</span> <span class="o">+</span> <span class="mf">0.202</span><span class="p">)</span> <span class="o">*</span> <span class="n">aat</span> <span class="o">**</span> <span class="p">(</span>
+        <span class="mf">0.0274</span> <span class="o">*</span> <span class="n">poiss</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.0529</span> <span class="o">*</span> <span class="n">poiss</span> <span class="o">-</span> <span class="mf">0.8765</span>
+    <span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">1e-4</span>
+        <span class="o">*</span> <span class="p">(</span><span class="mf">9.654</span> <span class="o">*</span> <span class="n">poiss</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">4.945</span> <span class="o">*</span> <span class="n">poiss</span> <span class="o">+</span> <span class="mf">3.1</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">aat</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.01867</span> <span class="o">*</span> <span class="n">poiss</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.4011</span> <span class="o">*</span> <span class="n">poiss</span> <span class="o">-</span> <span class="mf">1.8186</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">at</span> <span class="o">*</span> <span class="n">alpha</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">bt</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">ct</span>
+
+
+<span class="k">def</span> <span class="nf">normal_stiffness</span><span class="p">(</span>
+    <span class="n">grain_poisson_ratio</span><span class="p">,</span>
+    <span class="n">cement_poisson_ratio</span><span class="p">,</span>
+    <span class="n">cement_shear_modulus</span><span class="p">,</span>
+    <span class="n">grain_shear_modulus</span><span class="p">,</span>
+    <span class="n">radius_ratio</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the parameter Sn in (1) from Dvorkin et. al (1991).</span>
+<span class="sd">    See appendix A for description of calculation.</span>
+<span class="sd">    :param grain_poisson_ratio: The poisson&#39;s ratio of the grains.</span>
+<span class="sd">    :param cement_poisson_ratio: The poisson&#39;s ratio of the cement.</span>
+<span class="sd">    :param cement_shear_modulus: The shear modulus of the cement.</span>
+<span class="sd">    :param grain_shear_modulus: The shear modulus of the grain.</span>
+<span class="sd">    :param radius_ratio: The ratio of the radius of the cement layer to the</span>
+<span class="sd">        grain radius. Constant alpha in Dvorkin et. al (1991) equations (1)-(3).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">poiss</span> <span class="o">=</span> <span class="n">grain_poisson_ratio</span>
+    <span class="n">poiss_c</span> <span class="o">=</span> <span class="n">cement_poisson_ratio</span>
+    <span class="n">mu_cem</span> <span class="o">=</span> <span class="n">cement_shear_modulus</span>
+    <span class="n">mu_gr</span> <span class="o">=</span> <span class="n">grain_shear_modulus</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">radius_ratio</span>
+    <span class="n">aan</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mu_cem</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">mu_gr</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">poiss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">poiss_c</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">poiss_c</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">cn</span> <span class="o">=</span> <span class="mf">0.00024649</span> <span class="o">*</span> <span class="n">aan</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.9864</span><span class="p">)</span>
+    <span class="n">bn</span> <span class="o">=</span> <span class="mf">0.20405</span> <span class="o">*</span> <span class="n">aan</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.89008</span><span class="p">)</span>
+    <span class="n">an</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.024153</span> <span class="o">*</span> <span class="n">aan</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.3646</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">an</span> <span class="o">*</span> <span class="n">alpha</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">bn</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">cn</span>
+
+
+<span class="k">def</span> <span class="nf">cement_radius_ratio</span><span class="p">(</span><span class="n">cemented_sand_porosity</span><span class="p">,</span> <span class="n">grain_porosity</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :return: the ratio of the radius of the cement layer to the grain</span>
+<span class="sd">        radius, alpha in Dvorkin et. al (1991) equation (2). Unlike the paper,</span>
+<span class="sd">        the ratio is restricted to [0.0, 1.0] to avoid impossible values caused</span>
+<span class="sd">        by numerical instability.</span>
+<span class="sd">    :param cemented_sand_porosity: Porosity of cemented sand.</span>
+<span class="sd">    :param grain_porosity: The porosity of the granular material.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">grain_porosity</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">grain_porosity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sand porosity must be between 0 and 1, was </span><span class="si">{</span><span class="n">grain_porosity</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cemented_sand_porosity</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cemented_sand_porosity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cemented sand porosity must be between 0 and 1, was </span><span class="si">{</span><span class="n">cemented_sand_porosity</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">grain_porosity</span> <span class="o">&lt;</span> <span class="n">cemented_sand_porosity</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;sand porosity must be greater than cemented sand porosity: </span><span class="si">{</span><span class="n">grain_porosity</span><span class="si">}</span><span class="s2"> &lt; </span><span class="si">{</span><span class="n">cemented_sand_porosity</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">calculated_value</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">grain_porosity</span> <span class="o">-</span> <span class="n">cemented_sand_porosity</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">grain_porosity</span><span class="p">))</span>
+    <span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">calculated_value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="contact_cement">
+<a class="viewcode-back" href="../../../../_autosummary/open_petro_elastic.material.sandstone.contact_cement.html#open_petro_elastic.material.sandstone.contact_cement">[docs]</a>
+<span class="k">def</span> <span class="nf">contact_cement</span><span class="p">(</span>
+    <span class="n">cement</span><span class="p">,</span>
+    <span class="n">mineral</span><span class="p">,</span>
+    <span class="n">cemented_sand_porosity</span><span class="p">,</span>
+    <span class="n">sand_porosity</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">shear_reduction</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">coordination_number</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dvorkin Nur (1996) contact cement model of cemented granular</span>
+<span class="sd">    material. Based on the assumption that porosity decreases from the</span>
+<span class="sd">    initial porosity of a sand pack due to the uniform</span>
+<span class="sd">    deposition of cement on the surface of the grains.</span>
+
+<span class="sd">    * Dvorkin, Jack, and Amos Nur. &quot;Elasticity of high-porosity sandstones: Theory</span>
+<span class="sd">      for two North Sea data sets.&quot; Geophysics 61.5 (1996): 1363-1370.</span>
+
+<span class="sd">    Cement is assumed to be evenly distributed on the</span>
+<span class="sd">    grains (scheme 2 in Dvorkin and Nur&#39;s original paper)</span>
+
+<span class="sd">    :param mineral: material representing the sand framework material.</span>
+<span class="sd">    :param cement: material representing the pore-filling cement.</span>
+<span class="sd">    :param cemented_sand_porosity: Porosity of cemented sand.</span>
+<span class="sd">    :param sand_porosity: The porosity of the sand, defaults to 0.4.</span>
+<span class="sd">        porosity of dry sand minus the porosity of cemented sand.</span>
+<span class="sd">    :param coordination_number: Average number of contacts per grain,</span>
+<span class="sd">        defaults to 9.</span>
+<span class="sd">    :param shear_reduction: Shear reduction parameter used to account for</span>
+<span class="sd">        tangential frictionaless grain contacts, defaults to no reduction, ie. 1.0.</span>
+<span class="sd">    :return: A material representing the resulting cemented sand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">sand_porosity</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">sand_porosity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sand porosity must be between 0 and 1, was </span><span class="si">{</span><span class="n">sand_porosity</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cemented_sand_porosity</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">cemented_sand_porosity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cemented sand porosity must be between 0 and 1, was </span><span class="si">{</span><span class="n">cemented_sand_porosity</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">sand_porosity</span> <span class="o">&lt;</span> <span class="n">cemented_sand_porosity</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;sand porosity must be greater than cemented sand porosity: </span><span class="si">{</span><span class="n">sand_porosity</span><span class="si">}</span><span class="s2"> &lt; </span><span class="si">{</span><span class="n">cemented_sand_porosity</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">cement_radius_ratio</span><span class="p">(</span><span class="n">cemented_sand_porosity</span><span class="p">,</span> <span class="n">sand_porosity</span><span class="p">)</span>
+
+    <span class="n">st</span> <span class="o">=</span> <span class="n">shear_stiffness</span><span class="p">(</span>
+        <span class="n">cement</span><span class="o">.</span><span class="n">shear_modulus</span><span class="p">,</span> <span class="n">mineral</span><span class="o">.</span><span class="n">shear_modulus</span><span class="p">,</span> <span class="n">mineral</span><span class="o">.</span><span class="n">poisson_ratio</span><span class="p">,</span> <span class="n">alpha</span>
+    <span class="p">)</span>
+    <span class="n">sn</span> <span class="o">=</span> <span class="n">normal_stiffness</span><span class="p">(</span>
+        <span class="n">mineral</span><span class="o">.</span><span class="n">poisson_ratio</span><span class="p">,</span>
+        <span class="n">cement</span><span class="o">.</span><span class="n">poisson_ratio</span><span class="p">,</span>
+        <span class="n">cement</span><span class="o">.</span><span class="n">shear_modulus</span><span class="p">,</span>
+        <span class="n">mineral</span><span class="o">.</span><span class="n">shear_modulus</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># K_eff from equation (1)</span>
+    <span class="n">k_eff</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">coordination_number</span>
+        <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sand_porosity</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">cement</span><span class="o">.</span><span class="n">primary_wave_modulus</span>
+        <span class="o">*</span> <span class="n">sn</span>
+    <span class="p">)</span>
+
+    <span class="c1"># G_eff from equations (1)</span>
+    <span class="n">mu_eff</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="n">k_eff</span> <span class="o">+</span> <span class="n">shear_reduction</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">coordination_number</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="mi">1</span> <span class="o">-</span> <span class="n">sand_porosity</span>
+    <span class="p">)</span> <span class="o">*</span> <span class="n">cement</span><span class="o">.</span><span class="n">shear_modulus</span> <span class="o">*</span> <span class="n">st</span>
+
+    <span class="k">return</span> <span class="n">Material</span><span class="p">(</span>
+        <span class="n">bulk_modulus</span><span class="o">=</span><span class="n">k_eff</span><span class="p">,</span>
+        <span class="n">shear_modulus</span><span class="o">=</span><span class="n">mu_eff</span><span class="p">,</span>
+        <span class="n">density</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cemented_sand_porosity</span><span class="p">)</span>
+        <span class="o">*</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">cement</span><span class="o">.</span><span class="n">density</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">mineral</span><span class="o">.</span><span class="n">density</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+open\_petro\_elastic.material.material
+======================================
+
+.. automodule:: open_petro_elastic.material.material
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      polyval_material
+      vectorize_material
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Material
+   
+   
+
+   
+   
+   
+
+
+

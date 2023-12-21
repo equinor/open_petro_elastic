@@ -1,0 +1,29 @@
+open\_petro\_elastic.material.span\_wagner.coefficients
+=======================================================
+
+.. automodule:: open_petro_elastic.material.span_wagner.coefficients
+
+   
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      theta0
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

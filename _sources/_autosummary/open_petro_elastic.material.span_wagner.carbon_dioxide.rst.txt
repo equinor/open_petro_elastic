@@ -1,0 +1,6 @@
+open\_petro\_elastic.material.span\_wagner.carbon\_dioxide
+==========================================================
+
+.. currentmodule:: open_petro_elastic.material.span_wagner
+
+.. autofunction:: carbon_dioxide

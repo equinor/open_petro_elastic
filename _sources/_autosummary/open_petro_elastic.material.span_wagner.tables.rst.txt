@@ -1,0 +1,31 @@
+open\_petro\_elastic.material.span\_wagner.tables
+=================================================
+
+.. automodule:: open_petro_elastic.material.span_wagner.tables
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   open_petro_elastic.material.span_wagner.tables.lookup_table
+

@@ -1,0 +1,6 @@
+open\_petro\_elastic.material.sandstone.friable\_sand
+=====================================================
+
+.. currentmodule:: open_petro_elastic.material.sandstone
+
+.. autofunction:: friable_sand

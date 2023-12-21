@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>open_petro_elastic.material.sandstone.hertz_mindlin &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../config_file_format.html">Config File Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage_as_a_library.html">Usage as a Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">open_petro_elastic.material.sandstone.hertz_mindlin</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for open_petro_elastic.material.sandstone.hertz_mindlin</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for Hertz-Mindlin granular material under pressure model</span>
+<span class="sd"> see :py:meth:`hertz_mindlin`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..material</span> <span class="kn">import</span> <span class="n">Material</span>
+
+
+<div class="viewcode-block" id="hertz_mindlin">
+<a class="viewcode-back" href="../../../../_autosummary/open_petro_elastic.material.sandstone.hertz_mindlin.html#open_petro_elastic.material.sandstone.hertz_mindlin">[docs]</a>
+<span class="k">def</span> <span class="nf">hertz_mindlin</span><span class="p">(</span>
+    <span class="n">mineral</span><span class="p">,</span>
+    <span class="n">porosity</span><span class="p">,</span>
+    <span class="n">pressure</span><span class="p">,</span>
+    <span class="n">shear_reduction</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">coordination_number</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adjusts the moduli of a given granular material to a confining pressure</span>
+<span class="sd">    according to Hertz-Mindlin model for pressure-induced moduli increase at</span>
+<span class="sd">    critical porosity.</span>
+
+<span class="sd">    Models the elastic properties of a hydrostatic confining pressure applied to a</span>
+<span class="sd">    random indentical sphere packing, see Mavko et. al (2003) page 150</span>
+
+<span class="sd">    * &quot;The Rock Physics Handbook: Tools for Seismic Analysis of Porous Media&quot;</span>
+<span class="sd">      Gary Mavko, Tapan Mukerji, Jack Dvorkin</span>
+<span class="sd">      Cambridge University Press, 16. okt. 2003</span>
+
+<span class="sd">    :param mineral: The material composing the grains of a granular material.</span>
+<span class="sd">    :param porisity: The porosity of the granular material.</span>
+<span class="sd">    :param pressure: The confining pressure.</span>
+<span class="sd">    :param shear_reduction: Shear reduction parameter used to account for</span>
+<span class="sd">        tangential frictionaless grain contacts, defaults to no reduction, ie. 1.0.</span>
+<span class="sd">    :param coordination_number: Average number of contacts per grain,</span>
+<span class="sd">        defaults to 9.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">mineral</span><span class="o">.</span><span class="n">poisson_ratio</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">mineral</span><span class="o">.</span><span class="n">shear_modulus</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">coordination_number</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">porosity</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pressure</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="p">((</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">sn</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span>
+
+    <span class="n">k_eff</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">phi</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span> <span class="n">sn</span>
+    <span class="n">mu_eff</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">phi</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">sn</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">st</span> <span class="o">*</span> <span class="n">shear_reduction</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Material</span><span class="p">(</span>
+        <span class="n">bulk_modulus</span><span class="o">=</span><span class="n">k_eff</span><span class="p">,</span>
+        <span class="n">shear_modulus</span><span class="o">=</span><span class="n">mu_eff</span><span class="p">,</span>
+        <span class="n">density</span><span class="o">=</span><span class="n">mineral</span><span class="o">.</span><span class="n">density</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">porosity</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

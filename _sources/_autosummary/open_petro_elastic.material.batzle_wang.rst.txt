@@ -1,0 +1,35 @@
+open\_petro\_elastic.material.batzle\_wang
+==========================================
+
+.. automodule:: open_petro_elastic.material.batzle_wang
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   open_petro_elastic.material.batzle_wang.brine_properties
+   open_petro_elastic.material.batzle_wang.hydro_carbon_gas
+   open_petro_elastic.material.batzle_wang.ideal_gas
+   open_petro_elastic.material.batzle_wang.oil_properties
+   open_petro_elastic.material.batzle_wang.water_properties
+

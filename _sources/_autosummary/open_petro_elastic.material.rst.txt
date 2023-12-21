@@ -1,0 +1,38 @@
+﻿open\_petro\_elastic.material
+=============================
+
+.. automodule:: open_petro_elastic.material
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   open_petro_elastic.material.batzle_wang
+   open_petro_elastic.material.conversions
+   open_petro_elastic.material.fluid
+   open_petro_elastic.material.hashin_shtrikman
+   open_petro_elastic.material.material
+   open_petro_elastic.material.sandstone
+   open_petro_elastic.material.seismic_velocity
+   open_petro_elastic.material.span_wagner
+

@@ -1,0 +1,30 @@
+open\_petro\_elastic.material.span\_wagner.tables.lookup\_table
+===============================================================
+
+.. automodule:: open_petro_elastic.material.span_wagner.tables.lookup_table
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      generate_lookup_table
+      load_lookup_table_interpolator
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>open_petro_elastic.material.batzle_wang.oil_properties &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="open_petro_elastic.material.batzle_wang.water_properties" href="open_petro_elastic.material.batzle_wang.water_properties.html" />
+    <link rel="prev" title="open_petro_elastic.material.batzle_wang.ideal_gas" href="open_petro_elastic.material.batzle_wang.ideal_gas.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_file_format.html">Config File Format</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../usage_as_a_library.html">Usage as a Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="open_petro_elastic.material.html">open_petro_elastic.material</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.html">open_petro_elastic.material.batzle_wang</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.brine_properties.html">open_petro_elastic.material.batzle_wang.brine_properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.hydro_carbon_gas.html">open_petro_elastic.material.batzle_wang.hydro_carbon_gas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.ideal_gas.html">open_petro_elastic.material.batzle_wang.ideal_gas</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">open_petro_elastic.material.batzle_wang.oil_properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="open_petro_elastic.material.batzle_wang.water_properties.html">open_petro_elastic.material.batzle_wang.water_properties</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.conversions.html">open_petro_elastic.material.conversions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.fluid.html">open_petro_elastic.material.fluid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.hashin_shtrikman.html">open_petro_elastic.material.hashin_shtrikman</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.material.html">open_petro_elastic.material.material</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.sandstone.html">open_petro_elastic.material.sandstone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.seismic_velocity.html">open_petro_elastic.material.seismic_velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="open_petro_elastic.material.span_wagner.html">open_petro_elastic.material.span_wagner</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../usage_as_a_library.html">Usage as a Library</a></li>
+          <li class="breadcrumb-item"><a href="open_petro_elastic.material.html">open_petro_elastic.material</a></li>
+          <li class="breadcrumb-item"><a href="open_petro_elastic.material.batzle_wang.html">open_petro_elastic.material.batzle_wang</a></li>
+      <li class="breadcrumb-item active">open_petro_elastic.material.batzle_wang.oil_properties</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/open_petro_elastic.material.batzle_wang.oil_properties.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-open_petro_elastic.material.batzle_wang.oil_properties">
+<span id="open-petro-elastic-material-batzle-wang-oil-properties"></span><h1>open_petro_elastic.material.batzle_wang.oil_properties<a class="headerlink" href="#module-open_petro_elastic.material.batzle_wang.oil_properties" title="Link to this heading"></a></h1>
+<p>The oil properties are shown in Figure 5 to 8
+in Batzle and Wang. We can reproduce these figures, althought
+there is some small mismatch, possibly due to the figures
+in the paper being hand drawn.</p>
+<section id="figure-5">
+<h2>Figure 5<a class="headerlink" href="#figure-5" title="Link to this heading"></a></h2>
+<p>(<a class="reference download internal" download="" href="../_downloads/21d2515d45e45de8195e3901ad9bb9c7/open_petro_elastic-material-batzle_wang-oil_properties-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/03436b6d50f328c6783f0f3d9111d1ff/open_petro_elastic-material-batzle_wang-oil_properties-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/601209f3af37c3ec2c119ccb5ec5ca1c/open_petro_elastic-material-batzle_wang-oil_properties-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/79a6895d1cf7c424feb167408debb72d/open_petro_elastic-material-batzle_wang-oil_properties-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/open_petro_elastic-material-batzle_wang-oil_properties-1.png" class="plot-directive" src="../_images/open_petro_elastic-material-batzle_wang-oil_properties-1.png" />
+</figure>
+</section>
+<section id="figure-6">
+<h2>Figure 6<a class="headerlink" href="#figure-6" title="Link to this heading"></a></h2>
+<p>(<a class="reference download internal" download="" href="../_downloads/adc034c86bd252247c0304ae3e7c4777/open_petro_elastic-material-batzle_wang-oil_properties-2.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/13a23b64eeb9290fefe5791b378fda6a/open_petro_elastic-material-batzle_wang-oil_properties-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/4d23954a4a1d31dfd89ac4a4d7e867a9/open_petro_elastic-material-batzle_wang-oil_properties-2.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/511ffd07af8540574ab3635db826ed49/open_petro_elastic-material-batzle_wang-oil_properties-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/open_petro_elastic-material-batzle_wang-oil_properties-2.png" class="plot-directive" src="../_images/open_petro_elastic-material-batzle_wang-oil_properties-2.png" />
+</figure>
+</section>
+<section id="figure-7">
+<h2>Figure 7<a class="headerlink" href="#figure-7" title="Link to this heading"></a></h2>
+<p>(<a class="reference download internal" download="" href="../_downloads/d85ffb6adf538e57749769c0b4d0131d/open_petro_elastic-material-batzle_wang-oil_properties-3.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/f5296bf5e51abb5a36b886f6ade5e6d9/open_petro_elastic-material-batzle_wang-oil_properties-3.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/b72e5d67344cb7e3e6f0cd1497b4d369/open_petro_elastic-material-batzle_wang-oil_properties-3.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/4de911b2fc2337b0aa693f89b4d28c29/open_petro_elastic-material-batzle_wang-oil_properties-3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/open_petro_elastic-material-batzle_wang-oil_properties-3.png" class="plot-directive" src="../_images/open_petro_elastic-material-batzle_wang-oil_properties-3.png" />
+</figure>
+</section>
+<section id="figure-8">
+<h2>Figure 8<a class="headerlink" href="#figure-8" title="Link to this heading"></a></h2>
+<p>(<a class="reference download internal" download="" href="../_downloads/bfb5253dd971a8ea84f87da71a1e646f/open_petro_elastic-material-batzle_wang-oil_properties-4.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e8ed2b9fa9bfa65447db3b8ad0652d7c/open_petro_elastic-material-batzle_wang-oil_properties-4.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/8b49ddd9bc3d952090b1904466445baa/open_petro_elastic-material-batzle_wang-oil_properties-4.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/96066906ee69e338293449489877b354/open_petro_elastic-material-batzle_wang-oil_properties-4.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/open_petro_elastic-material-batzle_wang-oil_properties-4.png" class="plot-directive" src="../_images/open_petro_elastic-material-batzle_wang-oil_properties-4.png" />
+</figure>
+</section>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dead_oil</span></code>(temperature, pressure, ...)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param reference_density<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Density of the oil without dissolved gas</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dead_oil_density</span></code>(temperature, pressure, ...)</p></td>
+<td><p>The density of oil without dissolved gas (dead).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dead_oil_primary_velocity</span></code>(temperature, ...)</p></td>
+<td><p>The primary wave velocity in oil without dissolved gas (dead).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">live_oil</span></code>(temperature, pressure, ...)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param reference_density<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Density of the oil without dissolved gas</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">live_oil_density</span></code>(temperature, pressure, ...)</p></td>
+<td><p>Density of live oil at saturation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">live_oil_primary_velocity</span></code>(temperature, ...)</p></td>
+<td><p>Primary wave velocity of live oil at saturation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">live_oil_pseudo_density</span></code>(temperature, ...)</p></td>
+<td><p>Pseudo density used to substitute reference density in dead_oil_wave_velocity for live oils.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">live_oil_volume_factor</span></code>(temperature, ...)</p></td>
+<td><p>Volume factor derived by Standing (1962), equation 23 in Batzle &amp; Wang [1]. :param reference_density: Density of the oil without dissolved gas     at 15.6 degrees celsius and atmospheric pressure. (g/cc) :param gas_oil_ratio: The volume ratio of gas to oil [l/l] :param temperature: Temperature (celsius) of oil. :param gas_gravity: molar mass of gas relative to air molar mas. :return: A volume factor in calculating pseudo-density of live oil.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">oil</span></code>(temperature, pressure, ...)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param reference_density<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Density of the oil without dissolved gas</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">oil_bubble_point</span></code>(density, gas_oil_ratio, ...)</p></td>
+<td><p>Reservoir oils include some natural gas in solution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pressure_adjusted_dead_oil_density</span></code>(pressure, ...)</p></td>
+<td><p>Adjusts density of a dead oil (without dissolved gas) to a given pressure.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">temperature_adjusted_dead_oil_density</span></code>(...)</p></td>
+<td><p>Adjusts density of a dead oil (without dissolved gas) to a given temperature.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="open_petro_elastic.material.batzle_wang.ideal_gas.html" class="btn btn-neutral float-left" title="open_petro_elastic.material.batzle_wang.ideal_gas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="open_petro_elastic.material.batzle_wang.water_properties.html" class="btn btn-neutral float-right" title="open_petro_elastic.material.batzle_wang.water_properties" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

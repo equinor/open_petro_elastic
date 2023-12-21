@@ -1,0 +1,40 @@
+open\_petro\_elastic.material.batzle\_wang.oil\_properties
+==========================================================
+
+.. automodule:: open_petro_elastic.material.batzle_wang.oil_properties
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      dead_oil
+      dead_oil_density
+      dead_oil_primary_velocity
+      live_oil
+      live_oil_density
+      live_oil_primary_velocity
+      live_oil_pseudo_density
+      live_oil_volume_factor
+      oil
+      oil_bubble_point
+      pressure_adjusted_dead_oil_density
+      temperature_adjusted_dead_oil_density
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

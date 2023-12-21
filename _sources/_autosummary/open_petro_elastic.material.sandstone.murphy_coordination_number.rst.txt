@@ -1,0 +1,6 @@
+open\_petro\_elastic.material.sandstone.murphy\_coordination\_number
+====================================================================
+
+.. currentmodule:: open_petro_elastic.material.sandstone
+
+.. autofunction:: murphy_coordination_number

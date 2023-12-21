@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Config File Format &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage as a Library" href="usage_as_a_library.html" />
+    <link rel="prev" title="Command Line Options" href="command_line_options.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Config File Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#minerals">Minerals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fluids">Fluids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dry-rock">Dry Rock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inserting-from-datafile">Inserting from datafile</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage_as_a_library.html">Usage as a Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Config File Format</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/config_file_format.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="config-file-format">
+<h1>Config File Format<a class="headerlink" href="#config-file-format" title="Link to this heading"></a></h1>
+<p>Input to <code class="docutils literal notranslate"><span class="pre">open_petro_elastic</span></code> consists of a yaml
+config file plus an optional csv data file.</p>
+<p>The yaml config consists of three sections, minerals, fluids and dryrock. Elastic
+values for dry rock, having the mineral as its pore-material and saturated with the fluid
+is outputed.</p>
+<section id="minerals">
+<h2>Minerals<a class="headerlink" href="#minerals" title="Link to this heading"></a></h2>
+<p>Consists only of a list of constituents which will be mixed using Hashin-Shtrikman,
+like so:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">minerals</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">constituents</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span><span class="w"> </span><span class="c1">#sand</span>
+<span class="w">            </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">36.0E+9</span><span class="w"> </span><span class="c1">#Pa</span>
+<span class="w">            </span><span class="nt">shear_modulus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44.0E+9</span><span class="w"> </span><span class="c1">#Pa</span>
+<span class="w">            </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2650.0</span><span class="w"> </span><span class="c1"># kg/m3</span>
+<span class="w">          </span><span class="nt">fraction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span><span class="w"> </span><span class="c1"># shale</span>
+<span class="w">            </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11.0E+9</span><span class="w"> </span><span class="c1">#Pa</span>
+<span class="w">            </span><span class="nt">shear_modulus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.5E+9</span><span class="w"> </span><span class="c1">#Pa</span>
+<span class="w">            </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w"> </span><span class="c1"># kg/m3</span>
+<span class="w">          </span><span class="c1"># fraction of shale is 1 - sum(other materials)</span>
+</pre></div>
+</div>
+</section>
+<section id="fluids">
+<h2>Fluids<a class="headerlink" href="#fluids" title="Link to this heading"></a></h2>
+<p>Same as minerals, but a choice of mixing methods is given, and temperature and
+pressure can be given for costituents from theoretical models:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fluids</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">mix_method</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;wood&quot;</span><span class="w"> </span><span class="c1"># either brie or wood</span>
+<span class="w">    </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">75.0</span><span class="w"> </span><span class="c1"># celsius</span>
+<span class="w">    </span><span class="nt">pressure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000.0</span><span class="w"> </span><span class="c1"># Pa</span>
+<span class="w">    </span><span class="nt">constituents</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oil&quot;</span>
+<span class="w">            </span><span class="nt">gas_gravity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w"> </span><span class="c1"># ratio to air (air gas gravity is 1)</span>
+<span class="w">            </span><span class="nt">reference_density</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">800.0</span><span class="w"> </span><span class="c1"># kg/m3</span>
+<span class="w">            </span><span class="nt">gas_oil_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">153.0</span><span class="w"> </span><span class="c1"># ratio of gas to oil</span>
+<span class="w">          </span><span class="c1">#fraction set to 1 - sum(other_fluid_fractions)</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;brine&quot;</span>
+<span class="w">            </span><span class="nt">salinity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">45000</span><span class="w"> </span><span class="c1"># ppm</span>
+<span class="w">          </span><span class="nt">fraction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3</span><span class="w"> </span><span class="c1"># Ratio of brine to remaining fluid</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gas&quot;</span>
+<span class="w">            </span><span class="nt">gas_gravity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w"> </span><span class="c1"># ratio to air (air gas gravity is 1)</span>
+<span class="w">          </span><span class="nt">fraction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3</span><span class="w"> </span><span class="c1"># Ratio of gas to remaining fluid</span>
+</pre></div>
+</div>
+<p>The list can be any number of arbitrary materials (see example in mineral section above) or
+given one of the types <code class="docutils literal notranslate"><span class="pre">[&quot;oil&quot;,</span> <span class="pre">&quot;brine&quot;,</span> <span class="pre">&quot;gas&quot;,</span> <span class="pre">&quot;condensate&quot;]</span></code>.</p>
+</section>
+<section id="dry-rock">
+<h2>Dry Rock<a class="headerlink" href="#dry-rock" title="Link to this heading"></a></h2>
+<p>This section describes the porous dry rock to the corresponding dense mineral.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dry_rock</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;polyfit&quot;</span>
+<span class="w">        </span><span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">           </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">]]</span>
+<span class="w">           </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">2900.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-1300.0</span><span class="p p-Indicator">]]</span>
+<span class="w">           </span><span class="nt">shear_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1700.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-800.0</span><span class="p p-Indicator">]]</span>
+<span class="w">    </span><span class="nt">porosity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.36</span>
+<span class="w">    </span><span class="nt">adjustments</span><span class="p">:</span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;powerfit&quot;</span>
+<span class="w">         </span><span class="nt">overburden_pressure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100.0E6</span>
+<span class="w">         </span><span class="nt">pressure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">70.0E+6 Pa</span>
+<span class="w">         </span><span class="nt">reference_pressure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30.0E+6</span><span class="w"> </span><span class="c1"># Pa</span>
+<span class="w">         </span><span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">20.0E+9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-46.0</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">vp_over_vs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">12.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-26.0</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]</span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000.0</span>
+<span class="w">         </span><span class="nt">reference_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">         </span><span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">           </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.5</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
+<span class="w">           </span><span class="nt">shear_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.2</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
+<span class="w">           </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.35</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
+</pre></div>
+</div>
+<p>In the config above dry rock is created using a polynomial fit to
+porosity, however, it is also possible to use the theoretical models
+<code class="docutils literal notranslate"><span class="pre">&quot;friable_sand&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;patchy_cement&quot;</span></code>, see example configs for useage.</p>
+<p>The polynomial fit coefficients are such that the terms of the polynoimal,
+for e.g. density, are <code class="docutils literal notranslate"><span class="pre">dry_rock_density</span> <span class="pre">=</span> <span class="pre">sum_ij</span> <span class="pre">mineral_density^i</span> <span class="pre">*</span> <span class="pre">porosity^j</span> <span class="pre">*</span> <span class="pre">coeff[i][j]</span></code>.
+So the polynomials in the example above are</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dry_rock_density</span> <span class="o">=</span> <span class="n">mineral_density</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">porosity</span><span class="p">)</span>
+<span class="n">dry_rock_bulk_modulus</span> <span class="o">=</span> <span class="mi">2900</span> <span class="o">-</span> <span class="mf">1300.0</span> <span class="o">*</span> <span class="n">porosity</span>
+<span class="n">dry_rock_shear_modulus</span> <span class="o">=</span> <span class="mi">1700</span> <span class="o">-</span> <span class="mf">800.0</span> <span class="o">*</span> <span class="n">porosity</span>
+</pre></div>
+</div>
+<p>Adjustments (pressure dependency and depth trend) are applied in the order they
+are given in the adjustments list. In the example above, pressure dependency using
+the powerfit model is applied first, then depth trend which uses a polynomial fit.
+See <code class="docutils literal notranslate"><span class="pre">examples/example2.yaml</span></code> for a detailed description of adjustments.</p>
+</section>
+<section id="inserting-from-datafile">
+<h2>Inserting from datafile<a class="headerlink" href="#inserting-from-datafile" title="Link to this heading"></a></h2>
+<p>Values from the csv file are inserted into the config file as columns of vectors,
+<code class="docutils literal notranslate"><span class="pre">open_petro_elastic</span></code> then maps its computation over the columns row-wise. The insertion
+into the yaml file of columns is done by giving the column name to the value you
+want to insert it into. For instance</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">minerals</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">constituents</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span><span class="w"> </span><span class="c1"># shale</span>
+<span class="w">            </span><span class="nt">bulk_modulus</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shale_k&quot;</span>
+<span class="w">            </span><span class="nt">shear_modulus</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shale_s&quot;</span>
+<span class="w">            </span><span class="nt">density</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shale_r&quot;</span>
+</pre></div>
+</div>
+<p>This specifies that the minerals first constituent should have a material whos
+<code class="docutils literal notranslate"><span class="pre">bulk_modulus</span></code>, <code class="docutils literal notranslate"><span class="pre">shear_modulus</span></code>, and <code class="docutils literal notranslate"><span class="pre">density</span></code> can be found in the data files
+columns with headers <code class="docutils literal notranslate"><span class="pre">shale_k</span></code>, <code class="docutils literal notranslate"><span class="pre">shale_s</span></code>, and <code class="docutils literal notranslate"><span class="pre">shale_r</span></code> respectively. Lets say
+the contents of the data file is as follows:</p>
+<div class="highlight-csv notranslate"><div class="highlight"><pre><span></span><span class="o">shale_k</span><span class="p">,</span><span class="m">shale_s</span><span class="p">,</span><span class="k">shale_r</span>
+<span class="o">10E+9</span><span class="p">,</span><span class="m">4E+9</span><span class="p">,</span><span class="k">2000</span>
+<span class="o">8E+9</span><span class="p">,</span><span class="m">4.5E+9</span><span class="p">,</span><span class="k">3000</span>
+<span class="o">9E+9</span><span class="p">,</span><span class="m">5E+9</span><span class="p">,</span><span class="k">2666</span>
+</pre></div>
+</div>
+<p>Then the output from <code class="docutils literal notranslate"><span class="pre">open_petro_elastic</span></code> will have three rows corresponding to
+the three rows in the input.</p>
+<p>If a position is given only one value, as opposed to a vector, that same
+value is used for all rows. So in our previous example, if the config
+looks like this</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">minerals</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">constituents</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">material</span><span class="p">:</span><span class="w"> </span><span class="c1"># shale</span>
+<span class="w">            </span><span class="nt">bulk_modulus</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shale_k&quot;</span>
+<span class="w">            </span><span class="nt">shear_modulus</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shale_s&quot;</span>
+<span class="w">            </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+</pre></div>
+</div>
+<p>A density of 1000 kg/m³ is applied in all three output rows.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="command_line_options.html" class="btn btn-neutral float-left" title="Command Line Options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="usage_as_a_library.html" class="btn btn-neutral float-right" title="Usage as a Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+open\_petro\_elastic.material.fluid
+===================================
+
+.. automodule:: open_petro_elastic.material.fluid
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      brie_fluid_mixing
+      fluid_material
+      fluid_substitution
+      mix_bulk_moduli
+      mix_densities
+      sum_saturations_to_one
+      wood_fluid_mixing
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

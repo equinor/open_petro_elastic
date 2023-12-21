@@ -1,0 +1,6 @@
+open\_petro\_elastic.material.sandstone.hertz\_mindlin
+======================================================
+
+.. currentmodule:: open_petro_elastic.material.sandstone
+
+.. autofunction:: hertz_mindlin

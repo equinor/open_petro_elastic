@@ -1,0 +1,36 @@
+open\_petro\_elastic.material.sandstone
+=======================================
+
+.. automodule:: open_petro_elastic.material.sandstone
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   open_petro_elastic.material.sandstone.constant_cement
+   open_petro_elastic.material.sandstone.contact_cement
+   open_petro_elastic.material.sandstone.friable_sand
+   open_petro_elastic.material.sandstone.hertz_mindlin
+   open_petro_elastic.material.sandstone.murphy_coordination_number
+   open_petro_elastic.material.sandstone.patchy_cement
+

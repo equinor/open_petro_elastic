@@ -1,0 +1,32 @@
+open\_petro\_elastic.material.seismic\_velocity
+===============================================
+
+.. automodule:: open_petro_elastic.material.seismic_velocity
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      calculate_bulk_modulus
+      calculate_primary_velocity
+      calculate_secondary_velocity
+      calculate_shear_modulus
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

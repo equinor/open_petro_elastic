@@ -1,0 +1,34 @@
+open\_petro\_elastic.material.span\_wagner
+==========================================
+
+.. automodule:: open_petro_elastic.material.span_wagner
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   open_petro_elastic.material.span_wagner.carbon_dioxide
+   open_petro_elastic.material.span_wagner.coefficients
+   open_petro_elastic.material.span_wagner.equations
+   open_petro_elastic.material.span_wagner.tables
+

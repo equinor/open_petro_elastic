@@ -1,0 +1,32 @@
+open\_petro\_elastic.material.hashin\_shtrikman
+===============================================
+
+.. automodule:: open_petro_elastic.material.hashin_shtrikman
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_is_ratio
+      hashin_shtrikman_average
+      hashin_shtrikman_bound
+      hashin_shtrikman_walpole
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

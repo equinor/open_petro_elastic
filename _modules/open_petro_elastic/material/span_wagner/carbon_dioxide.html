@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>open_petro_elastic.material.span_wagner.carbon_dioxide &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../config_file_format.html">Config File Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage_as_a_library.html">Usage as a Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">open_petro_elastic.material.span_wagner.carbon_dioxide</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for open_petro_elastic.material.span_wagner.carbon_dioxide</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Package for calculating CO2 properties based on Span &amp; Wagner [2].</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span>
+<span class="kn">from</span> <span class="nn">open_petro_elastic</span> <span class="kn">import</span> <span class="n">float_vectorize</span>
+<span class="kn">from</span> <span class="nn">open_petro_elastic.material.fluid</span> <span class="kn">import</span> <span class="n">fluid_material</span> <span class="k">as</span> <span class="n">fluid</span>
+<span class="kn">from</span> <span class="nn">open_petro_elastic.material.span_wagner</span> <span class="kn">import</span> <span class="n">equations</span>
+<span class="kn">from</span> <span class="nn">open_petro_elastic.material.span_wagner.coefficients</span> <span class="kn">import</span> <span class="n">a0</span><span class="p">,</span> <span class="n">theta0</span>
+<span class="kn">from</span> <span class="nn">open_petro_elastic.material.span_wagner.tables.lookup_table</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">load_lookup_table_interpolator</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Constants</span>
+<span class="n">CO2_GAS_CONSTANT</span> <span class="o">=</span> <span class="mf">0.1889241</span> <span class="o">*</span> <span class="mf">1e3</span>  <span class="c1"># J / kg K</span>
+<span class="n">CO2_CRITICAL_TEMPERATURE</span> <span class="o">=</span> <span class="mf">304.1282</span>  <span class="c1"># K</span>
+<span class="n">CO2_CRITICAL_DENSITY</span> <span class="o">=</span> <span class="mf">467.6</span>  <span class="c1"># kg / m^3</span>
+<span class="n">CO2_CRITICAL_PRESSURE</span> <span class="o">=</span> <span class="mf">7.3773</span>  <span class="c1"># MPa</span>
+<span class="n">CO2_TRIPLE_TEMPERATURE</span> <span class="o">=</span> <span class="mf">216.592</span>  <span class="c1"># K</span>
+<span class="n">CO2_TRIPLE_PRESSURE</span> <span class="o">=</span> <span class="mf">0.51795</span>  <span class="c1"># MPa</span>
+
+
+<span class="k">def</span> <span class="nf">co2_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helmholtz energy as defined by equation 6.1 in Span &amp; Wagner [2]</span>
+
+<span class="sd">    :param delta: Reduced density, unit-less. That is, density / CO2_CRITICAL_DENSITY.</span>
+<span class="sd">    :param tau: Inverse reduced temperature, unit-less. That is, CO2_CRITICAL_TEMPERATURE / (absolute) temperature</span>
+<span class="sd">    :param dd: Degree of derivation wrt. delta. Integer between 0 and 2.</span>
+<span class="sd">    :param dt: Degree of derivation wrt. tau. Integer between 0 and 2, as long as (dt + dd &lt; 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ideal_gas_helmholtz_energy</span><span class="p">(</span>
+        <span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span>
+    <span class="p">)</span> <span class="o">+</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">ideal_gas_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helmholtz energy from ideal gas behavior as defined by equation 2.3 in Span &amp; Wagner [2]. See function</span>
+<span class="sd">    co2_helmholtz_energy for argument documentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Adjust array shapes</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
+    <span class="n">return_scalar</span> <span class="o">=</span> <span class="n">tau</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">tau2</span> <span class="o">=</span> <span class="n">tau</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Needed for array-based sums</span>
+
+    <span class="k">if</span> <span class="n">dt</span> <span class="o">==</span> <span class="n">dd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">theta0</span> <span class="o">*</span> <span class="n">tau2</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tau</span> <span class="o">+</span> <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span> <span class="o">+</span> <span class="n">_sum</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dt</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">dd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="n">theta0</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">theta0</span> <span class="o">*</span> <span class="n">tau2</span><span class="p">))</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">tau</span> <span class="o">+</span> <span class="n">_sum</span>
+    <span class="k">elif</span> <span class="n">dt</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dd</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">delta</span>
+    <span class="k">elif</span> <span class="n">dt</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">dd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:]</span>
+            <span class="o">*</span> <span class="n">theta0</span><span class="o">**</span><span class="mi">2</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">theta0</span> <span class="o">*</span> <span class="n">tau2</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">theta0</span> <span class="o">*</span> <span class="n">tau2</span><span class="p">))</span> <span class="o">**</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="n">a0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">tau</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">_sum</span>
+    <span class="k">elif</span> <span class="n">dt</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dd</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">delta</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">dt</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">dd</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="k">if</span> <span class="n">return_scalar</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Residual part of Helmholtz energy as defined by the equation in Table 32 of Span &amp; Wagner [2]. See</span>
+<span class="sd">    co2_helmholtz_energy for argument documentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
+    <span class="n">return_scalar</span> <span class="o">=</span> <span class="p">(</span><span class="n">tau</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># tau == 1.0 or delta == 1.0 leads to numerically invalid results. The values are nudged to avoid nan output.</span>
+    <span class="n">tau</span><span class="p">[</span><span class="n">tau</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">1e-15</span>
+    <span class="n">delta</span><span class="p">[</span><span class="n">delta</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">1e-15</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">equations</span><span class="o">.</span><span class="n">residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">return_scalar</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">carbon_dioxide_pressure</span><span class="p">(</span>
+    <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">d_density</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">isentropic</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    CO2 pressure (MPa) as given by Table 3 of Span &amp; Wagner [2]</span>
+
+<span class="sd">    :param absolute_temperature: Temperature in K.</span>
+<span class="sd">    :param density: CO2 density (kg / m^3).</span>
+<span class="sd">    :param d_density: Degree of derivation wrt. density.</span>
+<span class="sd">    :param d_temperature: Degree of derivation wrt. temperature.</span>
+<span class="sd">    :param isentropic: Correction for isentropic conditions. Relevant primarily for isentropic bulk modulus</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">CO2_CRITICAL_TEMPERATURE</span> <span class="o">/</span> <span class="n">absolute_temperature</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">density</span> <span class="o">/</span> <span class="n">CO2_CRITICAL_DENSITY</span>
+    <span class="k">if</span> <span class="n">d_temperature</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="k">if</span> <span class="n">d_density</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">density</span>
+            <span class="o">*</span> <span class="n">CO2_GAS_CONSTANT</span>
+            <span class="o">*</span> <span class="n">absolute_temperature</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="o">/</span> <span class="mf">1e6</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">d_density</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">second</span> <span class="o">=</span> <span class="n">delta</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">isentropic</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">third</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># See Table 3 of Span &amp; Wagner (speed of sound)</span>
+            <span class="n">nom</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="mi">1</span>
+                <span class="o">+</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">den</span> <span class="o">=</span> <span class="n">tau</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">co2_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">third</span> <span class="o">=</span> <span class="o">-</span><span class="n">nom</span> <span class="o">/</span> <span class="n">den</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">absolute_temperature</span> <span class="o">*</span> <span class="n">CO2_GAS_CONSTANT</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">first</span> <span class="o">+</span> <span class="n">second</span> <span class="o">+</span> <span class="n">third</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">saturated_liquid_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Saturated liquid density as defined by equation 3.14 of Span &amp; Wagner [2]</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature in K. Should satisfy:</span>
+<span class="sd">        CO2_TRIPLE_TEMPERATURE &lt; absolute_temperature &lt; CO2_CRITICAL_TEMPERATURE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_a1</span> <span class="o">=</span> <span class="mf">1.9245108</span>
+    <span class="n">_a2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.62385555</span>
+    <span class="n">_a3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.32731127</span>
+    <span class="n">_a4</span> <span class="o">=</span> <span class="mf">0.39245142</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">absolute_temperature</span> <span class="o">/</span> <span class="n">CO2_CRITICAL_TEMPERATURE</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.34</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">_a3</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="n">_a4</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">11</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">CO2_CRITICAL_DENSITY</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">saturated_vapor_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Saturated vapor density as defined by equation 3.15 of Span &amp; Wagner</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature in K. Should satisfy:</span>
+<span class="sd">        CO2_TRIPLE_TEMPERATURE &lt; absolute_temperature &lt; CO2_CRITICAL_TEMPERATURE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Assert temp &lt; critical</span>
+    <span class="n">_a1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.7074879</span>
+    <span class="n">_a2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.82274670</span>
+    <span class="n">_a3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.6008549</span>
+    <span class="n">_a4</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.111178</span>
+    <span class="n">_a5</span> <span class="o">=</span> <span class="o">-</span><span class="mf">29.742252</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">absolute_temperature</span> <span class="o">/</span> <span class="n">CO2_CRITICAL_TEMPERATURE</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.34</span>
+        <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="o">+</span> <span class="n">_a3</span> <span class="o">*</span> <span class="n">_t</span>
+        <span class="o">+</span> <span class="n">_a4</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">7</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">_a5</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">14</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">CO2_CRITICAL_DENSITY</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">sublimation_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sublimation pressure as defined by equation 3.12 of Span &amp; Wagner [2]</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature in K. Should satisfy absolute_temperature &lt; CO2_TRIPLE_TEMPERATURE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_a1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">14.740846</span>
+    <span class="n">_a2</span> <span class="o">=</span> <span class="mf">2.4327015</span>
+    <span class="n">_a3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.3061778</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">absolute_temperature</span> <span class="o">/</span> <span class="n">CO2_TRIPLE_TEMPERATURE</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">1.9</span> <span class="o">+</span> <span class="n">_a3</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">2.9</span>
+    <span class="k">return</span> <span class="n">CO2_TRIPLE_PRESSURE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">_t</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">vapor_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vapor pressure as defined by equation 3.13 of Span &amp; Wagner [2]</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature in K. Should satisfy:</span>
+<span class="sd">        CO2_TRIPLE_TEMPERATURE &lt; absolute_temperature &lt; CO2_CRITICAL_TEMPERATURE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_a1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">7.0602087</span>
+    <span class="n">_a2</span> <span class="o">=</span> <span class="mf">1.9391218</span>
+    <span class="n">_a3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.6463597</span>
+    <span class="n">_a4</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.2995634</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">absolute_temperature</span> <span class="o">/</span> <span class="n">CO2_CRITICAL_TEMPERATURE</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">1.5</span> <span class="o">+</span> <span class="n">_a3</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">_a4</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">4.0</span>
+    <span class="k">return</span> <span class="n">CO2_CRITICAL_PRESSURE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">_t</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">melting_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Melting pressure as defined by equation 3.10 of Span &amp; Wagner [2]</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature in K. Should satisfy CO2_TRIPLE_TEMPERATURE &lt; absolute_temperature</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_a1</span> <span class="o">=</span> <span class="mf">1955.5390</span>
+    <span class="n">_a2</span> <span class="o">=</span> <span class="mf">2055.4593</span>
+    <span class="n">_t</span> <span class="o">=</span> <span class="n">absolute_temperature</span> <span class="o">/</span> <span class="n">CO2_TRIPLE_TEMPERATURE</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">CO2_TRIPLE_PRESSURE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_determine_density_bounds</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the upper and lower bound on density</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">absolute_temperature</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">bounds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">bounds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1500.0</span>
+
+    <span class="n">below_triple</span> <span class="o">=</span> <span class="n">absolute_temperature</span> <span class="o">&lt;</span> <span class="n">CO2_TRIPLE_TEMPERATURE</span>
+    <span class="n">below_critical</span> <span class="o">=</span> <span class="o">~</span><span class="n">below_triple</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">absolute_temperature</span> <span class="o">&lt;</span> <span class="n">CO2_CRITICAL_TEMPERATURE</span><span class="p">)</span>
+
+    <span class="n">bounds</span><span class="p">[</span><span class="n">below_triple</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">saturated_vapor_density</span><span class="p">(</span>
+        <span class="n">absolute_temperature</span><span class="p">[</span><span class="n">below_triple</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">force_vapor</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="n">below_critical</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">saturated_vapor_density</span><span class="p">(</span>
+            <span class="n">absolute_temperature</span><span class="p">[</span><span class="n">below_critical</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">force_vapor</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="n">below_critical</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">saturated_liquid_density</span><span class="p">(</span>
+            <span class="n">absolute_temperature</span><span class="p">[</span><span class="n">below_critical</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># force_vapor == &#39;auto&#39;</span>
+        <span class="n">below_vapor_pressure</span> <span class="o">=</span> <span class="n">pressure</span> <span class="o">&lt;</span> <span class="n">vapor_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">)</span>
+        <span class="n">is_vapor</span> <span class="o">=</span> <span class="n">below_critical</span> <span class="o">&amp;</span> <span class="n">below_vapor_pressure</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="n">is_vapor</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">saturated_vapor_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">[</span><span class="n">is_vapor</span><span class="p">])</span>
+        <span class="n">is_liquid</span> <span class="o">=</span> <span class="n">below_critical</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">below_vapor_pressure</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="n">is_liquid</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">saturated_liquid_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">[</span><span class="n">is_liquid</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">bounds</span>
+
+
+<span class="k">def</span> <span class="nf">_find_initial_density_values</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds approximate density values for the provided temperature(s) and pressure(s). The result is only intended to be</span>
+<span class="sd">    used by array_carbon_dioxide_density.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+
+    <span class="n">temps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.01</span><span class="p">,</span> <span class="mi">41</span>
+    <span class="p">)</span>
+    <span class="n">press</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.99</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.01</span><span class="p">,</span> <span class="mi">41</span>
+    <span class="p">)</span>
+    <span class="n">tt</span><span class="p">,</span> <span class="n">pp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">temps</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+    <span class="n">densi</span> <span class="o">=</span> <span class="n">carbon_dioxide_density</span><span class="p">(</span>
+        <span class="n">tt</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">pp</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">force_vapor</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">temps</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">press</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">rgi</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">temps</span><span class="p">,</span> <span class="n">press</span><span class="p">)),</span> <span class="n">densi</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="n">rgi</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">oob</span> <span class="o">=</span> <span class="p">(</span><span class="n">iv</span> <span class="o">&lt;</span> <span class="n">bounds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="p">(</span><span class="n">iv</span> <span class="o">&gt;</span> <span class="n">bounds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">iv</span><span class="p">)</span>
+    <span class="n">iv</span><span class="p">[</span><span class="n">oob</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">oob</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">iv</span>
+
+
+<span class="k">def</span> <span class="nf">array_carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Alternative implementation of a vectorized carbon dioxide density function. Implemented primarily for demonstration</span>
+<span class="sd">    purposes. For large arrays, a look-up-table approach should be preferred.</span>
+
+<span class="sd">    Utilizes scipy.optimize.newton, which is the only root-finding method of scipy that supports a vectorized functions.</span>
+
+<span class="sd">    For argument documentation, see carbon_dioxide_density.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">absolute_temperature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">)</span>
+    <span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="n">_determine_density_bounds</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">)</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="n">_find_initial_density_values</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">)</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">carbon_dioxide_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">pressure</span><span class="p">,</span>
+        <span class="n">x0</span><span class="o">=</span><span class="n">iv</span><span class="p">,</span>
+        <span class="n">maxiter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">full_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># scipy.optimize.newton may not always converge. We need to determine which of the elements of the solution are</span>
+    <span class="c1">#  invalid. The opt.converged variable does not seem to suffice, so we perform separate checks. First, check that</span>
+    <span class="c1">#  the solution is a valid root</span>
+    <span class="n">invalid</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span>
+        <span class="n">carbon_dioxide_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">opt</span><span class="o">.</span><span class="n">root</span><span class="p">),</span>
+        <span class="n">pressure</span><span class="p">,</span>
+        <span class="n">atol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
+        <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Next, check if the solution is anywhere out of bounds (since newton does not support brackets), and check for nan</span>
+    <span class="c1"># values.</span>
+    <span class="n">invalid</span> <span class="o">|=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">root</span> <span class="o">&lt;</span> <span class="n">bounds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">|</span> <span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">root</span> <span class="o">&gt;</span> <span class="n">bounds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Finally, use the robust density method to determine the invalid results</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">root</span>
+    <span class="n">sol</span><span class="p">[</span><span class="n">invalid</span><span class="p">]</span> <span class="o">=</span> <span class="n">carbon_dioxide_density</span><span class="p">(</span>
+        <span class="n">absolute_temperature</span><span class="p">[</span><span class="n">invalid</span><span class="p">],</span> <span class="n">pressure</span><span class="p">[</span><span class="n">invalid</span><span class="p">],</span> <span class="n">force_vapor</span><span class="o">=</span><span class="n">force_vapor</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">sol</span>
+
+
+<span class="nd">@float_vectorize</span>
+<span class="k">def</span> <span class="nf">_calculate_carbon_dioxide_density</span><span class="p">(</span>
+    <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Density of carbon dioxide. Found solving the Pressure equation of Table 3 in Span &amp; Wagner [2] numerically for</span>
+<span class="sd">    density. To ensure a single solution, the phase of the liquid must first be determined.</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature (K).</span>
+<span class="sd">    :param pressure: Pressure (MPa).</span>
+<span class="sd">    :param force_vapor: Boolean or &#39;auto&#39;. If &#39;auto&#39;, the phase of the fluid is automatically determined. However, along</span>
+<span class="sd">        the vaporization line (assuming T_triple &lt; absolute_temperature &lt; T_critical), the fluid is in two-phase</span>
+<span class="sd">        equilibrium and the phase cannot be uniquely determined. If force_vapor is set to True, vapor phase is always</span>
+<span class="sd">        selected, if False, liquid phase is selected. Outide the temperature bounds, this argument has no effect. This</span>
+<span class="sd">        argument should only be used close to the vaporization boundary, otherwise the behavior might not be as</span>
+<span class="sd">        expected.</span>
+<span class="sd">    :param raise_error: Boolean. If True, raises an error if density cannot be determined. Otherwise, returns np.nan.</span>
+
+<span class="sd">    :return: Density (kg / m^3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="n">_determine_density_bounds</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">absolute_temperature</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pressure</span><span class="p">]),</span> <span class="n">force_vapor</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="c1"># Extend bounds slightly to ensure toms748 can converge</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.95</span><span class="p">,</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">root_scalar</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">carbon_dioxide_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">pressure</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;toms748&quot;</span><span class="p">,</span>
+            <span class="n">bracket</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+            <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raise_error</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">opt</span><span class="o">.</span><span class="n">root</span>
+
+
+<span class="k">def</span> <span class="nf">carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Density of carbon dioxide. Found either by direct calculation or interpolation. Any additional arguments are passed</span>
+<span class="sd">    to _calculate_carbon_dioxide_density.</span>
+
+<span class="sd">    :param absolute_temperature: Absolute temperature (K).</span>
+<span class="sd">    :param pressure: Pressure (MPa).</span>
+<span class="sd">    :param interpolate: Flag whether to interpolate data or not. If not, data is calculated directly. This is more</span>
+<span class="sd">        accurate, but also more time-consuming. Data outside the bounds of the interpolator will be set to np.nan.</span>
+
+<span class="sd">    :return: Density (kg / m^3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">interpolate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_calculate_carbon_dioxide_density</span><span class="p">(</span>
+            <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">interpolate</span> <span class="ow">is</span> <span class="kc">True</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+            <span class="s2">&quot;open_petro_elastic.material.span_wagner.tables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;carbon_dioxide_density.npz&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">interpolator</span> <span class="o">=</span> <span class="n">load_lookup_table_interpolator</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">carbon_dioxide_bulk_modulus</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Isentropic bulk modulus, derived from the expression for speed of sound in Table 3 of Span &amp; Wagner</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d_pressure</span> <span class="o">=</span> <span class="n">carbon_dioxide_pressure</span><span class="p">(</span>
+        <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">d_density</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isentropic</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">density</span> <span class="o">*</span> <span class="n">d_pressure</span> <span class="o">*</span> <span class="mf">1e6</span>
+
+
+<div class="viewcode-block" id="carbon_dioxide">
+<a class="viewcode-back" href="../../../../_autosummary/open_petro_elastic.material.span_wagner.carbon_dioxide.html#open_petro_elastic.material.span_wagner.carbon_dioxide">[docs]</a>
+<span class="k">def</span> <span class="nf">carbon_dioxide</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param absolute_temperature: Temperature in Celsius. Valid range: 216 K - 1100 K</span>
+<span class="sd">    :param pressure: Pressure in MPa. Valid range: 0 - 800</span>
+<span class="sd">    :param density: Density in kg / m^3. May be provided instead of pressure. If both are provided, density has</span>
+<span class="sd">        precedence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">density</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fluid</span><span class="p">(</span>
+        <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span>
+        <span class="n">bulk_modulus</span><span class="o">=</span><span class="n">carbon_dioxide_bulk_modulus</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+open\_petro\_elastic.material.batzle\_wang.ideal\_gas
+=====================================================
+
+.. automodule:: open_petro_elastic.material.batzle_wang.ideal_gas
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ideal_gas
+      ideal_gas_density
+      ideal_gas_primary_velocity
+      molar_volume
+      molecular_weight
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
