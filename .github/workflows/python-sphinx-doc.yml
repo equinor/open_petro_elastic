@@ -14,12 +14,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.11'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .
-        pip install -r doc_requirements.txt
+        python -m pip install .[docs]
     - name: Generate documentation
       run: |
         sphinx-build docs docs_out/

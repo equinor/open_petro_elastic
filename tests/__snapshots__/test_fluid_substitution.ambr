@@ -1,0 +1,4 @@
+# serializer version: 1
+# name: test_fluid_substitution
+  Material(shear_modulus=[1.], bulk_modulus=[1.94708995], primary_velocity=[1.28070748], secondary_velocity=[0.70710678], density=[2.])
+# ---

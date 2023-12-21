@@ -9,7 +9,7 @@ A Python library for petro-elastic modelling. It contains a `Material` class for
 pip install open_petro_elastic
 ```
 
-Developers and contributors can download the repository and do `pip install .` to install the package.
+Developers and contributors can download the repository and do `pip install ".[dev,test,docs]"` to install the package with all its dependencies for development, testing, and building the docs.
 
 
 ## Usage

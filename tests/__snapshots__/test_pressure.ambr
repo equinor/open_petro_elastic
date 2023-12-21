@@ -1,0 +1,10 @@
+# serializer version: 1
+# name: test_pressure_dependency_no_pressure_exp_fit
+  Material(shear_modulus=1.0, bulk_modulus=0.9999999999999998, primary_velocity=1.5275252316519465, secondary_velocity=1.0, density=1.0)
+# ---
+# name: test_pressure_dependency_no_pressure_poly_fit
+  Material(shear_modulus=1.0, bulk_modulus=0.9999999999999998, primary_velocity=1.5275252316519465, secondary_velocity=1.0, density=1.0)
+# ---
+# name: test_pressure_dependency_no_pressure_power_fit
+  Material(shear_modulus=1.0, bulk_modulus=0.9999999999999998, primary_velocity=1.5275252316519465, secondary_velocity=1.0, density=1.0)
+# ---
