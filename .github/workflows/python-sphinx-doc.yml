@@ -23,3 +23,8 @@ jobs:
       run: |
         sphinx-build docs docs_out/
         sphinx-build -b doctest docs docs_out/
+    - name: Publish docs
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: docs/docs_out
