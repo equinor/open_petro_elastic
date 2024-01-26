@@ -72,6 +72,8 @@ open_petro_elastic = "open_petro_elastic.__main__:main"
 batzle_wang = "open_petro_elastic.config.fluid_model_providers:BatzleWangFluidModelProvider"
 span_wagner = "open_petro_elastic.config.fluid_model_providers:SpanWagnerFluidModelProvider"
 
+[tool.setuptools_scm]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
