@@ -196,6 +196,7 @@ Figure 8
     >>> ax.legend()
 
 """
+
 import warnings
 
 import numpy as np

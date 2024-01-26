@@ -6,6 +6,7 @@ Equations and figures in tests refer to that paper.
 These figures are not completely accurate to computed values, possibly done by hand
 and are sometimes from measured values.
 """
+
 import pytest
 from generators import positives, ratios
 from hypothesis import assume, given

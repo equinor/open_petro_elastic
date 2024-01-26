@@ -2,6 +2,7 @@
 Module for Hertz-Mindlin granular material under pressure model
  see :py:meth:`hertz_mindlin`.
 """
+
 import numpy as np
 
 from ..material import Material

@@ -2,6 +2,7 @@
 Module for calculation of the constant cement model
 of Avseth et. al, see :py:meth:`constant_cement`.
 """
+
 from ..hashin_shtrikman import hashin_shtrikman_walpole
 from .contact_cement import contact_cement
 

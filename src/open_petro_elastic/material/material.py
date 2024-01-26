@@ -2,6 +2,7 @@
 The Material class is the data container for
 elastic properties of one material.
 """
+
 import numpy as np
 from numpy.polynomial.polynomial import polyval2d
 

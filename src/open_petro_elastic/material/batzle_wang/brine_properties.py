@@ -96,6 +96,7 @@ Figure 14
     >>> ax.legend()
 
 """
+
 import numpy as np
 from numpy import sqrt
 from numpy.polynomial.polynomial import polyval3d

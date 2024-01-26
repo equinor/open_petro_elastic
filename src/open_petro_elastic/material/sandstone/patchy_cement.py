@@ -2,6 +2,7 @@
 Module for patchy_cement hybrid sandstone model
  by Avseth et. al, see :py:meth:`patchy_cement`.
 """
+
 import numpy as np
 
 from ..hashin_shtrikman import hashin_shtrikman_walpole
