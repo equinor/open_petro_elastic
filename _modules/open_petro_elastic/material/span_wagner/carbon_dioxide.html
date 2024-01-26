@@ -76,6 +76,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Package for calculating CO2 properties based on Span &amp; Wagner [2].</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.optimize</span>
@@ -232,9 +233,7 @@
     <span class="n">_a3</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.32731127</span>
     <span class="n">_a4</span> <span class="o">=</span> <span class="mf">0.39245142</span>
     <span class="n">_t</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">absolute_temperature</span> <span class="o">/</span> <span class="n">CO2_CRITICAL_TEMPERATURE</span>
-    <span class="n">inner</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.34</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">_a3</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="n">_a4</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">11</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.34</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">_a3</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="n">_a4</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">**</span> <span class="p">(</span><span class="mi">11</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">CO2_CRITICAL_DENSITY</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
 
 
