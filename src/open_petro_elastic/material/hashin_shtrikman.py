@@ -8,6 +8,7 @@ see, for instance,
   multicomponent materials and random cell polycrystals." International Journal
   of Solids and Structures 49.18 (2012): 2646-2659.
 """
+
 import numpy as np
 
 from open_petro_elastic.float_vectorize import float_vectorize

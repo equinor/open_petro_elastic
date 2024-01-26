@@ -1,6 +1,7 @@
 """
 Package for calculating CO2 properties based on Span & Wagner [2].
 """
+
 import pkg_resources
 import numpy as np
 import scipy.optimize
@@ -157,9 +158,7 @@ def saturated_liquid_density(absolute_temperature):
     _a3 = -0.32731127
     _a4 = 0.39245142
     _t = 1 - absolute_temperature / CO2_CRITICAL_TEMPERATURE
-    inner = (
-        _a1 * _t**0.34 + _a2 * _t**0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
-    )
+    inner = _a1 * _t**0.34 + _a2 * _t**0.5 + _a3 * _t ** (10 / 6) + _a4 * _t ** (11 / 6)
     return CO2_CRITICAL_DENSITY * np.exp(inner)
 
 

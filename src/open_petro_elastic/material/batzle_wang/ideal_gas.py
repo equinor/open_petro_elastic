@@ -1,6 +1,7 @@
 """
 Module for calculating properties of ideal gas.
 """
+
 from numpy import sqrt
 from scipy.constants import gas_constant
 

@@ -1,6 +1,7 @@
 """
 Fluid is short hand for a material with shear modulus equal to zero.
 """
+
 import numpy as np
 from open_petro_elastic.float_vectorize import float_vectorize
 

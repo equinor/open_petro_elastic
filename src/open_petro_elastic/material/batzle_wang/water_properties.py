@@ -34,6 +34,7 @@ Figure 12
     ... )
 
 """
+
 import warnings
 
 import numpy as np
