@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+    environment: release
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
