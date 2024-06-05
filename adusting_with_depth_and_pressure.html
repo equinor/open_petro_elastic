@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adjusting with Depth and Pressure &mdash; open_petro_elastic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            open_petro_elastic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="command_line_options.html">Command Line Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_with_the_config_file_format.html">Getting Started With The Config File Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_as_a_library.html">Usage as a Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">open_petro_elastic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adjusting with Depth and Pressure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/adusting_with_depth_and_pressure.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>(adjustment_section)=</p>
+<section id="adjusting-with-depth-and-pressure">
+<h1>Adjusting with Depth and Pressure<a class="headerlink" href="#adjusting-with-depth-and-pressure" title="Link to this heading"></a></h1>
+<p>The dry_rock model can be adjusted according to depth and pressure:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dry_rock</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># model type is one of:</span>
+<span class="w">        </span><span class="c1">#  * &quot;polyfit&quot;</span>
+<span class="w">        </span><span class="c1">#  * &quot;friable_sand&quot;</span>
+<span class="w">        </span><span class="c1">#  * &quot;patchy_cement&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;polyfit&quot;</span>
+<span class="w">    </span><span class="nt">porosity</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># porosity of dry rock gotten from column in csv file</span>
+<span class="w">        </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;porosity&quot;</span>
+<span class="w">    </span><span class="c1"># Default polyfit coefficients is used which is:</span>
+<span class="w">    </span><span class="c1"># density: [[0.0, 0.0], [1.0, -1.0]]</span>
+<span class="w">    </span><span class="c1"># bulk_modulus: [[2900.0, -1300.0]]</span>
+<span class="w">    </span><span class="c1"># shear_modulus: [[1700.0, -800.0]]</span>
+<span class="w">    </span><span class="c1"># In  dry_rock, effective reference pressure is used:</span>
+<span class="w">    </span><span class="c1"># pressure = min(max_pressure, overburden_pressure - reference_pressure)</span>
+<span class="w">    </span><span class="nt">adjustments</span><span class="p">:</span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pressure_dependency&quot;</span>
+<span class="w">         </span><span class="c1"># In pressure dependency effective rock pressure is used:</span>
+<span class="w">         </span><span class="c1"># pressure = min(max_pressure, overburden_pressure - rock_pressure)</span>
+<span class="w">         </span><span class="c1"># With the exception of the powerfit model which uses rock pore pressure:</span>
+<span class="w">         </span><span class="c1"># pressure = rock_pressure</span>
+<span class="w">         </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">              </span><span class="c1"># model type is one of:</span>
+<span class="w">              </span><span class="c1"># * &quot;polyfit&quot;</span>
+<span class="w">              </span><span class="c1"># * &quot;expfit&quot;</span>
+<span class="w">              </span><span class="c1"># * &quot;logfit&quot;</span>
+<span class="w">              </span><span class="c1"># * &quot;powerfit&quot;</span>
+<span class="w">              </span><span class="c1"># * &quot;patchy_cement&quot;</span>
+<span class="w">              </span><span class="c1"># * &quot;friable_sand&quot;</span>
+<span class="w">             </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;powerfit&quot;</span>
+<span class="w">             </span><span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">                </span><span class="c1"># adjusted_bulk_modulus = original_bulk_modulus +</span>
+<span class="w">                </span><span class="c1">#         20.0 * delta_pressure^-40.0</span>
+<span class="w">                </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">20.0E+9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-46.0</span><span class="p p-Indicator">]</span>
+<span class="w">                </span><span class="c1"># adjusted_shear_modulus = original_shear_modulus +</span>
+<span class="w">                </span><span class="c1">#         12.0 * delta_pressure^-20.0</span>
+<span class="w">                </span><span class="nt">vp_over_vs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">12.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-26.0</span><span class="p p-Indicator">]</span>
+<span class="w">                </span><span class="c1"># adjusted_density = original_density</span>
+<span class="w">                </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]</span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;depth_trend&quot;</span>
+<span class="w">         </span><span class="nt">depth</span><span class="p">:</span>
+<span class="w">           </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;depth&quot;</span>
+<span class="w">         </span><span class="nt">reference_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">         </span><span class="nt">max_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000.0</span>
+<span class="w">         </span><span class="c1"># delta_depth = min(depth - reference_depth, max_depth)</span>
+<span class="w">         </span><span class="c1"># coefficients in a 2d polynomial which</span>
+<span class="w">         </span><span class="c1"># adjusts dry rock properties to depth</span>
+<span class="w">         </span><span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">           </span><span class="c1"># adjusted_bulk_modulus = c[i][j] * delta_depth^i * original_bulk_modulus^j</span>
+<span class="w">           </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.5</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
+<span class="w">           </span><span class="c1"># adjusted_shear_modulus = c[i][j] * delta_depth^i * original_shear_modulus^j</span>
+<span class="w">           </span><span class="nt">shear_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.2</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
+<span class="w">           </span><span class="c1"># adjusted_density = c[i][j] * delta_depth^i * original_density^j</span>
+<span class="w">           </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.35</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
+</pre></div>
+</div>
+<p>In the above example, the dry_rock material changes both with depth and pressure according to
+the “depth_trend” and “pressure_dependency” adjustment. Depth trend simply adjusts the material
+according to a two dimensional polynomial (see the above example for details).</p>
+<section id="pressure-dependency">
+<h2>Pressure Dependency<a class="headerlink" href="#pressure-dependency" title="Link to this heading"></a></h2>
+<p>The models for pressure dependency is one of “polyfit”, “expfit”, “logfit”,
+“powerfit”, “patchy_cement”, and “friable_sand”. These are used to calculate
+three factors: <code class="docutils literal notranslate"><span class="pre">f_density</span></code>, <code class="docutils literal notranslate"><span class="pre">f_1</span></code> and <code class="docutils literal notranslate"><span class="pre">f_2</span></code>.</p>
+<p>First the dry rock properties are calculated. Then the pressure depenency at
+reference pressure and at effective pressure is calculated and the final
+adjust dry rock properties are as follows, except for “powerfit” which we will
+discuss last:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adjusted_density</span> <span class="o">=</span> <span class="n">density</span> <span class="o">*</span> <span class="p">(</span><span class="n">fd</span><span class="p">(</span><span class="n">effective_pressure</span><span class="p">)</span> <span class="o">/</span> <span class="n">fd</span><span class="p">(</span><span class="n">reference_pressure</span><span class="p">))</span>
+<span class="n">adjusted_bulk_modulus</span> <span class="o">=</span> <span class="n">bulk_modulus</span> <span class="o">*</span> <span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">effective_pressure</span><span class="p">)</span> <span class="o">/</span> <span class="n">f1</span><span class="p">(</span><span class="n">reference_pressure</span><span class="p">))</span>
+<span class="n">adjusted_shear_modulus</span> <span class="o">=</span> <span class="n">shear_modulus</span> <span class="o">*</span> <span class="p">(</span><span class="n">f2</span><span class="p">(</span><span class="n">effective_pressure</span><span class="p">)</span> <span class="o">/</span> <span class="n">f2</span><span class="p">(</span><span class="n">reference_pressure</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If velocity coefficients are given to the model then the above calculation is carried
+out with <code class="docutils literal notranslate"><span class="pre">primary_velocity</span></code> and <code class="docutils literal notranslate"><span class="pre">secondary_velocity</span></code> instead of <code class="docutils literal notranslate"><span class="pre">bulk_modulus</span></code> and <code class="docutils literal notranslate"><span class="pre">shear_modulus</span></code>. Except
+for the <code class="docutils literal notranslate"><span class="pre">friable_sand</span></code> and <code class="docutils literal notranslate"><span class="pre">patch_cement</span></code> models which always use moduli.</p>
+<p>The models “polyfit”, “friable_sand”, and “patch_cement” are the same models used
+in the <a class="reference external" href="dry_rock"><code class="docutils literal notranslate"><span class="pre">dry_rock</span></code> section</a>. The factors calculated from these models
+are the <code class="docutils literal notranslate"><span class="pre">density</span></code>, <code class="docutils literal notranslate"><span class="pre">bulk_modulus</span></code> and <code class="docutils literal notranslate"><span class="pre">shear_modulus</span></code> for the corresponding dry_rock model, ie.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_d</span><span class="o">=</span><span class="n">density</span>
+<span class="n">f_1</span><span class="o">=</span><span class="n">bulk_modulus</span>
+<span class="n">f_2</span><span class="o">=</span><span class="n">shear_modulus</span>
+</pre></div>
+</div>
+<p>Given that you have the following coefficient section:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bulk_modulus</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cb1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cb2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cb3</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">vp_over_vs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cv1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cv2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cv3</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cd1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cd2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cd3</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The “expfit” model is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_d</span> <span class="o">=</span> <span class="n">cd1</span> <span class="o">+</span> <span class="n">cd2</span><span class="o">*</span><span class="n">e</span><span class="o">^</span><span class="p">(</span><span class="n">pressure</span><span class="o">/</span><span class="n">cd3</span><span class="p">)</span>
+<span class="n">f_1</span> <span class="o">=</span> <span class="n">cb1</span> <span class="o">+</span> <span class="n">cb2</span><span class="o">*</span><span class="n">e</span><span class="o">^</span><span class="p">(</span><span class="n">pressure</span><span class="o">/</span><span class="n">cb3</span><span class="p">)</span>
+<span class="n">f_2</span> <span class="o">=</span> <span class="n">cv1</span> <span class="o">+</span> <span class="n">cv2</span><span class="o">*</span><span class="n">e</span><span class="o">^</span><span class="p">(</span><span class="n">pressure</span><span class="o">/</span><span class="n">cv3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The “logfit” model is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_d</span> <span class="o">=</span> <span class="n">cd1</span> <span class="o">+</span> <span class="n">cd2</span><span class="o">*</span><span class="n">log_10</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
+<span class="n">f_1</span> <span class="o">=</span> <span class="n">cb1</span> <span class="o">+</span> <span class="n">cb2</span><span class="o">*</span><span class="n">log_10</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
+<span class="n">f_2</span> <span class="o">=</span> <span class="n">cv1</span> <span class="o">+</span> <span class="n">cv2</span><span class="o">*</span><span class="n">log_10</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">powerfit</span></code> calculates adjusted <code class="docutils literal notranslate"><span class="pre">dry_rock</span></code> in a quite different way from the other
+models. It uses <code class="docutils literal notranslate"><span class="pre">vp_over_vs</span></code> coefficients:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">coefficients</span><span class="p">:</span>
+  <span class="n">bulk_modulus</span><span class="p">:</span> <span class="p">[</span><span class="n">cb1</span><span class="p">,</span> <span class="n">cb2</span><span class="p">]</span>
+  <span class="n">vp_over_vs</span><span class="p">:</span> <span class="p">[</span><span class="n">cv1</span><span class="p">,</span> <span class="n">cv2</span><span class="p">]</span>
+  <span class="n">density</span><span class="p">:</span> <span class="p">[</span><span class="n">cd1</span><span class="p">,</span> <span class="n">cd2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Which is used to calculate the following factors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fd</span> <span class="o">=</span> <span class="n">cd1</span> <span class="o">+</span> <span class="n">pressure</span> <span class="o">^</span> <span class="n">cd2</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">cb1</span> <span class="o">+</span> <span class="n">pressure</span> <span class="o">^</span> <span class="n">fb2</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">cv1</span> <span class="o">+</span> <span class="n">pressure</span> <span class="o">^</span> <span class="n">fv2</span>
+</pre></div>
+</div>
+<p>Then an adjusted vp_over_vs is calculated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adjusted_vp_over_vs</span>  <span class="o">=</span> <span class="n">vp_over_vs</span> <span class="o">+</span> <span class="n">f2</span><span class="p">(</span><span class="n">effective</span><span class="p">)</span> <span class="o">-</span> <span class="n">f2</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And the final adjusted values are calculated from that:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adjusted_density</span> <span class="o">=</span> <span class="n">density</span> <span class="o">+</span> <span class="n">fd</span>
+<span class="n">adjusted_bulk_modulus</span> <span class="o">=</span> <span class="n">bulk_modulus</span> <span class="o">+</span> <span class="n">f1</span><span class="p">(</span><span class="n">eff</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">reff</span><span class="p">)</span>
+<span class="n">adjusted_shear_modulus</span> <span class="o">=</span> <span class="n">bulk_modulus</span> <span class="o">/</span> <span class="p">((</span><span class="n">vp_over_vs</span> <span class="o">+</span> <span class="n">f2</span><span class="p">(</span><span class="n">effective</span><span class="p">)</span> <span class="o">-</span> <span class="n">f2</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span><span class="o">^</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
