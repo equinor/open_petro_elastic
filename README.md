@@ -39,7 +39,7 @@ To get help on the command line interface:
 open_petro_elastic --help
 ```
 
-See [the docs](docs/index.rst) for more usage instructions.
+See [the docs](https://equinor.github.io/open_petro_elastic/) for more usage instructions.
 
 
 ## Run tests
