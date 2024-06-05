@@ -8,6 +8,7 @@ extensions = [
     "sphinxarg.ext",
     "sphinx.ext.viewcode",
     "sphinx.ext.doctest",
+    "sphinx.ext.githubpages",
     "matplotlib.sphinxext.plot_directive",
     "recommonmark",
 ]
