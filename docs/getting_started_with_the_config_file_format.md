@@ -34,28 +34,28 @@ pressure can be given for costituents from theoretical models:
 
 ```yaml
 fluids:
-    mix_method: "wood" # either brie or wood
+    mix_method: wood # either brie or wood
     temperature: 75.0 # celsius
     pressure: 1000.0 # Pa
     constituents:
         - material:
-            type: "oil"
+            type: oil
             gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
             reference_density: 800.0 # kg/m3
             gas_oil_ratio: 153.0 # ratio of gas to oil
           #fraction set to 1 - sum(other_fluid_fractions)
         - material:
-            type: "brine"
+            type: brine
             salinity: 45000 # ppm
           fraction: 0.3 # Ratio of brine to remaining fluid
         - material:
-            type: "gas"
+            type: gas
             gas_gravity: 0.5 # ratio to air (air gas gravity is 1)
           fraction: 0.3 # Ratio of gas to remaining fluid
 ```
 
 The list can be any number of arbitrary materials (see example in mineral section above) or
-given one of the types `["oil", "brine", "gas", "condensate"]`.
+given one of the types `oil`,  `brine`, `gas`, and `condensate`.
 
 (dry_rock)=
 ## Dry Rock
@@ -65,16 +65,16 @@ This section describes the porous dry rock to the corresponding dense mineral.
 ```yaml
 dry_rock:
     model:
-        type: "polyfit"
+        type: polyfit
         coefficients:
            density: [[0.0, 0.0], [1.0, -1.0]]
            bulk_modulus: [[2900.0, -1300.0]]
            shear_modulus: [[1700.0, -800.0]]
     porosity: 0.36
     adjustments:
-       - type: "pressure_dependency"
+       - type: pressure_dependency
          model:
-           type: "powerfit"
+           type: powerfit
            overburden_pressure: 100.0E6
            pressure: 70.0E+6 Pa
            reference_pressure: 30.0E+6 # Pa
@@ -82,7 +82,7 @@ dry_rock:
               bulk_modulus: [20.0E+9, -46.0]
               vp_over_vs: [12.0, -26.0]
               density: [1.0, 0.0]
-       - type: "depth_trend"
+       - type: depth_trend
          depth: 1000.0
          reference_depth: 0.0
          coefficients:
@@ -93,7 +93,7 @@ dry_rock:
 
 In the config above dry rock is created using a polynomial fit to
 porosity, however, it is also possible to use the theoretical models
-`"friable_sand"` and `"patchy_cement"`, see example configs for useage.
+`friable_sand` and `patchy_cement`, see example configs for useage.
 
 The polynomial fit coefficients are such that the terms of the polynoimal,
 for e.g. density, are `dry_rock_density = sum_ij mineral_density^i * porosity^j * coeff[i][j]`.
