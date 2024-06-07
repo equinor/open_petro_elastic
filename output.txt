@@ -1,13 +1,5 @@
-Results of doctest builder run on 2024-06-07 07:10:41
+Results of doctest builder run on 2024-06-07 07:23:13
 =====================================================
-
-Document: _autosummary/open_petro_elastic.material
---------------------------------------------------
-1 items passed all tests:
-   4 tests in default
-4 tests in 1 items.
-4 passed and 0 failed.
-Test passed.
 
 Document: usage_as_a_library
 ----------------------------
@@ -15,6 +7,14 @@ Document: usage_as_a_library
    5 tests in default
 5 tests in 1 items.
 5 passed and 0 failed.
+Test passed.
+
+Document: _autosummary/open_petro_elastic.material
+--------------------------------------------------
+1 items passed all tests:
+   4 tests in default
+4 tests in 1 items.
+4 passed and 0 failed.
 Test passed.
 
 Doctest summary
