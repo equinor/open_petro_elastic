@@ -21,7 +21,9 @@
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage as a Library" href="usage_as_a_library.html" />
+    <link rel="prev" title="Getting Started With The Config File Format" href="getting_started_with_the_config_file_format.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,9 +45,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="command_line_options.html">Command Line Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started_with_the_config_file_format.html">Getting Started With The Config File Format</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adjusting with Depth and Pressure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pressure-dependency">Pressure Dependency</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage_as_a_library.html">Usage as a Library</a></li>
 </ul>
 
@@ -63,9 +69,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="config_file_format.html">&lt;no title&gt;</a></li>
       <li class="breadcrumb-item active">Adjusting with Depth and Pressure</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/adusting_with_depth_and_pressure.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/adjusting_with_depth_and_pressure.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -80,13 +87,13 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dry_rock</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">model</span><span class="p">:</span>
 <span class="w">        </span><span class="c1"># model type is one of:</span>
-<span class="w">        </span><span class="c1">#  * &quot;polyfit&quot;</span>
-<span class="w">        </span><span class="c1">#  * &quot;friable_sand&quot;</span>
-<span class="w">        </span><span class="c1">#  * &quot;patchy_cement&quot;</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;polyfit&quot;</span>
+<span class="w">        </span><span class="c1">#  * polyfit</span>
+<span class="w">        </span><span class="c1">#  * friable_sand</span>
+<span class="w">        </span><span class="c1">#  * patchy_cement</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">polyfit</span>
 <span class="w">    </span><span class="nt">porosity</span><span class="p">:</span>
 <span class="w">        </span><span class="c1"># porosity of dry rock gotten from column in csv file</span>
-<span class="w">        </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;porosity&quot;</span>
+<span class="w">        </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">porosity</span>
 <span class="w">    </span><span class="c1"># Default polyfit coefficients is used which is:</span>
 <span class="w">    </span><span class="c1"># density: [[0.0, 0.0], [1.0, -1.0]]</span>
 <span class="w">    </span><span class="c1"># bulk_modulus: [[2900.0, -1300.0]]</span>
@@ -94,20 +101,20 @@
 <span class="w">    </span><span class="c1"># In  dry_rock, effective reference pressure is used:</span>
 <span class="w">    </span><span class="c1"># pressure = min(max_pressure, overburden_pressure - reference_pressure)</span>
 <span class="w">    </span><span class="nt">adjustments</span><span class="p">:</span>
-<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pressure_dependency&quot;</span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pressure_dependency</span>
 <span class="w">         </span><span class="c1"># In pressure dependency effective rock pressure is used:</span>
 <span class="w">         </span><span class="c1"># pressure = min(max_pressure, overburden_pressure - rock_pressure)</span>
 <span class="w">         </span><span class="c1"># With the exception of the powerfit model which uses rock pore pressure:</span>
 <span class="w">         </span><span class="c1"># pressure = rock_pressure</span>
 <span class="w">         </span><span class="nt">model</span><span class="p">:</span>
 <span class="w">              </span><span class="c1"># model type is one of:</span>
-<span class="w">              </span><span class="c1"># * &quot;polyfit&quot;</span>
-<span class="w">              </span><span class="c1"># * &quot;expfit&quot;</span>
-<span class="w">              </span><span class="c1"># * &quot;logfit&quot;</span>
-<span class="w">              </span><span class="c1"># * &quot;powerfit&quot;</span>
-<span class="w">              </span><span class="c1"># * &quot;patchy_cement&quot;</span>
-<span class="w">              </span><span class="c1"># * &quot;friable_sand&quot;</span>
-<span class="w">             </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;powerfit&quot;</span>
+<span class="w">              </span><span class="c1"># * polyfit</span>
+<span class="w">              </span><span class="c1"># * expfit</span>
+<span class="w">              </span><span class="c1"># * logfit</span>
+<span class="w">              </span><span class="c1"># * powerfit</span>
+<span class="w">              </span><span class="c1"># * patchy_cement</span>
+<span class="w">              </span><span class="c1"># * friable_sand</span>
+<span class="w">             </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powerfit</span>
 <span class="w">             </span><span class="nt">coefficients</span><span class="p">:</span>
 <span class="w">                </span><span class="c1"># adjusted_bulk_modulus = original_bulk_modulus +</span>
 <span class="w">                </span><span class="c1">#         20.0 * delta_pressure^-40.0</span>
@@ -117,9 +124,9 @@
 <span class="w">                </span><span class="nt">vp_over_vs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">12.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-26.0</span><span class="p p-Indicator">]</span>
 <span class="w">                </span><span class="c1"># adjusted_density = original_density</span>
 <span class="w">                </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]</span>
-<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;depth_trend&quot;</span>
+<span class="w">       </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">depth_trend</span>
 <span class="w">         </span><span class="nt">depth</span><span class="p">:</span>
-<span class="w">           </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;depth&quot;</span>
+<span class="w">           </span><span class="nt">column</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">depth</span>
 <span class="w">         </span><span class="nt">reference_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
 <span class="w">         </span><span class="nt">max_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000.0</span>
 <span class="w">         </span><span class="c1"># delta_depth = min(depth - reference_depth, max_depth)</span>
@@ -211,7 +218,10 @@ models. It uses <code class="docutils literal notranslate"><span class="pre">vp_
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started_with_the_config_file_format.html" class="btn btn-neutral float-left" title="Getting Started With The Config File Format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="usage_as_a_library.html" class="btn btn-neutral float-right" title="Usage as a Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
