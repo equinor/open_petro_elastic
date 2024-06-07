@@ -7,13 +7,13 @@ The dry_rock model can be adjusted according to depth and pressure:
 dry_rock:
     model:
         # model type is one of:
-        #  * "polyfit"
-        #  * "friable_sand"
-        #  * "patchy_cement"
-        type: "polyfit"
+        #  * polyfit
+        #  * friable_sand
+        #  * patchy_cement
+        type: polyfit
     porosity:
         # porosity of dry rock gotten from column in csv file
-        column: "porosity"
+        column: porosity
     # Default polyfit coefficients is used which is:
     # density: [[0.0, 0.0], [1.0, -1.0]]
     # bulk_modulus: [[2900.0, -1300.0]]
@@ -21,20 +21,20 @@ dry_rock:
     # In  dry_rock, effective reference pressure is used:
     # pressure = min(max_pressure, overburden_pressure - reference_pressure)
     adjustments:
-       - type: "pressure_dependency"
+       - type: pressure_dependency
          # In pressure dependency effective rock pressure is used:
          # pressure = min(max_pressure, overburden_pressure - rock_pressure)
          # With the exception of the powerfit model which uses rock pore pressure:
          # pressure = rock_pressure
          model:
               # model type is one of:
-              # * "polyfit"
-              # * "expfit"
-              # * "logfit"
-              # * "powerfit"
-              # * "patchy_cement"
-              # * "friable_sand"
-             type: "powerfit"
+              # * polyfit
+              # * expfit
+              # * logfit
+              # * powerfit
+              # * patchy_cement
+              # * friable_sand
+             type: powerfit
              coefficients:
                 # adjusted_bulk_modulus = original_bulk_modulus +
                 #         20.0 * delta_pressure^-40.0
@@ -44,9 +44,9 @@ dry_rock:
                 vp_over_vs: [12.0, -26.0]
                 # adjusted_density = original_density
                 density: [1.0, 0.0]
-       - type: "depth_trend"
+       - type: depth_trend
          depth:
-           column: "depth"
+           column: depth
          reference_depth: 0.0
          max_depth: 4000.0
          # delta_depth = min(depth - reference_depth, max_depth)
