@@ -83,7 +83,7 @@
   <p>(adjustment_section)=</p>
 <section id="adjusting-with-depth-and-pressure">
 <h1>Adjusting with Depth and Pressure<a class="headerlink" href="#adjusting-with-depth-and-pressure" title="Link to this heading"></a></h1>
-<p>The dry_rock model can be adjusted according to depth and pressure:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dry_rock</span></code> model can be adjusted according to depth and pressure:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dry_rock</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">model</span><span class="p">:</span>
 <span class="w">        </span><span class="c1"># model type is one of:</span>
@@ -141,17 +141,17 @@
 <span class="w">           </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.35</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">]]</span>
 </pre></div>
 </div>
-<p>In the above example, the dry_rock material changes both with depth and pressure according to
-the “depth_trend” and “pressure_dependency” adjustment. Depth trend simply adjusts the material
+<p>In the above example, the <code class="docutils literal notranslate"><span class="pre">dry_rock</span></code> material changes both with depth and pressure according to
+the <code class="docutils literal notranslate"><span class="pre">depth_trend</span></code> and <code class="docutils literal notranslate"><span class="pre">pressure_dependency</span></code> adjustment. Depth trend simply adjusts the material
 according to a two dimensional polynomial (see the above example for details).</p>
 <section id="pressure-dependency">
 <h2>Pressure Dependency<a class="headerlink" href="#pressure-dependency" title="Link to this heading"></a></h2>
-<p>The models for pressure dependency is one of “polyfit”, “expfit”, “logfit”,
-“powerfit”, “patchy_cement”, and “friable_sand”. These are used to calculate
+<p>The models for pressure dependency is one of <code class="docutils literal notranslate"><span class="pre">polyfit</span></code>, <code class="docutils literal notranslate"><span class="pre">expfit</span></code>, <code class="docutils literal notranslate"><span class="pre">logfit</span></code>,
+<code class="docutils literal notranslate"><span class="pre">powerfit</span></code>, <code class="docutils literal notranslate"><span class="pre">patchy_cement</span></code>, and <code class="docutils literal notranslate"><span class="pre">friable_sand</span></code>. These are used to calculate
 three factors: <code class="docutils literal notranslate"><span class="pre">f_density</span></code>, <code class="docutils literal notranslate"><span class="pre">f_1</span></code> and <code class="docutils literal notranslate"><span class="pre">f_2</span></code>.</p>
 <p>First the dry rock properties are calculated. Then the pressure depenency at
 reference pressure and at effective pressure is calculated and the final
-adjust dry rock properties are as follows, except for “powerfit” which we will
+adjust dry rock properties are as follows, except for <code class="docutils literal notranslate"><span class="pre">powerfit</span></code> which we will
 discuss last:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adjusted_density</span> <span class="o">=</span> <span class="n">density</span> <span class="o">*</span> <span class="p">(</span><span class="n">fd</span><span class="p">(</span><span class="n">effective_pressure</span><span class="p">)</span> <span class="o">/</span> <span class="n">fd</span><span class="p">(</span><span class="n">reference_pressure</span><span class="p">))</span>
 <span class="n">adjusted_bulk_modulus</span> <span class="o">=</span> <span class="n">bulk_modulus</span> <span class="o">*</span> <span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">effective_pressure</span><span class="p">)</span> <span class="o">/</span> <span class="n">f1</span><span class="p">(</span><span class="n">reference_pressure</span><span class="p">))</span>
@@ -160,10 +160,10 @@ discuss last:</p>
 </div>
 <p>If velocity coefficients are given to the model then the above calculation is carried
 out with <code class="docutils literal notranslate"><span class="pre">primary_velocity</span></code> and <code class="docutils literal notranslate"><span class="pre">secondary_velocity</span></code> instead of <code class="docutils literal notranslate"><span class="pre">bulk_modulus</span></code> and <code class="docutils literal notranslate"><span class="pre">shear_modulus</span></code>. Except
-for the <code class="docutils literal notranslate"><span class="pre">friable_sand</span></code> and <code class="docutils literal notranslate"><span class="pre">patch_cement</span></code> models which always use moduli.</p>
-<p>The models “polyfit”, “friable_sand”, and “patch_cement” are the same models used
+for the <code class="docutils literal notranslate"><span class="pre">friable_sand</span></code> and <code class="docutils literal notranslate"><span class="pre">patchy_cement</span></code> models which always use moduli.</p>
+<p>The models <code class="docutils literal notranslate"><span class="pre">polyfit</span></code>, <code class="docutils literal notranslate"><span class="pre">friable_sand</span></code>, and <code class="docutils literal notranslate"><span class="pre">patchy_cement</span></code> are the same models used
 in the <a class="reference external" href="dry_rock"><code class="docutils literal notranslate"><span class="pre">dry_rock</span></code> section</a>. The factors calculated from these models
-are the <code class="docutils literal notranslate"><span class="pre">density</span></code>, <code class="docutils literal notranslate"><span class="pre">bulk_modulus</span></code> and <code class="docutils literal notranslate"><span class="pre">shear_modulus</span></code> for the corresponding dry_rock model, ie.</p>
+are the <code class="docutils literal notranslate"><span class="pre">density</span></code>, <code class="docutils literal notranslate"><span class="pre">bulk_modulus</span></code> and <code class="docutils literal notranslate"><span class="pre">shear_modulus</span></code> for the corresponding <code class="docutils literal notranslate"><span class="pre">dry_rock</span></code> model, ie.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_d</span><span class="o">=</span><span class="n">density</span>
 <span class="n">f_1</span><span class="o">=</span><span class="n">bulk_modulus</span>
 <span class="n">f_2</span><span class="o">=</span><span class="n">shear_modulus</span>
@@ -176,13 +176,13 @@ are the <code class="docutils literal notranslate"><span class="pre">density</sp
 <span class="w">    </span><span class="nt">density</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cd1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cd2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cd3</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
-<p>The “expfit” model is:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">expfit</span></code> model is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_d</span> <span class="o">=</span> <span class="n">cd1</span> <span class="o">+</span> <span class="n">cd2</span><span class="o">*</span><span class="n">e</span><span class="o">^</span><span class="p">(</span><span class="n">pressure</span><span class="o">/</span><span class="n">cd3</span><span class="p">)</span>
 <span class="n">f_1</span> <span class="o">=</span> <span class="n">cb1</span> <span class="o">+</span> <span class="n">cb2</span><span class="o">*</span><span class="n">e</span><span class="o">^</span><span class="p">(</span><span class="n">pressure</span><span class="o">/</span><span class="n">cb3</span><span class="p">)</span>
 <span class="n">f_2</span> <span class="o">=</span> <span class="n">cv1</span> <span class="o">+</span> <span class="n">cv2</span><span class="o">*</span><span class="n">e</span><span class="o">^</span><span class="p">(</span><span class="n">pressure</span><span class="o">/</span><span class="n">cv3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The “logfit” model is:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">logfit</span></code> model is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_d</span> <span class="o">=</span> <span class="n">cd1</span> <span class="o">+</span> <span class="n">cd2</span><span class="o">*</span><span class="n">log_10</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
 <span class="n">f_1</span> <span class="o">=</span> <span class="n">cb1</span> <span class="o">+</span> <span class="n">cb2</span><span class="o">*</span><span class="n">log_10</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
 <span class="n">f_2</span> <span class="o">=</span> <span class="n">cv1</span> <span class="o">+</span> <span class="n">cv2</span><span class="o">*</span><span class="n">log_10</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span>
@@ -202,7 +202,7 @@ models. It uses <code class="docutils literal notranslate"><span class="pre">vp_
 <span class="n">f2</span> <span class="o">=</span> <span class="n">cv1</span> <span class="o">+</span> <span class="n">pressure</span> <span class="o">^</span> <span class="n">fv2</span>
 </pre></div>
 </div>
-<p>Then an adjusted vp_over_vs is calculated:</p>
+<p>Then an adjusted <code class="docutils literal notranslate"><span class="pre">vp_over_vs</span></code> is calculated:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adjusted_vp_over_vs</span>  <span class="o">=</span> <span class="n">vp_over_vs</span> <span class="o">+</span> <span class="n">f2</span><span class="p">(</span><span class="n">effective</span><span class="p">)</span> <span class="o">-</span> <span class="n">f2</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 </pre></div>
 </div>
