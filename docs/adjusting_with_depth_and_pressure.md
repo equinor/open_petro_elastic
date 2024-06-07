@@ -1,7 +1,7 @@
 (adjustment_section)=
 # Adjusting with Depth and Pressure
 
-The dry_rock model can be adjusted according to depth and pressure:
+The `dry_rock` model can be adjusted according to depth and pressure:
 
 ```yaml
 dry_rock:
@@ -61,19 +61,19 @@ dry_rock:
            density: [[0.0, 1.35], [1.0, 0.0]]
 ```
 
-In the above example, the dry_rock material changes both with depth and pressure according to
-the "depth_trend" and "pressure_dependency" adjustment. Depth trend simply adjusts the material 
+In the above example, the `dry_rock` material changes both with depth and pressure according to
+the `depth_trend` and `pressure_dependency` adjustment. Depth trend simply adjusts the material 
 according to a two dimensional polynomial (see the above example for details).
 
 ## Pressure Dependency
 
-The models for pressure dependency is one of "polyfit", "expfit", "logfit",
-"powerfit", "patchy_cement", and "friable_sand". These are used to calculate
+The models for pressure dependency is one of `polyfit`, `expfit`, `logfit`,
+`powerfit`, `patchy_cement`, and `friable_sand`. These are used to calculate
 three factors: `f_density`, `f_1` and `f_2`.
 
 First the dry rock properties are calculated. Then the pressure depenency at
 reference pressure and at effective pressure is calculated and the final
-adjust dry rock properties are as follows, except for "powerfit" which we will
+adjust dry rock properties are as follows, except for `powerfit` which we will
 discuss last:
 
 ```
@@ -84,11 +84,11 @@ adjusted_shear_modulus = shear_modulus * (f2(effective_pressure) / f2(reference_
 
 If velocity coefficients are given to the model then the above calculation is carried
 out with `primary_velocity` and `secondary_velocity` instead of `bulk_modulus` and `shear_modulus`. Except
-for the `friable_sand` and `patch_cement` models which always use moduli.
+for the `friable_sand` and `patchy_cement` models which always use moduli.
 
-The models "polyfit", "friable_sand", and "patch_cement" are the same models used
+The models `polyfit`, `friable_sand`, and `patchy_cement` are the same models used
 in the [`dry_rock` section](dry_rock). The factors calculated from these models
-are the `density`, `bulk_modulus` and `shear_modulus` for the corresponding dry_rock model, ie.
+are the `density`, `bulk_modulus` and `shear_modulus` for the corresponding `dry_rock` model, ie.
 
 ```
 f_d=density
@@ -106,7 +106,7 @@ Given that you have the following coefficient section:
     density: [cd1, cd2, cd3]
 ```
 
-The "expfit" model is:
+The `expfit` model is:
 
 ```
 f_d = cd1 + cd2*e^(pressure/cd3)
@@ -114,7 +114,7 @@ f_1 = cb1 + cb2*e^(pressure/cb3)
 f_2 = cv1 + cv2*e^(pressure/cv3)
 ```
 
-The "logfit" model is:
+The `logfit` model is:
 
 ```
 f_d = cd1 + cd2*log_10(pressure)
@@ -140,7 +140,7 @@ f1 = cb1 + pressure ^ fb2
 f2 = cv1 + pressure ^ fv2
 ```
 
-Then an adjusted vp_over_vs is calculated:
+Then an adjusted `vp_over_vs` is calculated:
 
 ```
 adjusted_vp_over_vs  = vp_over_vs + f2(effective) - f2(ref)
