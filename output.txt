@@ -1,4 +1,4 @@
-Results of doctest builder run on 2024-06-07 07:34:05
+Results of doctest builder run on 2024-07-02 11:23:19
 =====================================================
 
 Document: usage_as_a_library
