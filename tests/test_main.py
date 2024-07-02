@@ -48,25 +48,25 @@ run_example_parameters = (
             example_yaml("example1"),
             example_csv("example1"),
             example_csv("example1_calibration"),
-            None,
+            (),
         ],
         [
             example_yaml("example2"),
             example_csv("example2"),
             example_csv("example2_calibration"),
-            None,
+            (),
         ],
         [
             example_yaml("example3"),
             example_csv("example3"),
             example_csv("example3_calibration"),
-            None,
+            (),
         ],
         [
             example_yaml("example4"),
             example_csv("example4"),
             example_csv("example4_calibration"),
-            None,
+            (),
         ],
         [
             example_yaml("friable_sand_example"),
@@ -84,7 +84,7 @@ run_example_parameters = (
             example_yaml("carbon_dioxide_example"),
             example_csv("carbon_dioxide_example"),
             example_csv("carbon_dioxide_calibration"),
-            None,
+            (),
         ],
     ],
 )
