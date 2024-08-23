@@ -3,8 +3,9 @@ Package for calculating the residual helmholtz energy for CO2. The module uses s
 in Span & Wagner [2], as well as its derivatives.
 """
 
-import sympy as sp
 import numpy as np
+import sympy as sp
+
 from . import coefficients
 
 

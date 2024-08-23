@@ -38,7 +38,7 @@ class DepthTrend:
         if self.max_depth is not None:
             np.clip(result, None, self.max_depth)
         if self.reference_depth is not None:
-            result = result - self.reference_depth
+            result -= self.reference_depth
         return result
 
     def adjust_material(

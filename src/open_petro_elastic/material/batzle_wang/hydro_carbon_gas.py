@@ -226,7 +226,7 @@ def gas_bulk_modulus(absolute_temperature, pressure, gas_gravity):
         - 8.7 * exp(-0.65 * (ppr + 1))
     )
 
-    return gamma_0 * pressure / ((1 - dz_dppr * ppr / z))
+    return gamma_0 * pressure / (1 - dz_dppr * ppr / z)
 
 
 def gas(temperature, pressure, gas_gravity):

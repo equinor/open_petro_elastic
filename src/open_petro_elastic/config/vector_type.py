@@ -18,7 +18,7 @@ class Array(np.ndarray, metaclass=_ArrayMeta):
         if isinstance(dtype, tuple):
             dtype, shape = dtype
         else:
-            shape = tuple()
+            shape = ()
 
         result = np.array(val, dtype=dtype, copy=False, ndmin=len(shape))
         assert not shape or len(shape) == len(result.shape)  # ndmin guarantees this

@@ -56,9 +56,12 @@ class DryRock:
 
     @root_validator
     def add_default_polyfit_coefficents(cls, values):
-        if "model" in values and values["model"].type == "polyfit":
-            if values["model"].coefficients is None:
-                values["model"].coefficients = DEFAULT_COEFFICIENTS
+        if (
+            "model" in values
+            and values["model"].type == "polyfit"
+            and values["model"].coefficients is None
+        ):
+            values["model"].coefficients = DEFAULT_COEFFICIENTS
         return values
 
     @root_validator
@@ -72,9 +75,11 @@ class DryRock:
                 if isinstance(adj, DepthTrend):
                     num_depth += 1
         if num_pressure > 1:
-            warnings.warn("Adjustments contain more than one pressure dependency")
+            warnings.warn(
+                "Adjustments contain more than one pressure dependency", stacklevel=1
+            )
         if num_depth > 1:
-            warnings.warn("Adjustments contain more than one depth trend")
+            warnings.warn("Adjustments contain more than one depth trend", stacklevel=1)
         return values
 
     @root_validator

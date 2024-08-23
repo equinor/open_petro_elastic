@@ -55,9 +55,7 @@ docs = [
 dev = [
     "build",
     "setuptools",
-    "flake8",
-    "black",
-    "isort",
+    "ruff",
     "mypy",
 ]
 
@@ -83,10 +81,42 @@ open_petro_elastic = ["tutorial_config/*"]
             "material/span_wagner/tables/carbon_dioxide_density.npz"
 ]
 
-[tool.flake8]
-max-line-length = 88
-ignore = ["E302", "W503", "E501", "E741", "E203", "F405"]
-per-file-ignores = [
-    "__init__.py:F401,F403",
-    "conftest.py: F401,F403",
+[tool.ruff]
+src = ["src"]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+  "W",  # pycodestyle
+  "I",  # isort
+  "B",  # flake-8-bugbear
+  "SIM",  # flake-8-simplify
+  "F",  # pyflakes
+  "PL",  # pylint
+  "NPY",  # numpy specific rules
+  "C4",  # flake8-comprehensions
 ]
+preview = true
+ignore = ["PLW2901",  # redefined-loop-name
+          "PLR2004",  # magic-value-comparison
+          "PLR0915",  # too-many-statements
+          "PLR0912",  # too-many-branches
+          "PLR0911",  # too-many-return-statements
+          "PLC2701",  # import-private-name
+          "PLR6201",  # literal-membership
+          "PLR0914",  # too-many-locals
+          "PLR6301",  # no-self-use
+          "PLW1641",  # eq-without-hash
+          "PLR0904",  # too-many-public-methods
+          "PLR1702",  # too-many-nested-blocks
+          "PLW3201",  # bad-dunder-method-name
+          "PLW0108",  # unnecessary-lambda
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*" = [
+"B008" # function-call-in-default-argument
+]
+
+[tool.ruff.lint.pylint]
+max-args = 12

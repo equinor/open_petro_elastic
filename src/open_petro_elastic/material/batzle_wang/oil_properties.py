@@ -460,7 +460,8 @@ def live_oil(temperature, pressure, reference_density, gas_oil_ratio, gas_gravit
         < oil_bubble_point(reference_density, gas_oil_ratio, gas_gravity, temperature)
     ):
         warnings.warn(
-            "Pressure is below bubble point of oil, estimated elastic properties can be inaccurate"
+            "Pressure is below bubble point of oil, estimated elastic properties can be inaccurate",
+            stacklevel=1,
         )
     return fluid(
         density=live_oil_density(

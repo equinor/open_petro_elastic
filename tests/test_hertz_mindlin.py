@@ -1,8 +1,8 @@
+from generators import materials, positives, ratios
 from hypothesis import assume, given
 from numpy.testing import assert_allclose
-from open_petro_elastic.material.sandstone import hertz_mindlin
 
-from generators import materials, positives, ratios
+from open_petro_elastic.material.sandstone import hertz_mindlin
 
 
 @given(ratios(min_value=0.1, max_value=0.5), materials(), positives())

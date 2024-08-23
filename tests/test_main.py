@@ -21,7 +21,7 @@ EXAMPLE_DIR = path.join(path.dirname(__file__), "..", "examples")
 
 
 def run_example(example_yaml, example_data_file, example_calibration, shape=100):
-    with open(example_yaml) as input_file:
+    with open(example_yaml, encoding="utf-8") as input_file:
         inp = make_input(input_file, example_data_file)
     results = calculate_results(inp)
     path_to_calibration_data = path.join(EXAMPLE_DIR, example_calibration)
@@ -267,13 +267,13 @@ class MockArgs:
     ):
         self.data_file = data_file
         if isinstance(self.data_file, str):
-            self.data_file = open(self.data_file)
+            self.data_file = open(self.data_file, encoding="utf-8")  # noqa: SIM115
         self.config_file = config_file
         if isinstance(self.config_file, str):
-            self.config_file = open(self.config_file)
+            self.config_file = open(self.config_file, encoding="utf-8")  # noqa: SIM115
         self.calibration_data = calibration_data
         if isinstance(self.calibration_data, str):
-            self.calibration_data = open(self.calibration_data)
+            self.calibration_data = open(self.calibration_data, encoding="utf-8")  # noqa: SIM115
         self.output_file = output_file
         self.success_threshold = success_threshold
 

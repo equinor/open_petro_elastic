@@ -7,7 +7,6 @@ the table. This is also convenient when evaluating the Helmholtz energy expressi
 
 from numpy import array
 
-
 """ Ideal gas part (table 27) """
 a0 = array(
     [

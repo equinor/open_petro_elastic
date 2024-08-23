@@ -159,33 +159,37 @@ def test_pressure_case_max_pressure():
 def test_pressure_invalid_reference():
     pressure = Pressure(reference=19, overburden=20, fluid=9)
     with pytest.raises(ValueError, match="zero for reference"):
-        PressureDependency(
-            model={
-                "type": "logfit",
-                "coefficients": {
-                    "density": [0.0, 1.0],
-                    "bulk_modulus": [0.0, 1.0],
-                    "shear_modulus": [0.0, 1.0],
+        (
+            PressureDependency(
+                model={
+                    "type": "logfit",
+                    "coefficients": {
+                        "density": [0.0, 1.0],
+                        "bulk_modulus": [0.0, 1.0],
+                        "shear_modulus": [0.0, 1.0],
+                    },
                 },
-            },
-        ).adjust_material(
-            Material(bulk_modulus=1.0, shear_modulus=1.0, density=1.0), pressure
-        ),
+            ).adjust_material(
+                Material(bulk_modulus=1.0, shear_modulus=1.0, density=1.0), pressure
+            ),
+        )
 
 
 def test_pressure_invalid_powerfit_material():
     pressure = Pressure(reference=0.0, overburden=0.0, fluid=np.sqrt(3.0 / 4.0) - 10.0)
     with pytest.raises(ValueError, match="valid dry rock"):
-        PressureDependency(
-            model={
-                "type": "powerfit",
-                "coefficients": {
-                    "density": [1.0, 1.0],
-                    "bulk_modulus": [1.0, 1.0],
-                    "vp_over_vs": [1.0, 1.0],
+        (
+            PressureDependency(
+                model={
+                    "type": "powerfit",
+                    "coefficients": {
+                        "density": [1.0, 1.0],
+                        "bulk_modulus": [1.0, 1.0],
+                        "vp_over_vs": [1.0, 1.0],
+                    },
                 },
-            },
-        ).adjust_material(
-            Material(primary_velocity=10.0, secondary_velocity=1.0, density=1.0),
-            pressure,
-        ),
+            ).adjust_material(
+                Material(primary_velocity=10.0, secondary_velocity=1.0, density=1.0),
+                pressure,
+            ),
+        )

@@ -1,5 +1,5 @@
 import numpy as np
-from generators import fluids, ratios, positives
+from generators import fluids, positives, ratios
 from hypothesis import assume, given
 from numpy.testing import assert_allclose
 from predicates import assert_similar_material
@@ -73,9 +73,9 @@ def test_bries_unit_saturation_preserves_liquid(liquid, gas):
 def test_bries_two_liquids_two_gases(
     fluid1, fluid2, fluid3, fluid4, liquid_sat1, liquid_sat2, gas_sat1, gas_sat2
 ):
-    assume(0 < liquid_sat1 + liquid_sat2)
+    assume(liquid_sat1 + liquid_sat2 > 0)
     total = liquid_sat1 + liquid_sat2 + gas_sat1 + gas_sat2
-    assume(0 < total)
+    assume(total > 0)
     liquid_sat1 /= total
     liquid_sat2 /= total
     gas_sat1 /= total

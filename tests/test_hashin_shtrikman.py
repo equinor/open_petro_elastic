@@ -1,13 +1,13 @@
 import pytest
+from generators import materials, ratios
 from hypothesis import assume, given
+from predicates import assert_similar_material, between
+
 from open_petro_elastic.material.hashin_shtrikman import (
     hashin_shtrikman_average,
     hashin_shtrikman_bound,
     hashin_shtrikman_walpole,
 )
-
-from generators import materials, ratios
-from predicates import assert_similar_material, between
 
 
 @given(materials(), materials(), ratios())

@@ -105,10 +105,7 @@ def load_config_from_yaml(config_file):
 
 def load_data_from_csv(data_file):
     try:
-        if data_file is not None:
-            data = pd.read_csv(data_file)
-        else:
-            data = None
+        data = pd.read_csv(data_file) if data_file is not None else None
     except pd.errors.ParserError as e:
         raise InputError("Error while reading data file: {e}") from e
     except pd.errors.EmptyDataError as e:
@@ -190,7 +187,7 @@ def run_with_threshold(args):
         try:
             results.append(calculate_results(inp))
         except Exception as e:
-            print(f"Encountered error while calculating rows {id}: {e}")
+            print(f"Encountered error while calculating rows {idx}: {e}")
             num_failures += 1
     if len(inputs) == 0:
         success_percentage = 100
@@ -284,8 +281,8 @@ class GenerateTutorialAction(argparse.Action):
 def percentage(value):
     try:
         value = float(value)
-    except (ValueError, TypeError):
-        raise argparse.ArgumentTypeError(f"Value must be float {value}")
+    except (ValueError, TypeError) as err:
+        raise argparse.ArgumentTypeError(f"Value must be float {value}") from err
     if 0.0 <= value <= 100.0:
         return value
     raise argparse.ArgumentTypeError(f"Value must be in range [0, 100] {value}")

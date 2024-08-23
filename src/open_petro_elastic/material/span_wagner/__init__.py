@@ -8,5 +8,4 @@ triple‐point temperature to 1100 K at pressures up to 800 MPa." Journal of phy
 
 from .carbon_dioxide import carbon_dioxide
 
-
 __all__ = ["carbon_dioxide"]

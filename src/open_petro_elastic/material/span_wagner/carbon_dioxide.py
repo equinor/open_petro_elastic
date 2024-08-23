@@ -2,9 +2,11 @@
 Package for calculating CO2 properties based on Span & Wagner [2].
 """
 
-import pkg_resources
 import numpy as np
+import pkg_resources
 import scipy.optimize
+from scipy.interpolate import RegularGridInterpolator
+
 from open_petro_elastic import float_vectorize
 from open_petro_elastic.material.fluid import fluid_material as fluid
 from open_petro_elastic.material.span_wagner import equations
@@ -12,7 +14,6 @@ from open_petro_elastic.material.span_wagner.coefficients import a0, theta0
 from open_petro_elastic.material.span_wagner.tables.lookup_table import (
     load_lookup_table_interpolator,
 )
-
 
 # Constants
 CO2_GAS_CONSTANT = 0.1889241 * 1e3  # J / kg K
@@ -264,7 +265,6 @@ def _find_initial_density_values(bounds, absolute_temperature, pressure):
     Finds approximate density values for the provided temperature(s) and pressure(s). The result is only intended to be
     used by array_carbon_dioxide_density.
     """
-    from scipy.interpolate import RegularGridInterpolator
 
     temps = np.geomspace(
         np.min(absolute_temperature) * 0.99, np.max(absolute_temperature) * 1.01, 41

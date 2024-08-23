@@ -6,20 +6,23 @@ from open_petro_elastic.material.material import Material
 
 
 def positives(*args, **kwargs):
-    defaults = dict(allow_nan=False, min_value=0.1, max_value=10e8)
+    defaults = {"allow_nan": False, "min_value": 0.1, "max_value": 10e8}
     defaults.update(kwargs)
     return st.floats(*args, **defaults)
 
 
 def small_floats(*args, **kwargs):
-    defaults = dict(allow_nan=False, width=32, allow_infinity=False)
+    defaults = {"allow_nan": False, "width": 32, "allow_infinity": False}
     defaults.update(kwargs)
     return st.floats(*args, **defaults)
 
 
 @st.composite
 def materials(
-    draw, bulk_modulus=positives(), shear_modulus=positives(), density=positives()
+    draw,
+    bulk_modulus=positives(),
+    shear_modulus=positives(),
+    density=positives(),
 ):
     k = draw(bulk_modulus)
     mu = draw(shear_modulus)
@@ -43,7 +46,7 @@ def fluids(draw, bulk_modulus=positives(), density=positives()):
 
 
 def ratios(*args, **kwargs):
-    defaults = dict(allow_nan=False, min_value=0.0, max_value=1.0)
+    defaults = {"allow_nan": False, "min_value": 0.0, "max_value": 1.0}
     defaults.update(kwargs)
     return st.floats(*args, **defaults)
 
