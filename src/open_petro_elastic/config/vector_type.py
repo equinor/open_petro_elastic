@@ -20,7 +20,7 @@ class Array(np.ndarray, metaclass=_ArrayMeta):
         else:
             shape = ()
 
-        result = np.array(val, dtype=dtype, copy=False, ndmin=len(shape))
+        result = np.array(val, dtype=dtype, ndmin=len(shape))
         assert not shape or len(shape) == len(result.shape)  # ndmin guarantees this
 
         if any(
