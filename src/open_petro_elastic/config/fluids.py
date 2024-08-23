@@ -71,7 +71,7 @@ class Fluids:
 
     @validator("constituents")
     def fractions_should_not_exceed_one(cls, v):
-        fraction_sum = sum([c.fraction for c in v if c.fraction is not None])
+        fraction_sum = sum(c.fraction for c in v if c.fraction is not None)
         epsilon = 1e-5
         if np.any(fraction_sum > 1.0 + epsilon):
             raise ValueError("Sum of constituent fractions should not exceed 1.0")

@@ -46,7 +46,7 @@ class Minerals:
 
     def __post_init_post_parse__(self):
         fix_one_fraction(self)
-        if not np.all(np.isclose(sum([c.fraction for c in self]), 1.0, atol=1e-5)):
+        if not np.all(np.isclose(sum(c.fraction for c in self), 1.0, atol=1e-5)):
             raise ValueError("Sum of fractions must be one")
 
     @property

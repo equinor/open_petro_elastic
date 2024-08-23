@@ -1,14 +1,14 @@
+import numpy as np
 import pytest
 from numpy.testing import assert_allclose, assert_array_equal
-import numpy as np
+
 from open_petro_elastic.material.span_wagner.carbon_dioxide import (
+    array_carbon_dioxide_density,
+    carbon_dioxide,
+    carbon_dioxide_bulk_modulus,
     carbon_dioxide_density,
     carbon_dioxide_pressure,
-    carbon_dioxide,
-    array_carbon_dioxide_density,
-    carbon_dioxide_bulk_modulus,
 )
-
 
 # Excerpt from Table 34 of Span & Wagner [2]
 table_34_header = ["temperature", "pressure", "density", "vapor", "speed_of_sound"]
@@ -429,7 +429,7 @@ def test_density_close_to_phase_boundaries(temperature, pressure, density, vapor
 
 
 def test_carbon_dioxide_pressure_derivative():
-    t, p, r = table_35_data.T
+    t, _p, r = table_35_data.T
     eps = 0.01
     cd_estimate = carbon_dioxide_pressure(t, r + eps) - carbon_dioxide_pressure(
         t, r - eps

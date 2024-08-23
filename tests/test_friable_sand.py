@@ -1,9 +1,9 @@
+from generators import materials, positives, ratios
 from hypothesis import assume, given
 from numpy.testing import assert_allclose
-from open_petro_elastic.material.sandstone import friable_sand, hertz_mindlin
-
-from generators import materials, positives, ratios
 from predicates import between
+
+from open_petro_elastic.material.sandstone import friable_sand, hertz_mindlin
 
 
 @given(

@@ -3,6 +3,7 @@ Fluid is short hand for a material with shear modulus equal to zero.
 """
 
 import numpy as np
+
 from open_petro_elastic.float_vectorize import float_vectorize
 
 from .material import Material
@@ -12,7 +13,7 @@ def fluid_material(*args, **kwargs):
     """
     fluid is a material with shear modulus=0
     """
-    return Material(shear_modulus=0, *args, **kwargs)
+    return Material(shear_modulus=0, *args, **kwargs)  # noqa: B026
 
 
 def sum_saturations_to_one(saturations):
@@ -31,7 +32,7 @@ def mix_densities(fluids, saturations):
 
 
 def mix_bulk_moduli(fluids, saturations):
-    return 1.0 / sum([s / f.bulk_modulus for s, f in zip(saturations, fluids)])
+    return 1.0 / sum(s / f.bulk_modulus for s, f in zip(saturations, fluids))
 
 
 def wood_fluid_mixing(fluids, saturations):

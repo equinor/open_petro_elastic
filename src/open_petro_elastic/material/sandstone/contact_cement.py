@@ -4,6 +4,7 @@ of Dvorkin & Nur et. al, see :py:meth:`contact_cement`.
 """
 
 import numpy as np
+
 from open_petro_elastic.material import Material
 
 

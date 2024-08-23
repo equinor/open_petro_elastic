@@ -59,11 +59,11 @@ class Constituent:
     @validator("material", pre=True)
     def wrap_a_material(cls, v):
         if isinstance(v, Material):
-            return dict(
-                density=v.density,
-                bulk_modulus=v.bulk_modulus,
-                shear_modulus=v.shear_modulus,
-            )
+            return {
+                "density": v.density,
+                "bulk_modulus": v.bulk_modulus,
+                "shear_modulus": v.shear_modulus,
+            }
         return v
 
 
@@ -74,7 +74,7 @@ def fix_one_fraction(constituents):
     that missing fraction so that the sum of fractions is 1.0.
     """
     are_none_fraction = [c for c in constituents if c.fraction is None]
-    sum_rest = sum([c.fraction for c in constituents if c.fraction is not None])
+    sum_rest = sum(c.fraction for c in constituents if c.fraction is not None)
     epsilon = 1e-5
     if np.any(sum_rest > 1.0 + epsilon):
         raise ValueError(

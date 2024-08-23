@@ -202,7 +202,7 @@ class Polyfit2dModel:
         except ValueError as e:
             raise ValueError(
                 f"Polynomial fit does not result in a valid dry rock material: {e}"
-            )
+            ) from e
 
 
 @dataclass(config=PetroElasticConfig)

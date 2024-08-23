@@ -70,7 +70,8 @@ def water_primary_velocity(temperature, pressure):
         warnings.warn(
             "Calculations for water velocity is not precise for\n"
             + "pressure outside [0,100]MPa"
-            + f"pressure given: {pressure}MPa"
+            + f"pressure given: {pressure}MPa",
+            stacklevel=1,
         )
     coefficients = [
         [1402.85, 1.524, 3.437e-3, -1.197e-5],

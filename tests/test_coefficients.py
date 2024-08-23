@@ -3,7 +3,7 @@ import numpy as np
 try:
     from pydantic.v1 import ValidationError, parse_obj_as
 except ImportError:
-    from pydantic import parse_obj_as, ValidationError
+    from pydantic import ValidationError, parse_obj_as
 
 import pytest
 

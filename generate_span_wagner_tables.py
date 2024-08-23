@@ -1,13 +1,14 @@
-import sys
 import argparse
+import sys
+
 import numpy as np
-from open_petro_elastic.material.span_wagner.tables.lookup_table import (
-    generate_lookup_table,
-)
+
 from open_petro_elastic.material.span_wagner.carbon_dioxide import (
     carbon_dioxide_density,
 )
-
+from open_petro_elastic.material.span_wagner.tables.lookup_table import (
+    generate_lookup_table,
+)
 
 t_density = 273.15 + np.hstack(
     (np.arange(0, 50, step=0.05), np.arange(50, 200.1, step=0.5))

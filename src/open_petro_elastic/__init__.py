@@ -1,6 +1,6 @@
 import importlib.metadata
-from .float_vectorize import float_vectorize
 
+from .float_vectorize import float_vectorize
 
 __version__ = importlib.metadata.version(__package__ or __name__)
 
