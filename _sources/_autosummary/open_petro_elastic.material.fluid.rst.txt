@@ -4,11 +4,6 @@ open\_petro\_elastic.material.fluid
 .. automodule:: open_petro_elastic.material.fluid
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -21,15 +16,3 @@ open\_petro\_elastic.material.fluid
       sum_saturations_to_one
       wood_fluid_mixing
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

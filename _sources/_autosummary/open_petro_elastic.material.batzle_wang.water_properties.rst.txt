@@ -4,11 +4,6 @@ open\_petro\_elastic.material.batzle\_wang.water\_properties
 .. automodule:: open_petro_elastic.material.batzle_wang.water_properties
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ open\_petro\_elastic.material.batzle\_wang.water\_properties
       water_density
       water_primary_velocity
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

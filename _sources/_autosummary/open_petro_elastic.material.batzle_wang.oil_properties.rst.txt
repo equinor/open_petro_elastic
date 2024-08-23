@@ -4,11 +4,6 @@ open\_petro\_elastic.material.batzle\_wang.oil\_properties
 .. automodule:: open_petro_elastic.material.batzle_wang.oil_properties
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -26,15 +21,3 @@ open\_petro\_elastic.material.batzle\_wang.oil\_properties
       pressure_adjusted_dead_oil_density
       temperature_adjusted_dead_oil_density
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
