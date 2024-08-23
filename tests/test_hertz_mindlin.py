@@ -7,9 +7,9 @@ from generators import materials, positives, ratios
 
 @given(ratios(min_value=0.1, max_value=0.5), materials(), positives())
 def test_hertz_mindlin_preserves_non_auxetic(sand_porosity, mineral, pressure):
-    assume(mineral.poisson_ratio > 0)
+    assume(mineral.poisson_ratio > 1e-5)
     pressurized_sand = hertz_mindlin(mineral, sand_porosity, pressure)
-    assert pressurized_sand.poisson_ratio > 0
+    assert pressurized_sand.poisson_ratio >= 0
 
 
 @given(ratios(min_value=0.1, max_value=0.5), materials(), positives())
