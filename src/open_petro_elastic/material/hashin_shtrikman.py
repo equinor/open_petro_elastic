@@ -10,6 +10,7 @@ see, for instance,
 """
 
 from __future__ import annotations
+
 import numpy as np
 
 from open_petro_elastic.float_vectorize import float_vectorize
