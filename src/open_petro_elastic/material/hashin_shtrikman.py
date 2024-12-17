@@ -76,15 +76,11 @@ def hashin_shtrikman_bound(
         1 + 2 * (mu2 - mu1) * f * (k1 + 2 * mu1) / (5 * mu1 * (k1 + 4 / 3 * mu1))
     )
 
-    try:
-        instance = Material(
-            bulk_modulus=k,
-            shear_modulus=mu,
-            density=ratio * material1.density + (1 - ratio) * material2.density,
-        )
-    except ValueError as e:
-        raise ValueError(f"The material could not be created, got error: {e}")
-    return instance
+    return Material(
+        bulk_modulus=k,
+        shear_modulus=mu,
+        density=ratio * material1.density + (1 - ratio) * material2.density,
+    )
 
 
 def hashin_shtrikman_average(
@@ -120,42 +116,13 @@ def hashin_shtrikman_average(
     """
     check_is_ratio(ratio)
 
-    try:
-        bound1: Material = hashin_shtrikman_bound(material1, material2, ratio)
-    except ValueError as e:
-        raise ValueError(
-            (
-                f"Could not create bound from:"
-                f"material 1 {material1}, material 2 {material2}, ratio {ratio}. Got error: {e}"
-            )
-        )
-
-    check_is_ratio(1 - ratio)
-    try:
-        bound2: Material = hashin_shtrikman_bound(material2, material1, 1 - ratio)
-    except ValueError as e:
-        raise ValueError(
-            (
-                f"Could not create bound from:"
-                f"material 1 {material2}, material 2 {material1}, ratio {1 - ratio}. Got error: {e}"
-            )
-        )
-    avg_bulk = (bound1.bulk_modulus + bound2.bulk_modulus) / 2
-    avg_shear = (bound1.shear_modulus + bound2.shear_modulus) / 2
-    avg_density = ratio * material1.density + (1 - ratio) * material2.density
-
-    try:
-        instance: Material = Material(
-            bulk_modulus=avg_bulk, shear_modulus=avg_shear, density=avg_density
-        )
-    except ValueError as e:
-        raise ValueError(
-            (
-                f"Could not create Material instance with:"
-                f"bulk modulus {avg_bulk}, shear modulus {avg_shear}, density {avg_density}. Got error: {e}"
-            )
-        )
-    return instance
+    bound1 = hashin_shtrikman_bound(material1, material2, ratio)
+    bound2 = hashin_shtrikman_bound(material2, material1, 1 - ratio)
+    return Material(
+        bulk_modulus=(bound1.bulk_modulus + bound2.bulk_modulus) / 2,
+        shear_modulus=(bound1.shear_modulus + bound2.shear_modulus) / 2,
+        density=ratio * material1.density + (1 - ratio) * material2.density,
+    )
 
 
 def hashin_shtrikman_walpole(
@@ -220,17 +187,12 @@ def hashin_shtrikman_walpole(
         km = np.maximum(material1.bulk_modulus, material2.bulk_modulus)
         mum = np.maximum(material1.shear_modulus, material2.shear_modulus)
 
-    try:
-        instance: Material = Material(
-            density=calc_density(material1.density, material2.density, ratio, ratio2),
-            bulk_modulus=calc_bulk_modulus(
-                material1.bulk_modulus, material2.bulk_modulus, mum, ratio, ratio2
-            ),
-            shear_modulus=calc_shear_modulus(
-                material1.shear_modulus, material2.shear_modulus, km, mum, ratio, ratio2
-            ),
-        )
-    except ValueError as e:
-        raise ValueError(f"The material could not be created, got error: {e}")
-
-    return instance
+    return Material(
+        density=calc_density(material1.density, material2.density, ratio, ratio2),
+        bulk_modulus=calc_bulk_modulus(
+            material1.bulk_modulus, material2.bulk_modulus, mum, ratio, ratio2
+        ),
+        shear_modulus=calc_shear_modulus(
+            material1.shear_modulus, material2.shear_modulus, km, mum, ratio, ratio2
+        ),
+    )
