@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
@@ -6,19 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>open_petro_elastic.material.hashin_shtrikman &mdash; open_petro_elastic  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -105,16 +103,16 @@ of Solids and Structures 49.18 (2012): 2646-2659.</p></li>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_is_ratio</span></code>(ratio[, epsilon])</p></td>
-<td><p>Checks that -epsilon &lt;= ratio &lt;= 1.0 + epsilon, throws ValueError if not.</p></td>
+<td><p>Check if the given ratio is less than 1.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hashin_shtrikman_average</span></code>(material1, ...)</p></td>
-<td><p>Average of Hashin-Shtrikman upper and lower bound.</p></td>
+<td><p>Generate an instance of a Material object with the Hashin-Shtrikman average properties.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hashin_shtrikman_bound</span></code>(material1, material2, ...)</p></td>
-<td><p>Gives a bound on moduli for composite materials.</p></td>
+<td><p>Generate an instance of a Material object with Hashin-Shtrikman bounds for its bulk modulus, shear modulus, and density.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hashin_shtrikman_walpole</span></code>(material1, ...[, bound])</p></td>
-<td><p>Refinement of hashin_shtrikman bounds</p></td>
+<td><p>Generate an instance of a material at the lower(upper) bound corresponding to the Walpole refinement of the Hashin-Shtrikman bounds.</p></td>
 </tr>
 </tbody>
 </table>
