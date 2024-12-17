@@ -118,6 +118,7 @@ def hashin_shtrikman_average(
 
     bound1 = hashin_shtrikman_bound(material1, material2, ratio)
     bound2 = hashin_shtrikman_bound(material2, material1, 1 - ratio)
+
     return Material(
         bulk_modulus=(bound1.bulk_modulus + bound2.bulk_modulus) / 2,
         shear_modulus=(bound1.shear_modulus + bound2.shear_modulus) / 2,
