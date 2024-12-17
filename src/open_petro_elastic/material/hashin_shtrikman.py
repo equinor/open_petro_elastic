@@ -9,6 +9,8 @@ see, for instance,
   of Solids and Structures 49.18 (2012): 2646-2659.
 """
 
+from __future__ import annotations
+
 import numpy as np
 
 from open_petro_elastic.float_vectorize import float_vectorize
@@ -16,10 +18,21 @@ from open_petro_elastic.float_vectorize import float_vectorize
 from .material import Material
 
 
-def check_is_ratio(ratio, epsilon=1e-5):
+def check_is_ratio(ratio: float, epsilon: float = 1e-5) -> None:
     """
-    Checks that -epsilon <= ratio <= 1.0 + epsilon, throws ValueError if not.
+    Check if the given ratio is less than 1.
+
+    Parameters:
+        ratio (float): The ratio to be checked.
+        epsilon (float, optional): The tolerance value. Defaults to 1e-5.
+
+    Raises:
+        ValueError: If the ratio is greater than 1 + epsilon or less than 0 - epsilon.
+
+    Returns:
+        None
     """
+
     if np.any(1 + epsilon < ratio):
         raise ValueError(
             f"ratio in hashin-shtrikman bound should be less than 1: {ratio}"
@@ -30,17 +43,28 @@ def check_is_ratio(ratio, epsilon=1e-5):
         )
 
 
-def hashin_shtrikman_bound(material1, material2, ratio):
+def hashin_shtrikman_bound(
+    material1: Material, material2: Material, ratio: float
+) -> Material:
     """
-    Gives a bound on moduli for composite materials.
+    Generate an instance of a Material object with Hashin-Shtrikman bounds for its bulk modulus, shear modulus, and density.
 
-    see, for instance, https://www.subsurfwiki.org/wiki/Hashin-Shtrikman_bounds
-    :param material1: The first constiuent in the composite material.
-    :param material2: The second constiuent in the composite material.
-    :param ratio: The ratio of material1 in the composite material.
-    :returns: The hashin-shrikman bound on the composite material. Its a
-        upper bound if material1.bulk_modulus > material2.bulk_modulus and
-        lower bound otherwise.
+    Parameters:
+        material1 (Material): The first constituent in the composite material.
+        material2 (Material): The second constituent in the composite material.
+        ratio (float): The volume fraction of material1 in the composite material.
+
+    Returns:
+        Material: The composite material with the calculated bulk modulus, shear modulus, and density.
+
+    Raises:
+        ValueError: If the ratio is not between 0 and 1.
+        ValueError: If the material could not be created.
+
+    References:
+        - Hashin, Z., & Shtrikman, S. (1962).
+        A variational approach to the theory of the elastic behavior of multiphase materials.
+        Journal of the Mechanics and Physics of Solids, 10(4), 335-342.
     """
     check_is_ratio(ratio)
     k1 = material1.bulk_modulus
@@ -60,16 +84,39 @@ def hashin_shtrikman_bound(material1, material2, ratio):
     )
 
 
-def hashin_shtrikman_average(material1, material2, ratio):
+def hashin_shtrikman_average(
+    material1: Material, material2: Material, ratio: float
+) -> Material:
     """
-    Average of Hashin-Shtrikman upper and lower bound.
+    Generate an instance of a Material object with the Hashin-Shtrikman average properties.
 
-    :param material1: The first constiuent in the composite material.
-    :param material2: The second constiuent in the composite material.
-    :param ratio: The ratio of material1 in the composite material.
-    :returns: The average of upper and lower hashin_shtrikman bounds.
+    Parameters:
+        material1 (Material): The first constituent in the composite material.
+        material2 (Material): The second constituent in the composite material.
+        ratio (float): The ratio of material1 to material2.
+
+    Returns:
+        Material: The material with the Hashin-Shtrikman average properties.
+
+    Raises:
+        ValueError: If the ratio is not between 0 and 1,
+        ValueError: If there are errors in creating the bound materials.
+        ValueError: If the average material instance cannot be created.
+
+    Examples:
+        >>> material1 = Material(bulk_modulus=100, shear_modulus=50, density=2.5)
+        >>> material2 = Material(bulk_modulus=200, shear_modulus=110, density=3.0)
+        >>> ratio = 0.6
+        >>> result = hashin_shtrikman_average(material1, material2, ratio)
+        >>> result.bulk_modulus
+        130.79283887468029
+        >>> result.shear_modulus
+        68.78970958579256
+        >>> result.density
+        2.7
     """
     check_is_ratio(ratio)
+
     bound1 = hashin_shtrikman_bound(material1, material2, ratio)
     bound2 = hashin_shtrikman_bound(material2, material1, 1 - ratio)
 
@@ -80,23 +127,34 @@ def hashin_shtrikman_average(material1, material2, ratio):
     )
 
 
-def hashin_shtrikman_walpole(material1, material2, ratio, bound="lower"):
+def hashin_shtrikman_walpole(
+    material1: Material, material2: Material, ratio: float, bound: str = "lower"
+) -> Material:
     """
-    Refinement of hashin_shtrikman bounds
+    Generate an instance of a material at the lower(upper) bound corresponding to the
+    Walpole refinement of the Hashin-Shtrikman bounds.
 
-    * Chinh, Pham Duc. "Bounds on the elastic moduli of statistically isotropic
-      multicomponent materials and random cell polycrystals." International
-      Journal of Solids and Structures 49.18 (2012): 2646-2659.
+    Parameters:
+        material1 (Material): The first constituent in the composite material.
+        material2 (Material): The second constituent in the composite material.
+        ratio (float): The ratio of material1 in the composite material.
+        bound (str, optional): Either "lower" or "upper" bound. Defaults to "lower".
 
-    :param material1: The first constiuent in the composite material.
-    :param material2: The second constiuent in the composite material.
-    :param ratio: The ratio of material1 in the composite material.
-    :param bound: Either "lower" or "upper", whether to return the
-        lower or upper bound.
-    :return: Lower (or upper) hashin-shtrikman-walpole bound for mixing
-        of multicomponent materials.
+    Returns:
+        Material: A material with lower (or upper) Hashin-Shtrikman-Walpole bound.
+
+    Raises:
+        ValueError: If the ratio is not between 0 and 1.
+        ValueError: If the material could not be created.
+
+    References:
+        - Chinh, Pham Duc.
+        "Bounds on the elastic moduli of statistically isotropic multicomponent materials and random cell polycrystals."
+        International Journal of Solids and Structures 49.18 (2012): 2646-2659.
     """
     check_is_ratio(ratio)
+    if bound not in ["lower", "upper"]:
+        raise ValueError(f"bound should be either 'lower' or 'upper', got {bound}")
 
     @float_vectorize
     def calc_density(r1, r2, f1, f2):
