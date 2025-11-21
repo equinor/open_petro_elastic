@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>open_petro_elastic.material &mdash; open_petro_elastic  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
 
@@ -94,8 +94,8 @@
 for open_petro_elastic and can be used as a standalone library.</p>
 <p>Sentral to the library is the Material class which carries the
 elastic properties of any given material</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">open_petro_elastic.material.sandstone</span> <span class="kn">import</span> <span class="n">hertz_mindlin</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">open_petro_elastic.material</span> <span class="kn">import</span> <span class="n">Material</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic.material.sandstone</span><span class="w"> </span><span class="kn">import</span> <span class="n">hertz_mindlin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic.material</span><span class="w"> </span><span class="kn">import</span> <span class="n">Material</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mineral</span> <span class="o">=</span> <span class="n">Material</span><span class="p">(</span>
 <span class="gp">... </span>       <span class="n">density</span><span class="o">=</span><span class="mf">2.75</span><span class="p">,</span>
 <span class="gp">... </span>       <span class="n">bulk_modulus</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span>

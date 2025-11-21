@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>open_petro_elastic.material.span_wagner.carbon_dioxide &mdash; open_petro_elastic  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
 
@@ -76,16 +76,16 @@
 <span class="sd">Package for calculating CO2 properties based on Span &amp; Wagner [2].</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pkg_resources</span>
-<span class="kn">import</span> <span class="nn">scipy.optimize</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pkg_resources</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.optimize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
 
-<span class="kn">from</span> <span class="nn">open_petro_elastic</span> <span class="kn">import</span> <span class="n">float_vectorize</span>
-<span class="kn">from</span> <span class="nn">open_petro_elastic.material.fluid</span> <span class="kn">import</span> <span class="n">fluid_material</span> <span class="k">as</span> <span class="n">fluid</span>
-<span class="kn">from</span> <span class="nn">open_petro_elastic.material.span_wagner</span> <span class="kn">import</span> <span class="n">equations</span>
-<span class="kn">from</span> <span class="nn">open_petro_elastic.material.span_wagner.coefficients</span> <span class="kn">import</span> <span class="n">a0</span><span class="p">,</span> <span class="n">theta0</span>
-<span class="kn">from</span> <span class="nn">open_petro_elastic.material.span_wagner.tables.lookup_table</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic</span><span class="w"> </span><span class="kn">import</span> <span class="n">float_vectorize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic.material.fluid</span><span class="w"> </span><span class="kn">import</span> <span class="n">fluid_material</span> <span class="k">as</span> <span class="n">fluid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic.material.span_wagner</span><span class="w"> </span><span class="kn">import</span> <span class="n">equations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic.material.span_wagner.coefficients</span><span class="w"> </span><span class="kn">import</span> <span class="n">a0</span><span class="p">,</span> <span class="n">theta0</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">open_petro_elastic.material.span_wagner.tables.lookup_table</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">load_lookup_table_interpolator</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -98,7 +98,7 @@
 <span class="n">CO2_TRIPLE_PRESSURE</span> <span class="o">=</span> <span class="mf">0.51795</span>  <span class="c1"># MPa</span>
 
 
-<span class="k">def</span> <span class="nf">co2_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">co2_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helmholtz energy as defined by equation 6.1 in Span &amp; Wagner [2]</span>
 
@@ -112,7 +112,7 @@
     <span class="p">)</span> <span class="o">+</span> <span class="n">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">ideal_gas_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ideal_gas_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helmholtz energy from ideal gas behavior as defined by equation 2.3 in Span &amp; Wagner [2]. See function</span>
 <span class="sd">    co2_helmholtz_energy for argument documentation.</span>
@@ -156,7 +156,7 @@
         <span class="k">return</span> <span class="n">result</span>
 
 
-<span class="k">def</span> <span class="nf">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">co2_residual_helmholtz_energy</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Residual part of Helmholtz energy as defined by the equation in Table 32 of Span &amp; Wagner [2]. See</span>
 <span class="sd">    co2_helmholtz_energy for argument documentation.</span>
@@ -178,7 +178,7 @@
         <span class="k">return</span> <span class="n">res</span>
 
 
-<span class="k">def</span> <span class="nf">carbon_dioxide_pressure</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">carbon_dioxide_pressure</span><span class="p">(</span>
     <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">d_density</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">isentropic</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -221,7 +221,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">saturated_liquid_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">saturated_liquid_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Saturated liquid density as defined by equation 3.14 of Span &amp; Wagner [2]</span>
 
@@ -237,7 +237,7 @@
     <span class="k">return</span> <span class="n">CO2_CRITICAL_DENSITY</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">saturated_vapor_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">saturated_vapor_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Saturated vapor density as defined by equation 3.15 of Span &amp; Wagner</span>
 
@@ -261,7 +261,7 @@
     <span class="k">return</span> <span class="n">CO2_CRITICAL_DENSITY</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">sublimation_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sublimation_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sublimation pressure as defined by equation 3.12 of Span &amp; Wagner [2]</span>
 
@@ -275,7 +275,7 @@
     <span class="k">return</span> <span class="n">CO2_TRIPLE_PRESSURE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">_t</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">vapor_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vapor_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vapor pressure as defined by equation 3.13 of Span &amp; Wagner [2]</span>
 
@@ -291,7 +291,7 @@
     <span class="k">return</span> <span class="n">CO2_CRITICAL_PRESSURE</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">inner</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">_t</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">melting_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">melting_pressure</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Melting pressure as defined by equation 3.10 of Span &amp; Wagner [2]</span>
 
@@ -303,7 +303,7 @@
     <span class="k">return</span> <span class="n">CO2_TRIPLE_PRESSURE</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">_a1</span> <span class="o">*</span> <span class="n">_t</span> <span class="o">+</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">_t</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_determine_density_bounds</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_determine_density_bounds</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the upper and lower bound on density</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -334,7 +334,7 @@
     <span class="k">return</span> <span class="n">bounds</span>
 
 
-<span class="k">def</span> <span class="nf">_find_initial_density_values</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_initial_density_values</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds approximate density values for the provided temperature(s) and pressure(s). The result is only intended to be</span>
 <span class="sd">    used by array_carbon_dioxide_density.</span>
@@ -357,7 +357,7 @@
     <span class="k">return</span> <span class="n">iv</span>
 
 
-<span class="k">def</span> <span class="nf">array_carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">array_carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Alternative implementation of a vectorized carbon dioxide density function. Implemented primarily for demonstration</span>
 <span class="sd">    purposes. For large arrays, a look-up-table approach should be preferred.</span>
@@ -401,7 +401,7 @@
 
 
 <span class="nd">@float_vectorize</span>
-<span class="k">def</span> <span class="nf">_calculate_carbon_dioxide_density</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_carbon_dioxide_density</span><span class="p">(</span>
     <span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">force_vapor</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -442,7 +442,7 @@
     <span class="k">return</span> <span class="n">opt</span><span class="o">.</span><span class="n">root</span>
 
 
-<span class="k">def</span> <span class="nf">carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">carbon_dioxide_density</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Density of carbon dioxide. Found either by direct calculation or interpolation. Any additional arguments are passed</span>
 <span class="sd">    to _calculate_carbon_dioxide_density.</span>
@@ -468,7 +468,7 @@
         <span class="k">return</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">carbon_dioxide_bulk_modulus</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">carbon_dioxide_bulk_modulus</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">density</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Isentropic bulk modulus, derived from the expression for speed of sound in Table 3 of Span &amp; Wagner</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -480,7 +480,7 @@
 
 <div class="viewcode-block" id="carbon_dioxide">
 <a class="viewcode-back" href="../../../../_autosummary/open_petro_elastic.material.span_wagner.carbon_dioxide.html#open_petro_elastic.material.span_wagner.carbon_dioxide">[docs]</a>
-<span class="k">def</span> <span class="nf">carbon_dioxide</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">carbon_dioxide</span><span class="p">(</span><span class="n">absolute_temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :param absolute_temperature: Temperature in Celsius. Valid range: 216 K - 1100 K</span>
 <span class="sd">    :param pressure: Pressure in MPa. Valid range: 0 - 800</span>
