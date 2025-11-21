@@ -117,7 +117,7 @@ def test_fluids_mixed_with_brie_using_multiple_materials():
     assert 3 in mixed.index_of_brie_gases()
 
 
-def test_fluids_vectorized(snapshot):
+def test_fluids_vectorized():
     oil_config = {
         "material": {
             "density": np.ones(2),
@@ -133,7 +133,16 @@ def test_fluids_vectorized(snapshot):
         }
     }
     fluids = Fluids(constituents=[oil_config, gas_config], mix_method="brie")
-    snapshot.assert_match(fluids.as_mixture(Pressure()))
+    mixture = fluids.as_mixture(Pressure())
+    assert mixture.shear_modulus == 0.0
+    assert mixture.bulk_modulus.tolist() == pytest.approx(
+        [1.64734606e08, 1.83184882e08]
+    )
+    assert mixture.primary_velocity.tolist() == pytest.approx(
+        [1144.72360384, 1021.36998928]
+    )
+    assert mixture.secondary_velocity.tolist() == pytest.approx([0.0, 0.0])
+    assert mixture.density.tolist() == pytest.approx([125.71397711, 175.59956795])
 
 
 def test_fluids_raises_fraction_exceeds():
