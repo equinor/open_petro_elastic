@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name="open_petro_elastic"
 dynamic = ["version"]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 authors = [{ name="Equinor", email="fg_sib-scout@equinor.com" },]
 description="Utility for calculating elastic properties of rocks and fluids."
 license = {file = "LICENSE"}
@@ -19,8 +19,6 @@ classifiers=[
     "Topic :: Scientific/Engineering :: Physics",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
