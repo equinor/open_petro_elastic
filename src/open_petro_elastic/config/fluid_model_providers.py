@@ -1,6 +1,5 @@
 import collections
-
-import pkg_resources
+import importlib.metadata
 
 import open_petro_elastic.material.batzle_wang as default
 from open_petro_elastic.material import span_wagner
@@ -64,8 +63,8 @@ class SpanWagnerFluidModelProvider:
 
 model_names = [
     entry_point.name
-    for entry_point in pkg_resources.iter_entry_points(
-        "open_petro_elastic.fluid_model_providers"
+    for entry_point in importlib.metadata.entry_points(
+        group="open_petro_elastic.fluid_model_providers"
     )
 ]
 
@@ -83,8 +82,8 @@ if duplicate_names:
 
 fluid_model_providers = {
     entry_point.name: entry_point.load()()
-    for entry_point in pkg_resources.iter_entry_points(
-        "open_petro_elastic.fluid_model_providers"
+    for entry_point in importlib.metadata.entry_points(
+        group="open_petro_elastic.fluid_model_providers"
     )
 }
 

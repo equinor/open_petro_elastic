@@ -2,8 +2,9 @@
 Package for calculating CO2 properties based on Span & Wagner [2].
 """
 
+import importlib.metadata
+
 import numpy as np
-import pkg_resources
 import scipy.optimize
 from scipy.interpolate import RegularGridInterpolator
 
@@ -386,10 +387,9 @@ def carbon_dioxide_density(absolute_temperature, pressure, interpolate=False, **
         )
     else:
         assert interpolate is True
-        fp = pkg_resources.resource_filename(
-            "open_petro_elastic.material.span_wagner.tables",
-            "carbon_dioxide_density.npz",
-        )
+        fp = importlib.resources.files(
+            "open_petro_elastic.material.span_wagner.tables"
+        ).joinpath("carbon_dioxide_density.npz")
         interpolator = load_lookup_table_interpolator(fp)
         return interpolator(absolute_temperature, pressure)
 
