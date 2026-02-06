@@ -27,12 +27,15 @@ def sum_saturations_to_one(saturations):
 
 def mix_densities(fluids, saturations):
     return sum(
-        fluid.density * saturation for (fluid, saturation) in zip(fluids, saturations)
+        fluid.density * saturation
+        for (fluid, saturation) in zip(fluids, saturations, strict=True)
     )
 
 
 def mix_bulk_moduli(fluids, saturations):
-    return 1.0 / sum(s / f.bulk_modulus for s, f in zip(saturations, fluids))
+    return 1.0 / sum(
+        s / f.bulk_modulus for s, f in zip(saturations, fluids, strict=True)
+    )
 
 
 def wood_fluid_mixing(fluids, saturations):
