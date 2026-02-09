@@ -25,11 +25,15 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install .[dev,test]
+        python -m pip install .[dev,test,docs]
     - name: Lint with ruff
       run: |
         ruff check
         ruff format --check
+    - name: Generate documentation
+      run: |
+        sphinx-build docs docs_out/
+        sphinx-build -b doctest docs docs_out/
     - name: Test
       run: |
         pytest .
