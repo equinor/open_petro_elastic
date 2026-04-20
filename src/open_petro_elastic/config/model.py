@@ -281,7 +281,6 @@ class PatchyCementModel(AbstractPressureDependencyModel):
     lower_bound_pressure: Array[float] = 20.0e6
     upper_bound_cement_fraction: Array[float] = 0.1
     coordination_number: Optional[Array[float]] = None
-    critical_porosity: Array[float] = 0.4
     shear_reduction: Array[float] = 1.0
 
     def __post_init_post_parse__(self):
