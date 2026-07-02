@@ -15,7 +15,7 @@ A Python library for petro-elastic modelling. It contains a `Material` class for
 pip install open_petro_elastic
 ```
 
-Developers and contributors can download the repository and do `pip install ".[dev,test,docs]"` to install the package with all its dependencies for development, testing, and building the docs.
+Developers and contributors can download the repository and do `uv sync --all-groups` to install the package with all its dependencies for development, testing, and building the docs.
 
 
 ## Usage
@@ -44,10 +44,10 @@ See [the docs](https://equinor.github.io/open_petro_elastic/) for more usage ins
 
 ## Run tests
 
-Developers and contributors should install everything `test_requirements.txt`. Then tests can be run with:
+Tests can be run with:
 
 ```
-pytest
+uv run pytest
 ```
 
-Developers should also intall everything in `doc_requirements.txt` and read the [Code of Conduct](CODE_OF_CONDUCT.md).
+Developers should also read the [Code of Conduct](CODE_OF_CONDUCT.md).

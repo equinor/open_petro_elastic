@@ -35,24 +35,20 @@ dependencies = [
     "typing_extensions",
 ]
 
-[project.optional-dependencies]
-test = [
+[dependency-groups]
+dev = [
     "pytest",
     "syrupy",
     "hypothesis",
     "matplotlib",
     "pillow>=10.0.0",   # Not directly required, pinned by Snyk to avoid a vulnerability
     "Flake8-pyproject", # Work around Flake8 incompatibility with pyproject.toml
-]
-docs = [
     "sphinx",
     "sphinx-rtd-theme",
     "sphinx-argparse",
     "matplotlib",
     "recommonmark",
     "pygments-csv-lexer",
-]
-dev = [
     "build",
     "setuptools",
     "ruff",
@@ -120,3 +116,7 @@ ignore = ["PLW2901",  # redefined-loop-name
 
 [tool.ruff.lint.pylint]
 max-args = 12
+
+[tool.uv]
+fork-strategy = "requires-python"
+exclude-newer = "7 days"
