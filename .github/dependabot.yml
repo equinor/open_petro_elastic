@@ -1,7 +1,16 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: "uv"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "semiannually"
+    allow:
+      - dependency-type: "all"
+    versioning-strategy: "lockfile-only"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7
