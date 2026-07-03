@@ -3,7 +3,6 @@
 A Python library for petro-elastic modelling. It contains a `Material` class for representing rocks and fluids, as well as various rock physics models and algorithms such as Hashin-Shtrikman bounds and Gassmann fluid substitution.
 
 [![Build and test](https://github.com/equinor/open_petro_elastic/actions/workflows/python-build-test.yml/badge.svg)](https://github.com/equinor/open_petro_elastic/actions/workflows/python-build-test.yml)
-[![Build documentation](https://github.com/equinor/open_petro_elastic/actions/workflows/python-sphinx-doc.yml/badge.svg)](https://github.com/equinor/open_petro_elastic/actions/workflows/python-sphinx-doc.yml)
 [![PyPI version](https://img.shields.io/pypi/v/open_petro_elastic.svg)](https://pypi.org/project/open_petro_elastic//)
 [![PyPI versions](https://img.shields.io/pypi/pyversions/open_petro_elastic.svg)](https://pypi.org/project/open_petro_elastic//)
 [![PyPI license](https://img.shields.io/pypi/l/open_petro_elastic.svg)](https://pypi.org/project/open_petro_elastic/)
@@ -38,8 +37,6 @@ To get help on the command line interface:
 ```shell
 open_petro_elastic --help
 ```
-
-See [the docs](https://equinor.github.io/open_petro_elastic/) for more usage instructions.
 
 
 ## Run tests
