@@ -54,7 +54,6 @@ dev = [
 ]
 
 [project.urls]
-"documentation" = "https://equinor.github.io/open_petro_elastic"
 "repository" = "https://github.com/equinor/open_petro_elastic"
 
 [project.scripts]
